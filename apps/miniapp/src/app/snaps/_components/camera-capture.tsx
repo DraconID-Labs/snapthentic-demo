@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState, useCallback } from "react";
+import { Camera, Check, RotateCcw, Upload, X } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
-import { Camera, Upload, RotateCcw, Check, X } from "lucide-react";
 
 interface CameraCaptureProps {
   onPhotoCapture: (photoDataUrl: string) => void;

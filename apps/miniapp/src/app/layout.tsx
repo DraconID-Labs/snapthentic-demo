@@ -6,9 +6,9 @@ import { Sora } from "next/font/google";
 import { AuthWallProvider } from "~/components/auth-wall-provider";
 import { ErudaProvider } from "~/components/eruda/eruda-provider";
 import MiniKitProvider from "~/components/minikit-provider";
+import MobileBottomNav from "~/components/mobile-bottom-nav";
 import NextAuthProvider from "~/components/next-auth-provider";
 import { TRPCReactProvider } from "~/trpc/react";
-import MobileBottomNav from "~/components/mobile-bottom-nav";
 
 const sora = Sora({
   subsets: ["latin"],

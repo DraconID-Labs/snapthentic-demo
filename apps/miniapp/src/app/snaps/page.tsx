@@ -1,18 +1,18 @@
 "use client";
 
-import { useCallback, useState } from "react";
 import {
-  type LucideIcon,
   Camera,
-  Hash,
-  PenTool,
   FileCheck,
+  Hash,
+  type LucideIcon,
+  PenTool,
 } from "lucide-react";
-import { StepTimeline } from "./_components/step-timeline";
-import { TakePhotoStep } from "./_components/step-take-photo";
+import { useCallback, useState } from "react";
 import { HashPhotoStep } from "./_components/step-hash-photo";
 import { SignPhotoStep } from "./_components/step-sign-photo";
 import { SummaryStep } from "./_components/step-summary";
+import { TakePhotoStep } from "./_components/step-take-photo";
+import { StepTimeline } from "./_components/step-timeline";
 import type { SignedMessage } from "./_utils/sign-message";
 
 // Shared data that flows through the wizard

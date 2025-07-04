@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Button } from "~/components/ui/button";
-import { CameraCapture } from "./camera-capture";
 import { useRequestCameraPermissions } from "~/app/snaps/_hooks/use-request-camera-permissions";
+import { Button } from "~/components/ui/button";
 import type { StepComponentProps } from "../page";
+import { CameraCapture } from "./camera-capture";
 
 export function TakePhotoStep({ data, updateData, next }: StepComponentProps) {
   const permissionGranted = useRequestCameraPermissions();

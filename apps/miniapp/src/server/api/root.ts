@@ -4,8 +4,8 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { userProfileRouter } from "./routers/userProfile";
 import { proofsRouter } from "./routers/proofs";
+import { userProfileRouter } from "./routers/userProfile";
 
 /**
  * This is the primary router for your server.

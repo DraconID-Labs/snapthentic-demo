@@ -1,10 +1,10 @@
 "use client";
 
+import { prefixSignature } from "@snapthentic/signatures";
 import { useEffect } from "react";
 import { Button } from "~/components/ui/button";
 import { useSignMessage } from "../_hooks/use-sign-message";
 import type { StepComponentProps } from "../page";
-import { prefixSignature } from "@snapthentic/signatures";
 
 export function SignPhotoStep({
   data,

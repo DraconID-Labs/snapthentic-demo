@@ -1,12 +1,12 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useGenerateProof } from "./_hooks/use-generate-proof";
 import { useSubmitProof } from "./_hooks/use-submit-proof";
-import { Button } from "~/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
 
 export default function Page() {
   const router = useRouter();

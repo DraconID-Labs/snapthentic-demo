@@ -1,10 +1,10 @@
 "use client";
 
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { api } from "~/trpc/react";
 import { Button } from "~/components/ui/button";
-import { useQueryClient } from "@tanstack/react-query";
+import { api } from "~/trpc/react";
 
 interface ProfileForm {
   nickname?: string;

@@ -1,12 +1,12 @@
 "use client";
 
 import { UserPlus } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
-import Link from "next/link";
 import { api } from "~/trpc/react";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const router = useRouter();

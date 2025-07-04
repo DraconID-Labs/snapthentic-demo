@@ -1,8 +1,8 @@
 "use client";
 
+import { Camera, Home, Search, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Camera, Home, Search, User } from "lucide-react";
 
 import { cn } from "~/utils/cn";
 
