@@ -164,6 +164,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.3(@types/react@18.3.23)(react@18.3.1)
+      '@snapthentic/blockchain':
+        specifier: workspace:*
+        version: link:../../packages/blockchain
       '@snapthentic/database':
         specifier: workspace:*
         version: link:../../packages/database
@@ -233,6 +236,9 @@ importers:
       vaul:
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@18.3.7(@types/react@18.3.23))(@types/react@18.3.23)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      viem:
+        specifier: ^2.31.6
+        version: 2.31.6(typescript@5.8.3)(zod@3.25.67)
       zod:
         specifier: 'catalog:'
         version: 3.25.67
@@ -269,10 +275,17 @@ importers:
         version: 1.0.7(tailwindcss@3.4.17)
 
   packages/blockchain:
+    dependencies:
+      viem:
+        specifier: ^2.31.6
+        version: 2.31.6(typescript@5.8.3)(zod@3.25.67)
     devDependencies:
       '@snapthentic/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      tsx:
+        specifier: ^4.20.3
+        version: 4.20.3
 
   packages/database:
     dependencies:

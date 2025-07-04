@@ -9,6 +9,9 @@ export const env = createEnv({
       .default("development"),
     NEXTAUTH_SECRET: z.string(),
     WORLDCOIN_APP_SECRET: z.string(),
+    REGISTRY_ADDRESS: z.string(),
+    CALLER_PRIVATE_KEY: z.string(),
+    RPC_URL: z.string(),
   },
   client: {},
   shared: {
@@ -31,6 +34,9 @@ export const env = createEnv({
     NEXT_PUBLIC_WORLDCOIN_APP_ID: process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID,
     WORLDCOIN_APP_SECRET: process.env.WORLDCOIN_APP_SECRET,
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    REGISTRY_ADDRESS: process.env.REGISTRY_ADDRESS,
+    CALLER_PRIVATE_KEY: process.env.CALLER_PRIVATE_KEY,
+    RPC_URL: process.env.RPC_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

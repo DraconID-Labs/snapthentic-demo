@@ -1,6 +1,7 @@
 import { type InsertSnap, snaps } from "@snapthentic/database/schema";
 import { desc, eq } from "drizzle-orm";
 import { z } from "zod";
+import { registerSnapOnChain } from "~/blockchain/submit-snap";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 const CreateSnapSchema = z.object({
@@ -36,6 +37,14 @@ export const snapsRouter = createTRPCRouter({
         .insert(snaps)
         .values(newSnap)
         .returning();
+
+      const { txHash, receipt } = await registerSnapOnChain(
+        input.signerAddress,
+        input.signature,
+        input.hash,
+      );
+
+      console.log(txHash, receipt);
 
       return {
         id: insertedSnap?.id,

@@ -1,7 +1,8 @@
 {
   "extends": "@snapthentic/typescript-config/base.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "dist",
+    "resolveJsonModule": true
   },
-  "include": ["src", "drizzle.config.ts"]
+  "include": ["abi.json", "index.ts"]
 }
