@@ -1,6 +1,7 @@
 import {
   createCallerFactory,
   createTRPCRouter,
+  protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
 
@@ -11,6 +12,7 @@ import {
  */
 export const appRouter = createTRPCRouter({
   hello: publicProcedure.query(() => "Hello World"),
+  helloPrivate: protectedProcedure.query(() => "Hello World"),
 });
 
 // export type definition of API

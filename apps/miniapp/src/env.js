@@ -7,9 +7,14 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
+    NEXTAUTH_SECRET: z.string(),
+    WORLDCOIN_APP_SECRET: z.string(),
   },
   client: {},
   shared: {
+    NEXT_PUBLIC_NODE_ENV: z
+      .enum(["development", "production"])
+      .default("development"),
     NEXT_PUBLIC_WORLDCOIN_APP_ID: z
       .string()
       .refine((value) => value.startsWith("app_"), {
@@ -24,6 +29,7 @@ export const env = createEnv({
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
     NEXT_PUBLIC_WORLDCOIN_APP_ID: process.env.NEXT_PUBLIC_WORLDCOIN_APP_ID,
+    WORLDCOIN_APP_SECRET: process.env.WORLDCOIN_APP_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
