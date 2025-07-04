@@ -67,39 +67,6 @@ export const userProfileRouter = createTRPCRouter({
       });
     }),
 
-  // Create user profile
-  create: protectedProcedure
-    .input(createUserProfileSchema)
-    .mutation(async ({ ctx, input }) => {
-      // Check if profile already exists
-      const existingProfile = await ctx.db
-        .select()
-        .from(userProfiles)
-        .where(eq(userProfiles.userId, ctx.session.user.id))
-        .limit(1);
-
-      if (existingProfile.length > 0) {
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "User profile already exists",
-        });
-      }
-
-      const newProfile: InsertUserProfile = {
-        userId: ctx.session.user.id,
-        ...input,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const result = await ctx.db
-        .insert(userProfiles)
-        .values(newProfile)
-        .returning();
-
-      return result[0];
-    }),
-
   // Update user profile
   update: protectedProcedure
     .input(updateUserProfileSchema)

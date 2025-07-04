@@ -27,6 +27,17 @@ export const userProfiles = createTable("user_profile", {
     .notNull(),
 });
 
+export const proofs = createTable("proofs", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: varchar("user_id", { length: 255 }).notNull().unique(),
+  proof: text("proof").notNull(),
+  action: varchar("action", { length: 255 }).notNull(),
+  signal: text("signal"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
 // Export type for TypeScript usage
 export type UserProfile = typeof userProfiles.$inferSelect;
 export type InsertUserProfile = typeof userProfiles.$inferInsert;

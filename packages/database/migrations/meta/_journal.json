@@ -8,6 +8,13 @@
       "when": 1751310707901,
       "tag": "0000_whole_ego",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1751402711965,
+      "tag": "0001_secret_sunspot",
+      "breakpoints": true
     }
   ]
 }
