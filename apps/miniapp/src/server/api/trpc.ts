@@ -123,8 +123,8 @@ export const protectedProcedure = t.procedure
       if (env.NODE_ENV === "development") {
         ctx.session = {
           user: {
-            id: "dev user id",
-            name: "dev user name",
+            id: "dev-user-id",
+            name: "dev-user-name",
           },
           expires: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
         };

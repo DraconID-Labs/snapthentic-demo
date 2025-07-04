@@ -33,16 +33,18 @@ declare module "next-auth" {
  */
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session: ({ session }) => {
+    session: (params) => {
+      console.dir({ msg: "session", params }, { depth: null });
       return {
-        ...session,
+        ...params.session,
       };
     },
-    async signIn() {
+    async signIn(params) {
+      console.dir({ msg: "signIn", params }, { depth: null });
       return true;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret: env.NEXTAUTH_SECRET,
   providers: [
     {
       id: "worldcoin",
