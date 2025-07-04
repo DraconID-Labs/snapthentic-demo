@@ -4,8 +4,10 @@ import { useEffect, useRef } from "react";
 import { api } from "~/trpc/react";
 import { SnapCard } from "../snaps/_components/snap-card";
 import { Loader } from "~/components/ui/loader";
+import { useRouter } from "next/navigation";
 
 export default function FeedPage() {
+  const router = useRouter();
   const {
     data,
     fetchNextPage,
@@ -81,7 +83,13 @@ export default function FeedPage() {
       ) : (
         <>
           {allSnaps.map((snap) => (
-            <SnapCard key={snap.id} snap={snap} />
+            <SnapCard
+              key={snap.id}
+              snap={snap}
+              onClick={() => {
+                router.push(`/snaps/${snap.id}`);
+              }}
+            />
           ))}
 
           {/* Infinite scroll trigger */}

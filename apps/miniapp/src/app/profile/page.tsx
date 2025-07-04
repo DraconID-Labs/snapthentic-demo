@@ -41,26 +41,27 @@ export default function Page() {
 
   return (
     <div className="flex min-h-screen flex-col items-center gap-4">
+      <h1 className="w-full text-left text-2xl font-bold">Profile</h1>
       {/* Avatar header */}
       <div className="flex w-full items-center justify-between gap-4">
         <Avatar>
           <AvatarImage src={profile?.avatarUrl ?? undefined} />
           <AvatarFallback>{profile?.displayName?.slice(0, 2)}</AvatarFallback>
         </Avatar>
-        <div className="flex w-full flex-col gap-2">
+        <div className="flex w-full flex-col gap-4">
           <h2 className="font-bold">@{profile?.displayName}</h2>
           <div className="flex items-center justify-between gap-2">
             <div className="flex flex-col text-left">
               <span>{snaps.length}</span>
-              <span className="text-sm">snaps</span>
+              <span className="text-xs">snaps</span>
             </div>
             <div className="flex flex-col text-left">
-              <span>0</span>
-              <span className="text-sm">followers</span>
+              <span>{Math.floor(Math.random() * 1000)}</span>
+              <span className="text-xs">followers</span>
             </div>
             <div className="flex flex-col text-left">
-              <span>0</span>
-              <span className="text-sm">following</span>
+              <span>{Math.floor(Math.random() * 1000)}</span>
+              <span className="text-xs">following</span>
             </div>
           </div>
         </div>

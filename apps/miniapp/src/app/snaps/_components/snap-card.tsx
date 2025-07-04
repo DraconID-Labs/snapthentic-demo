@@ -12,7 +12,13 @@ import {
 import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
 import Link from "next/link";
 
-export function SnapCard({ snap }: { snap: SnapWithAuthor }) {
+export function SnapCard({
+  snap,
+  onClick,
+}: {
+  snap: SnapWithAuthor;
+  onClick?: () => void;
+}) {
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex w-full items-center gap-2">
@@ -27,7 +33,11 @@ export function SnapCard({ snap }: { snap: SnapWithAuthor }) {
           <p className="text-gray-500">{snap.author.bio ?? "No bio"}</p>
         </div>
       </div>
-      <div className="relative -mx-4 h-[500px] w-screen">
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+      <div
+        className="relative -mx-4 h-[500px] w-screen cursor-pointer"
+        onClick={onClick}
+      >
         <Image
           fill
           src={snap.photoData}
