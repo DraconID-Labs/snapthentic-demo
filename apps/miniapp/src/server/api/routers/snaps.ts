@@ -100,6 +100,7 @@ export const snapsRouter = createTRPCRouter({
         .update(snaps)
         .set({
           signedPhotoData: cloudinaryResponse2.url,
+          txHash,
         })
         // biome-ignore lint/style/noNonNullAssertion: just inserted
         .where(eq(snaps.id, insertedSnap!.id));

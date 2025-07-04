@@ -1,0 +1,1 @@
+ALTER TABLE "snapthentic_snaps" ADD COLUMN "tx_hash" text DEFAULT '' NOT NULL;
