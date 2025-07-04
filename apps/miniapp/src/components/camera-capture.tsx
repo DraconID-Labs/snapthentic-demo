@@ -199,7 +199,7 @@ export function CameraCapture({
             />
             <Button
               onClick={() => fileInputRef.current?.click()}
-              className="w-full"
+              className="w-full bg-blue-500"
             >
               <Camera className="mr-2 size-4" />
               Native Camera
