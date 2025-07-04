@@ -31,12 +31,12 @@ export default function ProfilePage() {
 
   const snaps = snapsRaw ?? [];
 
-  const placeholderSnaps = Array.from({ length: 20 }, (_, index) => ({
-    id: index,
-    title: `Snap ${index}`,
-    description: `Description ${index}`,
-    imageUrl: `https://picsum.photos/200/300?random=${index}`,
-  }));
+  // const placeholderSnaps = Array.from({ length: 20 }, (_, index) => ({
+  //   id: index,
+  //   title: `Snap ${index}`,
+  //   description: `Description ${index}`,
+  //   imageUrl: `https://picsum.photos/200/300?random=${index}`,
+  // }));
 
   return (
     <div className="flex min-h-screen flex-col items-center gap-4">
@@ -87,7 +87,7 @@ export default function ProfilePage() {
             />
           </div>
         ))}
-        {placeholderSnaps.map((snap) => (
+        {/* {placeholderSnaps.map((snap) => (
           <div key={snap.id} className="flex flex-col gap-2">
             <Image
               src={snap.imageUrl}
@@ -96,7 +96,7 @@ export default function ProfilePage() {
               height={250}
             />
           </div>
-        ))}
+        ))} */}
       </div>
     </div>
   );

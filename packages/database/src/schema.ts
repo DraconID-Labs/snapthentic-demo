@@ -1,6 +1,7 @@
 // Example model schema from the Drizzle docs
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
+import { relations } from "drizzle-orm";
 import { pgTableCreator } from "drizzle-orm/pg-core";
 import { boolean, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
@@ -42,6 +43,7 @@ export const snaps = createTable("snaps", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: varchar("user_id", { length: 255 }).notNull(),
   photoData: text("photo_data").notNull(), // Base64 encoded photo data
+  signedPhotoData: text("signed_photo_data"), // Base64 encoded photo data with steganography signature
   hash: text("hash").notNull(), // Hash of the photo
   signature: text("signature").notNull(), // Digital signature
   signerAddress: varchar("signer_address", { length: 255 }).notNull(), // Address of the signer
@@ -56,6 +58,13 @@ export const snaps = createTable("snaps", {
     .defaultNow()
     .notNull(),
 });
+
+export const snapRelations = relations(snaps, ({ one }) => ({
+  author: one(userProfiles, {
+    fields: [snaps.userId],
+    references: [userProfiles.userId],
+  }),
+}));
 
 // Export type for TypeScript usage
 export type UserProfile = typeof userProfiles.$inferSelect;

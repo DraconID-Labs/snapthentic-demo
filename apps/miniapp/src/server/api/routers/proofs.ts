@@ -10,6 +10,20 @@ import z from "zod";
 import { env } from "~/env";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
+import {
+  uniqueNamesGenerator,
+  adjectives,
+  colors,
+  animals,
+  type Config as UniqueNamesConfig,
+} from "unique-names-generator";
+
+const config = {
+  dictionaries: [colors, adjectives, animals],
+  separator: "",
+  style: "capital",
+} satisfies UniqueNamesConfig;
+
 const WorldCoinSuccessResultSchema = z.object({
   proof: z.string(),
   merkle_root: z.string(),
@@ -88,7 +102,7 @@ export const proofsRouter = createTRPCRouter({
       }
 
       const newProfile: InsertUserProfile = {
-        displayName: "RedNaughtFish",
+        displayName: uniqueNamesGenerator(config),
         avatarUrl: "",
         bio: "",
         location: "",

@@ -1,14 +1,5 @@
 import Jimp from "jimp";
 
-// Message prefix functions (keeping existing functionality)
-export function prefixSignature(message: string): string {
-  return `snapthentic:v1:${message}`;
-}
-
-export function stripPrefix(signature: string): string {
-  return signature.replace(/^snapthentic:v1:/, "");
-}
-
 // Types for steganography
 export interface SteganographyOptions {
   /** Number of bits to use per color channel (1-8, default: 1 for LSB) */
@@ -370,4 +361,18 @@ export async function imageToBuffer(
   format = "image/png",
 ): Promise<Buffer> {
   return await image.getBufferAsync(format);
+}
+
+export function splitPrefix(base64: string): [string, string] {
+  const [prefix, data] = base64.split(",") as [string, string];
+
+  return [prefix, data];
+}
+
+export function base64ToBuffer(base64: string): Buffer {
+  return Buffer.from(base64, "base64");
+}
+
+export function bufferToBase64(buffer: Buffer): string {
+  return buffer.toString("base64");
 }

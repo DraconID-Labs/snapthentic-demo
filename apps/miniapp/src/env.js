@@ -12,6 +12,9 @@ export const env = createEnv({
     REGISTRY_ADDRESS: z.string(),
     CALLER_PRIVATE_KEY: z.string(),
     RPC_URL: z.string(),
+    CLOUDINARY_CLOUD_NAME: z.string(),
+    CLOUDINARY_API_KEY: z.string(),
+    CLOUDINARY_API_SECRET: z.string(),
   },
   client: {},
   shared: {
@@ -37,6 +40,9 @@ export const env = createEnv({
     REGISTRY_ADDRESS: process.env.REGISTRY_ADDRESS,
     CALLER_PRIVATE_KEY: process.env.CALLER_PRIVATE_KEY,
     RPC_URL: process.env.RPC_URL,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

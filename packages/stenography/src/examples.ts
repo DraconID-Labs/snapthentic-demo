@@ -7,8 +7,6 @@ import {
   compareImages,
   imageToBuffer,
   type SteganographyOptions,
-  stripPrefix,
-  prefixSignature,
 } from "./index.js";
 
 /**
@@ -171,24 +169,23 @@ export async function structuredDataExample(): Promise<void> {
 
   // Serialize to JSON and add signature prefix
   const jsonData = JSON.stringify(userData, null, 2);
-  const signedData = prefixSignature(jsonData);
 
-  console.log(`✓ Data to hide: ${signedData.length} bytes`);
-  console.log(`✓ First 100 chars: ${signedData.substring(0, 100)}...`);
+  console.log(`✓ Data to hide: ${jsonData.length} bytes`);
+  console.log(`✓ First 100 chars: ${jsonData.substring(0, 100)}...`);
 
   // Check capacity
   const capacity = calculateCapacity(500, 400);
   console.log(`✓ Image capacity: ${capacity} bytes`);
 
-  if (signedData.length > capacity) {
+  if (jsonData.length > capacity) {
     console.log(
-      `❌ Data too large! Need ${signedData.length - capacity} more bytes`,
+      `❌ Data too large! Need ${jsonData.length - capacity} more bytes`,
     );
     return;
   }
 
   // Encode
-  const result = await encodeMessage(imageBuffer, signedData);
+  const result = await encodeMessage(imageBuffer, jsonData);
   console.log(
     `✓ Encoded ${result.bytesUsed} bytes (${(result.efficiency * 100).toFixed(1)}% efficiency)`,
   );
@@ -196,10 +193,9 @@ export async function structuredDataExample(): Promise<void> {
   // Decode
   const modifiedBuffer = await imageToBuffer(result.image);
   const decoded = await decodeMessage(modifiedBuffer);
-  const extractedData = stripPrefix(decoded.message);
 
   try {
-    const parsedData = JSON.parse(extractedData);
+    const parsedData = JSON.parse(decoded.message);
     console.log("✅ Successfully decoded and parsed JSON data:");
     console.log(`   ID: ${parsedData.id}`);
     console.log(`   Name: ${parsedData.name}`);

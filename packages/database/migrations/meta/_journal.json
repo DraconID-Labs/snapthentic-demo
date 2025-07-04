@@ -22,6 +22,13 @@
       "when": 1751461691361,
       "tag": "0002_steep_prism",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1751473782406,
+      "tag": "0003_chemical_colonel_america",
+      "breakpoints": true
     }
   ]
 }

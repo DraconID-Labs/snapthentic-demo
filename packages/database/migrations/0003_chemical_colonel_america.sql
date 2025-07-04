@@ -1,0 +1,1 @@
+ALTER TABLE "snapthentic_snaps" ADD COLUMN "signed_photo_data" text;
