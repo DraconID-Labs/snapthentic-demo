@@ -43,8 +43,7 @@ export const snaps = createTable("snaps", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: varchar("user_id", { length: 255 }).notNull(),
   txHash: text("tx_hash").notNull().default(""), // Transaction hash of the snap
-  photoData: text("photo_data").notNull(), // Base64 encoded photo data
-  signedPhotoData: text("signed_photo_data"), // Base64 encoded photo data with steganography signature
+  photoUrl: text("photo_url").notNull(), // URL of the photo
   hash: text("hash").notNull(), // Hash of the photo
   signature: text("signature").notNull(), // Digital signature
   signerAddress: varchar("signer_address", { length: 255 }).notNull(), // Address of the signer

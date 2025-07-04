@@ -1,7 +1,7 @@
 /** @type {import("next").NextConfig} */
 const config = {
   images: {
-    domains: ["res.cloudinary.com"],
+    domains: ["res.cloudinary.com", "fhtuskhkfbauvscxgdir.supabase.co"],
     remotePatterns: [
       new URL("https://res.cloudinary.com/"),
       {

@@ -1,10 +1,12 @@
 import { type InsertSnap, snaps } from "@snapthentic/database/schema";
 import { encodeMessage, imageToBuffer } from "@snapthentic/stenography";
+import { randomUUID } from "node:crypto";
 import { desc, eq, and, lt } from "drizzle-orm";
 import { z } from "zod";
 import { registerSnapOnChain } from "~/blockchain/register-snap-onchain";
-import { uploadToCloudinary } from "~/cloudinary/upload";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { uploadToSupabase } from "~/supabase/upload";
+import { getPublicUrl } from "~/supabase/get-public-url";
 
 const CreateSnapSchema = z.object({
   photoData: z.string().min(1, "Photo data is required"),
@@ -25,6 +27,9 @@ export const snapsRouter = createTRPCRouter({
       const hexSignature = ensureHexPrefix(input.signature);
       const hexSignerAddress = ensureHexPrefix(input.signerAddress);
 
+      const uuid = randomUUID();
+      const filename = `${hexSignerAddress}-${hexHash}-${uuid}.jpeg`;
+
       function base64ToBuffer(base64: string): Buffer {
         const matches = /^data:([A-Za-z-+/]+);base64,(.+)$/.exec(base64);
 
@@ -37,40 +42,6 @@ export const snapsRouter = createTRPCRouter({
         return imageBuffer;
       }
 
-      console.time("base64ToBuffer");
-      const imageBuffer = base64ToBuffer(input.photoData);
-      console.timeEnd("base64ToBuffer");
-
-      console.time("uploadToCloudinary");
-      const cloudinaryResponse = await uploadToCloudinary(imageBuffer);
-      console.timeEnd("uploadToCloudinary");
-
-      if (!cloudinaryResponse) {
-        throw new Error("Failed to upload photo to Cloudinary");
-      }
-
-      const newSnap: InsertSnap = {
-        userId: ctx.session.user.id,
-        photoData: cloudinaryResponse.url,
-        signedPhotoData: undefined, // !
-        hash: hexHash,
-        signature: hexSignature,
-        signerAddress: hexSignerAddress,
-        signatureVersion: input.signatureVersion,
-        title: input.title,
-        description: input.description,
-        isPublic: input.isPublic,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      console.time("insertSnap");
-      const [insertedSnap] = await ctx.db
-        .insert(snaps)
-        .values(newSnap)
-        .returning();
-      console.timeEnd("insertSnap");
-
       console.time("registerSnapOnChain");
       const { txHash } = await registerSnapOnChain(
         input.signerAddress,
@@ -78,6 +49,10 @@ export const snapsRouter = createTRPCRouter({
         hexHash,
       );
       console.timeEnd("registerSnapOnChain");
+
+      console.time("base64ToBuffer");
+      const imageBuffer = base64ToBuffer(input.photoData);
+      console.timeEnd("base64ToBuffer");
 
       console.time("encodeMessage");
       const encoded = await encodeMessage(imageBuffer, txHash);
@@ -87,24 +62,34 @@ export const snapsRouter = createTRPCRouter({
       const modifiedBuffer = await imageToBuffer(encoded.image);
       console.timeEnd("imageToBuffer");
 
-      console.time("uploadToCloudinary2");
-      const cloudinaryResponse2 = await uploadToCloudinary(modifiedBuffer);
-      console.timeEnd("uploadToCloudinary2");
+      console.time("uploadToSupabase");
+      await uploadToSupabase(modifiedBuffer, filename);
+      const publicUrl = getPublicUrl(filename);
+      console.timeEnd("uploadToSupabase");
 
-      if (!cloudinaryResponse2) {
-        throw new Error("Failed to upload photo to Cloudinary");
-      }
+      const newSnap: InsertSnap = {
+        userId: ctx.session.user.id,
+        photoUrl: publicUrl,
+        hash: hexHash,
+        signature: hexSignature,
+        signerAddress: hexSignerAddress,
+        signatureVersion: input.signatureVersion,
+        title: input.title,
+        description: input.description,
+        isPublic: input.isPublic,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        txHash,
+      };
 
-      console.time("updateSnap");
-      await ctx.db
-        .update(snaps)
-        .set({
-          signedPhotoData: cloudinaryResponse2.url,
-          txHash,
-        })
-        // biome-ignore lint/style/noNonNullAssertion: just inserted
-        .where(eq(snaps.id, insertedSnap!.id));
-      console.timeEnd("updateSnap");
+      console.dir({ insert: newSnap }, { depth: null });
+
+      console.time("insertSnap");
+      const [insertedSnap] = await ctx.db
+        .insert(snaps)
+        .values(newSnap)
+        .returning();
+      console.timeEnd("insertSnap");
 
       return {
         id: insertedSnap?.id,
@@ -121,7 +106,7 @@ export const snapsRouter = createTRPCRouter({
         description: snaps.description,
         isPublic: snaps.isPublic,
         createdAt: snaps.createdAt,
-        photoData: snaps.photoData,
+        photoUrl: snaps.photoUrl,
       })
       .from(snaps)
       .where(eq(snaps.userId, ctx.session.user.id))

@@ -1,6 +1,5 @@
 import type { SnapWithAuthor } from "@snapthentic/database/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import {
   ExternalLink,
@@ -11,6 +10,7 @@ import {
 } from "lucide-react";
 import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
 import Link from "next/link";
+import LazyImage from "~/components/ui/lazy-image";
 
 export function SnapCard({
   snap,
@@ -38,9 +38,9 @@ export function SnapCard({
         className="relative -mx-4 h-[500px] w-screen cursor-pointer"
         onClick={onClick}
       >
-        <Image
+        <LazyImage
           fill
-          src={snap.photoData}
+          src={snap.photoUrl}
           alt={snap.title ?? ""}
           sizes="100vw"
           className="object-cover"

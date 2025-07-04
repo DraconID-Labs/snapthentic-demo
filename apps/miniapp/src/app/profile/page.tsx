@@ -1,11 +1,11 @@
 "use client";
 
 import { UserPlus } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
+import LazyImage from "~/components/ui/lazy-image";
 import { Loader } from "~/components/ui/loader";
 import { api } from "~/trpc/react";
 
@@ -82,9 +82,9 @@ export default function Page() {
         {snaps.map((snap) => (
           <Link href={`/snaps/${snap.id}`} key={snap.id}>
             <div className="relative flex h-[200px] flex-col gap-2">
-              <Image
+              <LazyImage
                 fill
-                src={snap.photoData}
+                src={snap.photoUrl}
                 alt={snap.title ?? ""}
                 className="object-cover"
               />
