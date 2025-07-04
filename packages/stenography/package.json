@@ -1,0 +1,28 @@
+{
+  "name": "@snapthentic/stenography",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "format:fix": "biome format --write .",
+    "format": "biome format .",
+    "lint:fix": "biome check --formatter-enabled=false --write .",
+    "lint": "biome check --formatter-enabled=false ."
+  },
+  "dependencies": {
+    "jimp": "^0.22.10"
+  },
+  "devDependencies": {
+    "@snapthentic/typescript-config": "workspace:*",
+    "@types/node": "^20.0.0",
+    "tsx": "^4.20.3"
+  }
+}
