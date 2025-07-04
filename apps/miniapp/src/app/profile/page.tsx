@@ -78,14 +78,16 @@ export default function ProfilePage() {
       </div>
       <div className="grid w-full grid-cols-3 gap-1">
         {snaps.map((snap) => (
-          <div key={snap.id} className="flex flex-col gap-2">
-            <Image
-              src={snap.photoData}
-              alt={snap.title ?? ""}
-              width={150}
-              height={250}
-            />
-          </div>
+          <Link href={`/snaps/${snap.id}`} key={snap.id}>
+            <div className="relative flex h-[200px] flex-col gap-2">
+              <Image
+                fill
+                src={snap.photoData}
+                alt={snap.title ?? ""}
+                className="object-cover"
+              />
+            </div>
+          </Link>
         ))}
         {/* {placeholderSnaps.map((snap) => (
           <div key={snap.id} className="flex flex-col gap-2">

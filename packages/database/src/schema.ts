@@ -71,3 +71,7 @@ export type UserProfile = typeof userProfiles.$inferSelect;
 export type InsertUserProfile = typeof userProfiles.$inferInsert;
 export type Snap = typeof snaps.$inferSelect;
 export type InsertSnap = typeof snaps.$inferInsert;
+
+export type SnapWithAuthor = typeof snaps.$inferSelect & {
+  author: UserProfile;
+};
