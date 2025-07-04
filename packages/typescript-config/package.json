@@ -1,0 +1,10 @@
+{
+  "name": "@snapthentic/typescript-config",
+  "private": true,
+  "scripts": {
+    "format:fix": "biome format --write .",
+    "format": "biome format .",
+    "lint:fix": "biome check --formatter-enabled=false --write .",
+    "lint": "biome check --formatter-enabled=false ."
+  }
+}

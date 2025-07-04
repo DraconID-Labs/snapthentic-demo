@@ -1,0 +1,22 @@
+{
+  "name": "@snapthentic/eslint-config",
+  "private": true,
+  "exports": {
+    "./next": "./next.cjs"
+  },
+  "scripts": {
+    "format:fix": "biome format --write .",
+    "format": "biome format .",
+    "lint:fix": "biome check --formatter-enabled=false --write .",
+    "lint": "biome check --formatter-enabled=false ."
+  },
+  "devDependencies": {
+    "@types/eslint": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-next": "catalog:",
+    "eslint-plugin-tailwindcss": "catalog:",
+    "eslint-plugin-unused-imports": "catalog:"
+  }
+}
