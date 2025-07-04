@@ -5,6 +5,7 @@ import {
   publicProcedure,
 } from "~/server/api/trpc";
 import { proofsRouter } from "./routers/proofs";
+import { snapsRouter } from "./routers/snaps";
 import { userProfileRouter } from "./routers/userProfile";
 
 /**
@@ -17,6 +18,7 @@ export const appRouter = createTRPCRouter({
   helloPrivate: protectedProcedure.query(() => "Hello World"),
   userProfile: userProfileRouter,
   proofs: proofsRouter,
+  snaps: snapsRouter,
 });
 
 // export type definition of API

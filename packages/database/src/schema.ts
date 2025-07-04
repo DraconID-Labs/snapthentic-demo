@@ -38,6 +38,27 @@ export const proofs = createTable("proofs", {
     .notNull(),
 });
 
+export const snaps = createTable("snaps", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: varchar("user_id", { length: 255 }).notNull(),
+  photoData: text("photo_data").notNull(), // Base64 encoded photo data
+  hash: text("hash").notNull(), // Hash of the photo
+  signature: text("signature").notNull(), // Digital signature
+  signerAddress: varchar("signer_address", { length: 255 }).notNull(), // Address of the signer
+  signatureVersion: varchar("signature_version", { length: 10 }).notNull(), // Version of the signature
+  title: varchar("title", { length: 255 }), // Optional title for the snap
+  description: text("description"), // Optional description
+  isPublic: boolean("is_public").default(true),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
 // Export type for TypeScript usage
 export type UserProfile = typeof userProfiles.$inferSelect;
 export type InsertUserProfile = typeof userProfiles.$inferInsert;
+export type Snap = typeof snaps.$inferSelect;
+export type InsertSnap = typeof snaps.$inferInsert;

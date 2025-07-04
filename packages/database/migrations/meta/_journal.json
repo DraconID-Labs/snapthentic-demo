@@ -15,6 +15,13 @@
       "when": 1751402711965,
       "tag": "0001_secret_sunspot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1751461691361,
+      "tag": "0002_steep_prism",
+      "breakpoints": true
     }
   ]
 }

@@ -16,12 +16,20 @@ export default function ProfilePage() {
     isError,
   } = api.userProfile.getMyProfile.useQuery();
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error...</div>;
+  const {
+    data: snapsRaw,
+    isLoading: snapsLoading,
+    isError: snapsError,
+  } = api.snaps.getMySnaps.useQuery();
+
+  if (isLoading || snapsLoading) return <div>Loading...</div>;
+  if (isError || snapsError) return <div>Error...</div>;
 
   if (!profile) {
     router.push("/profile/verify");
   }
+
+  const snaps = snapsRaw ?? [];
 
   const placeholderSnaps = Array.from({ length: 20 }, (_, index) => ({
     id: index,
@@ -42,7 +50,7 @@ export default function ProfilePage() {
           <h2 className="font-bold">@{profile?.displayName}</h2>
           <div className="flex items-center justify-between gap-2">
             <div className="flex flex-col text-left">
-              <span>0</span>
+              <span>{snaps.length}</span>
               <span className="text-sm">snaps</span>
             </div>
             <div className="flex flex-col text-left">
@@ -69,6 +77,16 @@ export default function ProfilePage() {
         </Button>
       </div>
       <div className="grid w-full grid-cols-3 gap-1">
+        {snaps.map((snap) => (
+          <div key={snap.id} className="flex flex-col gap-2">
+            <Image
+              src={snap.photoData}
+              alt={snap.title ?? ""}
+              width={150}
+              height={250}
+            />
+          </div>
+        ))}
         {placeholderSnaps.map((snap) => (
           <div key={snap.id} className="flex flex-col gap-2">
             <Image

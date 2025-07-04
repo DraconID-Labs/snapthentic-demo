@@ -1,0 +1,17 @@
+{
+  "name": "@snapthentic/blockchain",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    "abi": {
+      "types": "./abi.json",
+      "default": "./abi.json"
+    }
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@snapthentic/typescript-config": "workspace:*"
+  }
+}
