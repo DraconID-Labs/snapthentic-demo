@@ -12,7 +12,6 @@ import { HashPhotoStep } from "./_components/step-hash-photo";
 import { SignPhotoStep } from "./_components/step-sign-photo";
 import { SummaryStep } from "./_components/step-summary";
 import { TakePhotoStep } from "./_components/step-take-photo";
-import { StepTimeline } from "./_components/step-timeline";
 import type { SignedMessage } from "./_utils/sign-message";
 
 // Shared data that flows through the wizard
@@ -83,20 +82,15 @@ export default function Page() {
   const CurrentStep = STEPS[currentStepIdx]?.Component ?? (() => null);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="mx-auto max-w-2xl px-4 py-8">
-        {/* Vertical timeline */}
-        <StepTimeline steps={STEPS} currentStepIdx={currentStepIdx} />
-
+    <div className="min-h-screen">
+      <div className="mx-auto flex max-w-2xl flex-col gap-2 px-4 py-8">
         {/* Step container */}
-        <div className="mt-8 rounded-lg bg-white p-6 shadow-sm">
-          <CurrentStep
-            data={data}
-            updateData={updateData}
-            next={next}
-            prev={prev}
-          />
-        </div>
+        <CurrentStep
+          data={data}
+          updateData={updateData}
+          next={next}
+          prev={prev}
+        />
       </div>
     </div>
   );

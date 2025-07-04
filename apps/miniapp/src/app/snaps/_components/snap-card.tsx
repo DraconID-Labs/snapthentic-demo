@@ -3,11 +3,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import {
+  ExternalLink,
   HeartIcon,
   MessageCircleIcon,
   ShareIcon,
   ShieldCheck,
 } from "lucide-react";
+import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
+import Link from "next/link";
 
 export function SnapCard({ snap }: { snap: SnapWithAuthor }) {
   return (
@@ -51,8 +54,46 @@ export function SnapCard({ snap }: { snap: SnapWithAuthor }) {
         </div>
 
         <span className="flex items-center gap-1">
-          <span className="text-sm">Verified</span>
-          <ShieldCheck className="size-5 text-green-700" />
+          <Drawer>
+            <DrawerTrigger className="flex items-center gap-1">
+              <span className="text-sm">Verified</span>
+              <ShieldCheck className="size-5 text-green-700" />
+            </DrawerTrigger>
+            <DrawerContent className="flex max-h-[100vw] flex-col gap-2 p-4 pb-[150px] text-xs">
+              <div className="flex flex-col gap-1">
+                <span className="font-bold">Author</span>
+                <span className="break-all rounded-md bg-gray-300 p-2">
+                  {snap.signerAddress}
+                </span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-bold">Signature</span>
+                <span className="break-all rounded-md bg-gray-300 p-2">
+                  {snap.signature}
+                </span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="font-bold">Hash</span>
+                <span className="break-all rounded-md bg-gray-300 p-2">
+                  {snap.hash}
+                </span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <span className="pl-2 font-bold">Transaction</span>
+                <span className="break-all rounded-md bg-gray-300 p-2">
+                  {snap.txHash}
+                </span>
+              </div>
+              <Link
+                href={`https://sepolia.etherscan.io/tx/${snap.txHash}`}
+                target="_blank"
+              >
+                <div className="flex items-center justify-end gap-1 pt-5 font-bold">
+                  See on explorer <ExternalLink className="size-4" />
+                </div>
+              </Link>
+            </DrawerContent>
+          </Drawer>
         </span>
       </div>
       <div className="flex w-full items-center gap-2 pt-2">

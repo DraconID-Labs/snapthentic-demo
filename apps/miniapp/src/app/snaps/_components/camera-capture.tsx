@@ -125,10 +125,7 @@ export function CameraCapture({
   const handleRetake = useCallback(() => {
     setCapturedImage(null);
     setError(null);
-    if (isCameraSupported) {
-      void startCamera();
-    }
-  }, [startCamera, isCameraSupported]);
+  }, []);
 
   const resetCamera = useCallback(() => {
     stopCamera();
@@ -156,7 +153,7 @@ export function CameraCapture({
             <img
               src={capturedImage}
               alt="Captured"
-              className="w-full rounded-lg shadow-md"
+              className="max-h-[400px] w-full rounded-lg shadow-md"
             />
           </div>
 
@@ -202,7 +199,7 @@ export function CameraCapture({
               className="w-full bg-blue-500"
             >
               <Camera className="mr-2 size-4" />
-              Native Camera
+              Snap it now
             </Button>
           </div>
 
@@ -225,19 +222,6 @@ export function CameraCapture({
             </Button>
           </div>
         </div>
-
-        {/* Web camera option */}
-        {isCameraSupported && (
-          <Button
-            onClick={startCamera}
-            variant="secondary"
-            className="w-full"
-            disabled={isStartingCamera}
-          >
-            <Camera className="mr-2 size-4" />
-            Use Web Camera
-          </Button>
-        )}
 
         {/* Camera loading */}
         {isStartingCamera && (

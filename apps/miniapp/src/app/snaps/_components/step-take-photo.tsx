@@ -17,22 +17,19 @@ export function TakePhotoStep({ data, updateData, next }: StepComponentProps) {
     updateData({ photo: photoDataUrl });
     setCapturedPhoto(photoDataUrl);
     setShowCamera(false);
+    next();
   };
 
   const handleCameraCancel = () => {
     setShowCamera(false);
   };
 
-  const confirmAndNext = () => {
-    if (capturedPhoto) {
-      next();
-    }
-  };
-
   return (
-    <div className="space-y-4">
+    <div className="w-full space-y-4">
       {!showCamera && !capturedPhoto && (
-        <Button onClick={() => setShowCamera(true)}>Take a Photo</Button>
+        <Button className="bg-blue-400" onClick={() => setShowCamera(true)}>
+          Take a Photo
+        </Button>
       )}
 
       {showCamera && (
@@ -40,31 +37,6 @@ export function TakePhotoStep({ data, updateData, next }: StepComponentProps) {
           onPhotoCapture={handlePhotoCapture}
           onCancel={handleCameraCancel}
         />
-      )}
-
-      {capturedPhoto && !showCamera && (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-700">Captured Photo</h3>
-            <Button
-              onClick={() => setShowCamera(true)}
-              variant="outline"
-              size="sm"
-            >
-              Retake
-            </Button>
-          </div>
-
-          <div className="flex justify-center">
-            <img
-              src={capturedPhoto}
-              alt="User captured content"
-              className="max-h-96 max-w-full rounded-lg shadow-md"
-            />
-          </div>
-
-          <Button onClick={confirmAndNext}>Confirm & Next</Button>
-        </div>
       )}
     </div>
   );
