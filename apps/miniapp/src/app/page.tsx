@@ -1,18 +1,35 @@
-import { getServerAuthSession } from "~/server/auth";
-import { api } from "~/trpc/server";
+"use client";
 
-export default async function Home() {
-  const privateHello = await api.helloPrivate();
-  const publicHello = await api.hello();
-  const session = await getServerAuthSession();
+import Link from "next/link";
+import { Button } from "~/components/ui/button";
+import { api } from "~/trpc/react";
 
-  console.log(privateHello, publicHello);
+export default function Page() {
+  const {
+    data: profile,
+    isLoading,
+    isError,
+  } = api.userProfile.getMyProfile.useQuery();
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!profile || isError) {
+    return <div>No profile found</div>;
+  }
+
   return (
     <div>
-      Hello from Example App
-      <div>{privateHello}</div>
-      <div>{publicHello}</div>
-      <pre>{JSON.stringify(session, null, 2)}</pre>
+      <h1>Hello {profile.displayName}</h1>
+      <div>
+        <Link href="/snaps">
+          <Button>Snaps</Button>
+        </Link>
+        <Link href="/profile">
+          <Button>Profile</Button>
+        </Link>
+      </div>
     </div>
   );
 }
