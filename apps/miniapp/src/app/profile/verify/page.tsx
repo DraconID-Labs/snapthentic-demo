@@ -7,6 +7,7 @@ import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
 import { useGenerateProof } from "./_hooks/use-generate-proof";
 import { useSubmitProof } from "./_hooks/use-submit-proof";
+import { Loader } from "~/components/ui/loader";
 
 export default function Page() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function Page() {
     void submit(proof);
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loader />;
 
   if (isError) return <div>Error</div>;
 

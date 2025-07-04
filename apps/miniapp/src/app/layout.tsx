@@ -35,9 +35,7 @@ export default async function RootLayout({
             <NextAuthProvider>
               <AuthWallProvider>
                 <MiniKitProvider>
-                  <div className="min-h-screen w-full p-4 pb-16">
-                    {children}
-                  </div>
+                  <div className="min-h-screen w-full p-4 pb-0">{children}</div>
                   <MobileBottomNav />
                 </MiniKitProvider>
               </AuthWallProvider>

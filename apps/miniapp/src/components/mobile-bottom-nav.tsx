@@ -1,6 +1,6 @@
 "use client";
 
-import { Camera, Home, Search, User } from "lucide-react";
+import { Camera, Check, Home, Search, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -10,12 +10,14 @@ interface NavItem {
   href: string;
   label: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  isHighlighted?: boolean;
 }
 
 const navItems: NavItem[] = [
   { href: "/", label: "Home", icon: Home },
   { href: "/search", label: "Search", icon: Search },
-  { href: "/snaps", label: "Snap", icon: Camera },
+  { href: "/snaps", label: "Snap", icon: Camera, isHighlighted: true },
+  { href: "/verify", label: "Verify", icon: Check },
   { href: "/profile", label: "Profile", icon: User },
 ];
 
@@ -23,9 +25,9 @@ export default function MobileBottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t bg-white pb-4 shadow-md md:hidden">
-      <ul className="flex items-center justify-around py-2">
-        {navItems.map(({ href, label, icon: Icon }) => {
+    <nav className="fixed inset-x-0 bottom-0 z-50 border-t bg-white pb-4 shadow-md">
+      <ul className="flex items-center justify-around pt-3">
+        {navItems.map(({ href, label, icon: Icon, isHighlighted }) => {
           const isActive =
             pathname === href || (href !== "/" && pathname.startsWith(href));
 
@@ -33,11 +35,15 @@ export default function MobileBottomNav() {
             <li key={href}>
               <Link
                 href={href}
-                className="flex flex-col items-center justify-center text-xs"
+                className="relative z-10 flex flex-col items-center justify-center text-xs"
               >
+                {isHighlighted && (
+                  <div className="absolute -top-[10px] z-[-1] h-[100px] w-20 rounded-full bg-yellow-600/20" />
+                )}
                 <Icon
                   className={cn(
                     "size-6 transition-colors",
+                    isHighlighted && "size-8",
                     isActive ? "text-black" : "text-gray-500",
                   )}
                 />

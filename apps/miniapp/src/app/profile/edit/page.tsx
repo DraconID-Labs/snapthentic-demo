@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
+import { Loader } from "~/components/ui/loader";
 import { api } from "~/trpc/react";
 
 interface ProfileForm {
@@ -68,7 +69,7 @@ export default function EditProfilePage() {
     upsertProfile.mutate(form);
   };
 
-  if (isProfileLoading) return <div className="p-4">Loading...</div>;
+  if (isProfileLoading) return <Loader />;
 
   return (
     <div className="flex min-h-screen flex-col gap-4">

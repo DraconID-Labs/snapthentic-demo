@@ -4,6 +4,7 @@ import {
   type RequestPermissionPayload,
 } from "@worldcoin/minikit-js";
 import { useCallback, useEffect, useState } from "react";
+import { env } from "~/env";
 
 type Payload = Awaited<
   ReturnType<typeof MiniKit.commandsAsync.requestPermission>
@@ -26,7 +27,9 @@ export function useRequestCameraPermissions() {
     void requestPermission();
   }, [requestPermission]);
 
-  const permissionGranted = payload?.finalPayload.status === "success";
+  const permissionGranted =
+    payload?.finalPayload.status === "success" ||
+    env.NEXT_PUBLIC_NODE_ENV === "development";
 
   return permissionGranted;
 }

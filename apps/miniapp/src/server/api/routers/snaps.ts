@@ -1,6 +1,6 @@
 import { type InsertSnap, snaps } from "@snapthentic/database/schema";
 import { encodeMessage, imageToBuffer } from "@snapthentic/stenography";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, and, lt } from "drizzle-orm";
 import { z } from "zod";
 import { registerSnapOnChain } from "~/blockchain/register-snap-onchain";
 import { uploadToCloudinary } from "~/cloudinary/upload";
@@ -140,6 +140,53 @@ export const snapsRouter = createTRPCRouter({
         .limit(1);
 
       return snap[0] ?? null;
+    }),
+
+  getFeed: protectedProcedure
+    .input(
+      z.object({
+        limit: z.number().optional().default(10),
+        cursor: z.string().optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const { limit, cursor } = input;
+
+      // Build where conditions
+      const baseCondition = eq(snaps.isPublic, true);
+      const whereConditions = [baseCondition];
+
+      if (cursor) {
+        const cursorSnap = await ctx.db
+          .select({ createdAt: snaps.createdAt })
+          .from(snaps)
+          .where(eq(snaps.id, cursor))
+          .limit(1);
+
+        if (cursorSnap[0]) {
+          whereConditions.push(lt(snaps.createdAt, cursorSnap[0].createdAt));
+        }
+      }
+
+      const feed = await ctx.db.query.snaps.findMany({
+        where:
+          whereConditions.length > 1 ? and(...whereConditions) : baseCondition,
+        orderBy: desc(snaps.createdAt),
+        limit: limit + 1,
+        with: {
+          author: true,
+        },
+      });
+
+      const hasMore = feed.length > limit;
+      const items = hasMore ? feed.slice(0, limit) : feed;
+      const nextCursor = hasMore ? items[items.length - 1]?.id : undefined;
+
+      return {
+        items,
+        nextCursor,
+        hasMore,
+      };
     }),
 });
 

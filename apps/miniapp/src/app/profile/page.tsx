@@ -6,9 +6,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
+import { Loader } from "~/components/ui/loader";
 import { api } from "~/trpc/react";
 
-export default function ProfilePage() {
+export default function Page() {
   const router = useRouter();
   const {
     data: profile,
@@ -22,7 +23,7 @@ export default function ProfilePage() {
     isError: snapsError,
   } = api.snaps.getMySnaps.useQuery();
 
-  if (isLoading || snapsLoading) return <div>Loading...</div>;
+  if (isLoading || snapsLoading) return <Loader />;
   if (isError || snapsError) return <div>Error...</div>;
 
   if (!profile) {

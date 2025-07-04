@@ -7,7 +7,7 @@
     "build": "next build",
     "clean": "rimraf .next",
     "email:dev": "email dev --dir src/emails",
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "biome check .",

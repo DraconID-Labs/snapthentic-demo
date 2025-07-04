@@ -2,6 +2,7 @@
 
 import { signIn, useSession } from "next-auth/react";
 import type { ReactNode } from "react";
+import { Loader } from "./ui/loader";
 
 export function AuthWallProvider({ children }: { children: ReactNode }) {
   const { status } = useSession();
@@ -14,7 +15,7 @@ export function AuthWallProvider({ children }: { children: ReactNode }) {
   }
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   void signIn("worldcoin");
