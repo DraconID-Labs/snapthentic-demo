@@ -16,7 +16,6 @@
     "@typescript-eslint/parser": "catalog:",
     "eslint": "catalog:",
     "eslint-config-next": "catalog:",
-    "eslint-plugin-tailwindcss": "catalog:",
     "eslint-plugin-unused-imports": "catalog:"
   }
 }

@@ -1,17 +1,18 @@
 import "~/styles/globals.css";
 
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Sora } from "next/font/google";
 
+import { AuthWallProvider } from "~/components/auth-wall-provider";
+import { ErudaProvider } from "~/components/eruda/eruda-provider";
+import MiniKitProvider from "~/components/minikit-provider";
+import NextAuthProvider from "~/components/next-auth-provider";
 import { TRPCReactProvider } from "~/trpc/react";
-import { ErudaProvider } from "~/componenets/eruda/eruda-provider";
-import NextAuthProvider from "~/componenets/next-auth-provider";
-import MiniKitProvider from "~/componenets/minikit-provider";
-import { AuthWallProvider } from "~/componenets/auth-wall-provider";
 
-const inter = Inter({
+const sora = Sora({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`font-sans ${inter.variable} bg-white`}>
+    <html lang="en" className={`font-sans ${sora.variable}`}>
       <body className="w-screen">
         <TRPCReactProvider>
           <ErudaProvider>

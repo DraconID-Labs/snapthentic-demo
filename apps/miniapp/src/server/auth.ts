@@ -34,13 +34,15 @@ declare module "next-auth" {
 export const authOptions: NextAuthOptions = {
   callbacks: {
     session: (params) => {
-      console.dir({ msg: "session", params }, { depth: null });
       return {
         ...params.session,
+        user: {
+          id: params.session.user.name,
+          name: params.session.user.name,
+        },
       };
     },
-    async signIn(params) {
-      console.dir({ msg: "signIn", params }, { depth: null });
+    async signIn() {
       return true;
     },
   },
