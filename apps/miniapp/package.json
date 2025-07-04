@@ -37,10 +37,11 @@
     "superjson": "catalog:",
     "tailwind-merge": "catalog:",
     "zod": "catalog:",
-    "zustand": "catalog:"
+    "zustand": "catalog:",
+    "@snapthentic/database": "workspace:*",
+    "@snapthentic/signatures": "workspace:*"
   },
   "devDependencies": {
-    "@snapthentic/database": "workspace:*",
     "@snapthentic/eslint-config": "workspace:*",
     "@snapthentic/typescript-config": "workspace:*",
     "@types/node": "catalog:",

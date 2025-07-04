@@ -1,85 +1,101 @@
 "use client";
 
-import { useState } from "react";
-import { Button } from "~/components/ui/button";
-import { api } from "~/trpc/react";
-import { CameraCapture } from "~/components/camera-capture";
-import { useRequestCameraPermissions } from "~/hooks/request-camera-permissions";
+import { useCallback, useState } from "react";
+import {
+  type LucideIcon,
+  Camera,
+  Hash,
+  PenTool,
+  FileCheck,
+} from "lucide-react";
+import { StepTimeline } from "./_components/step-timeline";
+import { TakePhotoStep } from "./_components/step-take-photo";
+import { HashPhotoStep } from "./_components/step-hash-photo";
+import { SignPhotoStep } from "./_components/step-sign-photo";
+import { SummaryStep } from "./_components/step-summary";
+import type { SignedMessage } from "./_utils/sign-message";
+
+// Shared data that flows through the wizard
+interface SnapData {
+  photo?: string;
+  hash?: string;
+  signature?: SignedMessage;
+}
+
+// Props that every step component receives
+export interface StepComponentProps {
+  data: SnapData;
+  updateData: (partial: Partial<SnapData>) => void;
+  next: () => void;
+  prev: () => void;
+}
+
+interface StepDefinition {
+  id: string;
+  title: string;
+  icon: LucideIcon;
+  Component: React.FC<StepComponentProps>;
+}
+
+const STEPS: StepDefinition[] = [
+  {
+    id: "photo",
+    title: "Take Photo",
+    icon: Camera,
+    Component: TakePhotoStep,
+  },
+  {
+    id: "hash",
+    title: "Hash Photo",
+    icon: Hash,
+    Component: HashPhotoStep,
+  },
+  {
+    id: "sign",
+    title: "Sign Photo",
+    icon: PenTool,
+    Component: SignPhotoStep,
+  },
+  {
+    id: "summary",
+    title: "Summary",
+    icon: FileCheck,
+    Component: SummaryStep,
+  },
+];
 
 export default function Page() {
-  const permissionGranted = useRequestCameraPermissions();
+  const [currentStepIdx, setCurrentStepIdx] = useState(0);
+  const [data, setData] = useState<SnapData>({});
 
-  const [showCamera, setShowCamera] = useState(permissionGranted);
-  const [capturedPhoto, setCapturedPhoto] = useState<string | null>(null);
+  const updateData = useCallback((partial: Partial<SnapData>) => {
+    setData((prev) => ({ ...prev, ...partial }));
+  }, []);
 
-  const {
-    data: profile,
-    isLoading,
-    isError,
-  } = api.userProfile.getMyProfile.useQuery();
+  const next = useCallback(() => {
+    setCurrentStepIdx((idx) => Math.min(idx + 1, STEPS.length - 1));
+  }, []);
 
-  const handlePhotoCapture = (photoDataUrl: string) => {
-    setCapturedPhoto(photoDataUrl);
-    setShowCamera(false);
-  };
+  const prev = useCallback(() => {
+    setCurrentStepIdx((idx) => Math.max(idx - 1, 0));
+  }, []);
 
-  const handleCameraCancel = () => {
-    setShowCamera(false);
-  };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!profile || isError) {
-    return <div>No profile found</div>;
-  }
+  const CurrentStep = STEPS[currentStepIdx]?.Component ?? (() => null);
 
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="mx-auto max-w-2xl px-4 py-8">
-        {/* Photo Capture Section */}
-        <div className="mb-8 rounded-lg bg-white p-6 shadow-sm">
-          <h2 className="mb-4 text-lg font-bold text-gray-900">
-            Photo Capture
-          </h2>
+        {/* Vertical timeline */}
+        <StepTimeline steps={STEPS} currentStepIdx={currentStepIdx} />
 
-          {!showCamera && !capturedPhoto && (
-            <Button onClick={() => setShowCamera(true)} className="mb-4">
-              Take a Photo
-            </Button>
-          )}
-
-          {showCamera && (
-            <CameraCapture
-              onPhotoCapture={handlePhotoCapture}
-              onCancel={handleCameraCancel}
-            />
-          )}
-
-          {capturedPhoto && !showCamera && (
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="text-md font-semibold text-gray-700">
-                  Captured Photo
-                </h3>
-                <Button
-                  onClick={() => setShowCamera(true)}
-                  variant="outline"
-                  size="sm"
-                >
-                  Take New Photo
-                </Button>
-              </div>
-              <div className="flex justify-center">
-                <img
-                  src={capturedPhoto}
-                  alt="User captured content"
-                  className="max-h-96 max-w-full rounded-lg shadow-md"
-                />
-              </div>
-            </div>
-          )}
+        {/* Step container */}
+        <div className="mt-8 rounded-lg bg-white p-6 shadow-sm">
+          <CurrentStep
+            data={data}
+            updateData={updateData}
+            next={next}
+            prev={prev}
+          />
         </div>
       </div>
     </div>

@@ -8,6 +8,7 @@ import { ErudaProvider } from "~/components/eruda/eruda-provider";
 import MiniKitProvider from "~/components/minikit-provider";
 import NextAuthProvider from "~/components/next-auth-provider";
 import { TRPCReactProvider } from "~/trpc/react";
+import MobileBottomNav from "~/components/mobile-bottom-nav";
 
 const sora = Sora({
   subsets: ["latin"],
@@ -33,7 +34,10 @@ export default async function RootLayout({
           <ErudaProvider>
             <NextAuthProvider>
               <AuthWallProvider>
-                <MiniKitProvider>{children}</MiniKitProvider>
+                <MiniKitProvider>
+                  <div className="min-h-screen pb-16">{children}</div>
+                  <MobileBottomNav />
+                </MiniKitProvider>
               </AuthWallProvider>
             </NextAuthProvider>
           </ErudaProvider>

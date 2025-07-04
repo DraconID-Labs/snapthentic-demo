@@ -1,0 +1,8 @@
+{
+  "extends": "@snapthentic/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "ES2022"
+  },
+  "include": ["src"]
+}
