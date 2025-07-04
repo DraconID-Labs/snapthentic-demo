@@ -24,7 +24,7 @@ export function SnapCard({ snap }: { snap: SnapWithAuthor }) {
           <p className="text-gray-500">{snap.author.bio ?? "No bio"}</p>
         </div>
       </div>
-      <div className="relative -mx-4 h-[600px] w-screen">
+      <div className="relative -mx-4 h-[500px] w-screen">
         <Image
           fill
           src={snap.photoData}
