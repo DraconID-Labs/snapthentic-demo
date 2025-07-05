@@ -57,6 +57,13 @@
       "when": 1751579831555,
       "tag": "0007_zippy_human_cannonball",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1751579933294,
+      "tag": "0008_flawless_rattler",
+      "breakpoints": true
     }
   ]
 }

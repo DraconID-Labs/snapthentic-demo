@@ -82,8 +82,8 @@ export const snapContestVote = createTable("snap_contest_votes", {
 
 export const contest = createTable("contest", {
   id: uuid("id").defaultRandom().primaryKey(),
-  title: varchar("user_id", { length: 255 }).notNull(),
-  description: varchar("user_id", { length: 255 }).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  description: varchar("description", { length: 255 }).notNull(),
   active: boolean("active").default(false),
   startDate: timestamp("start_date", { withTimezone: true }),
   endDate: timestamp("end_date", { withTimezone: true }),
