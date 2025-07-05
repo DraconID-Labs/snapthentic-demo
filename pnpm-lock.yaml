@@ -6,6 +6,9 @@ settings:
 
 catalogs:
   default:
+    '@biomejs/biome':
+      specifier: 1.9.4
+      version: 1.9.4
     '@t3-oss/env-nextjs':
       specifier: 0.13.8
       version: 0.13.8
@@ -21,6 +24,9 @@ catalogs:
     '@trpc/server':
       specifier: 11.4.3
       version: 11.4.3
+    '@types/eslint':
+      specifier: 8.56.10
+      version: 8.56.10
     '@types/node':
       specifier: ^22
       version: 22.15.34
@@ -30,6 +36,12 @@ catalogs:
     '@types/react-dom':
       specifier: ^18
       version: 18.3.7
+    '@typescript-eslint/eslint-plugin':
+      specifier: 8.1.0
+      version: 8.1.0
+    '@typescript-eslint/parser':
+      specifier: 8.1.0
+      version: 8.1.0
     '@worldcoin/minikit-js':
       specifier: 1.9.6
       version: 1.9.6
@@ -39,9 +51,30 @@ catalogs:
     clsx:
       specifier: 2.1.1
       version: 2.1.1
+    dotenv:
+      specifier: 17.0.0
+      version: 17.0.0
+    drizzle-kit:
+      specifier: 0.31.4
+      version: 0.31.4
+    drizzle-orm:
+      specifier: 0.44.2
+      version: 0.44.2
     eruda:
       specifier: 3.2.3
       version: 3.2.3
+    eslint:
+      specifier: 8.57.0
+      version: 8.57.0
+    eslint-config-next:
+      specifier: 14.2.4
+      version: 14.2.4
+    eslint-plugin-tailwindcss:
+      specifier: 3.17.5
+      version: 3.17.5
+    eslint-plugin-unused-imports:
+      specifier: 4.1.4
+      version: 4.1.4
     next:
       specifier: 15.3.4
       version: 15.3.4
@@ -54,6 +87,9 @@ catalogs:
     postcss:
       specifier: 8.5.6
       version: 8.5.6
+    postgres:
+      specifier: 3.4.7
+      version: 3.4.7
     react:
       specifier: ^18.3.1
       version: 18.3.1
@@ -78,6 +114,15 @@ catalogs:
     tailwindcss-animate:
       specifier: 1.0.7
       version: 1.0.7
+    tsx:
+      specifier: 4.20.3
+      version: 4.20.3
+    turbo:
+      specifier: 2.5.4
+      version: 2.5.4
+    typescript:
+      specifier: 5.8.3
+      version: 5.8.3
     zod:
       specifier: 3.25.67
       version: 3.25.67
@@ -299,6 +344,9 @@ importers:
       eslint-config-next:
         specifier: 'catalog:'
         version: 14.2.4(eslint@8.57.0)(typescript@5.8.3)
+      eslint-plugin-tailwindcss:
+        specifier: 'catalog:'
+        version: 3.17.5(tailwindcss@3.4.17)
       eslint-plugin-unused-imports:
         specifier: 'catalog:'
         version: 4.1.4(@typescript-eslint/eslint-plugin@8.1.0(@typescript-eslint/parser@8.1.0(eslint@8.57.0)(typescript@5.8.3))(eslint@8.57.0)(typescript@5.8.3))(eslint@8.57.0)
@@ -2317,6 +2365,12 @@ packages:
     engines: {node: '>=4'}
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
+
+  eslint-plugin-tailwindcss@3.17.5:
+    resolution: {integrity: sha512-8Mi7p7dm+mO1dHgRHHFdPu4RDTBk69Cn4P0B40vRQR+MrguUpwmKwhZy1kqYe3Km8/4nb+cyrCF+5SodOEmaow==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      tailwindcss: ^3.4.0
 
   eslint-plugin-unused-imports@4.1.4:
     resolution: {integrity: sha512-YptD6IzQjDardkl0POxnnRBhU1OEePMV0nd6siHaRBbd+lyh6NAhFEobiznKU7kTsSsDeSD62Pe7kAM1b7dAZQ==}
@@ -5761,6 +5815,12 @@ snapshots:
       semver: 6.3.1
       string.prototype.matchall: 4.0.11
       string.prototype.repeat: 1.0.0
+
+  eslint-plugin-tailwindcss@3.17.5(tailwindcss@3.4.17):
+    dependencies:
+      fast-glob: 3.3.2
+      postcss: 8.5.6
+      tailwindcss: 3.4.17
 
   eslint-plugin-unused-imports@4.1.4(@typescript-eslint/eslint-plugin@8.1.0(@typescript-eslint/parser@8.1.0(eslint@8.57.0)(typescript@5.8.3))(eslint@8.57.0)(typescript@5.8.3))(eslint@8.57.0):
     dependencies:
