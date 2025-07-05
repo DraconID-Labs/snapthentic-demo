@@ -144,3 +144,20 @@ export type InsertSnap = typeof snaps.$inferInsert;
 export type SnapWithAuthor = typeof snaps.$inferSelect & {
   author: UserProfile;
 };
+
+export type Contest = typeof contest.$inferSelect;
+export type InsertContest = typeof contest.$inferInsert;
+
+export type SnapContest = typeof snapContest.$inferSelect;
+export type InsertSnapContest = typeof snapContest.$inferInsert;
+
+export type SnapContestVote = typeof snapContestVote.$inferSelect;
+export type InsertSnapContestVote = typeof snapContestVote.$inferInsert;
+
+export type ContestWithSnapContests = Contest & {
+  snapContests: SnapContest &
+    {
+      snap: Snap;
+      votes: SnapContestVote[];
+    }[];
+};
