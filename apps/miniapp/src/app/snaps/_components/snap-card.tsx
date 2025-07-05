@@ -208,7 +208,7 @@ export function SnapCard({
                 <Code className="border-none">{snap.txHash}</Code>
               </div>
               <Link
-                href={`https://sepolia.worldscan.org/address/${snap.txHash}`}
+                href={`https://sepolia.worldscan.org/tx/${snap.txHash}`}
                 target="_blank"
               >
                 <div className="flex items-center justify-end gap-1 pt-5 font-bold">
