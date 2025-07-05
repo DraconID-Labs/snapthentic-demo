@@ -226,7 +226,7 @@ export default function VerifyPage() {
                     </Code>
                   </div>
                   <div className="text-sm">
-                    <span className="font-medium">Verified At:</span>{" "}
+                    <span className="font-medium">Created At:</span>{" "}
                     <Code className="border-none bg-transparent">
                       {new Date(
                         verificationResult.data.createdAt,
