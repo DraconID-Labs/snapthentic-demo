@@ -6,6 +6,7 @@ export interface SnapData {
   signature?: SignedMessage;
   title?: string;
   description?: string;
+  contestId?: string;
   submitResult?: {
     success: boolean;
     message: string;

@@ -4,6 +4,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import { contestsRouter } from "./routers/contests";
 import { followsRouter } from "./routers/follows";
 import { likesRouter } from "./routers/likes";
 import { proofsRouter } from "./routers/proofs";
@@ -23,6 +24,7 @@ export const appRouter = createTRPCRouter({
   snaps: snapsRouter,
   likes: likesRouter,
   follows: followsRouter,
+  contests: contestsRouter,
 });
 
 // export type definition of API

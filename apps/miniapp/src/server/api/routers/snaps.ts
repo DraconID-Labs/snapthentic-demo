@@ -1,8 +1,9 @@
 import { randomUUID } from "node:crypto";
 import {
-  type InsertSnap,
-  snaps,
+  type InsertSnap, snaps,
   userProfiles,
+  contest,
+  snapContest
 } from "@snapthentic/database/schema";
 import {
   constructV1Signature,
@@ -47,6 +48,7 @@ const CreateSnapSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   isPublic: z.boolean().optional().default(true),
+  contestId: z.string().optional(),
 });
 
 const UpdateSnapSchema = z.object({
@@ -141,9 +143,52 @@ export const snapsRouter = createTRPCRouter({
         .returning();
       console.timeEnd("insertSnap");
 
+      // If contestId is provided, enter the snap into the contest
+      if (input.contestId && insertedSnap) {
+        // Verify contest exists and is active
+        const contestData = await ctx.db.query.contest.findFirst({
+          where: eq(contest.id, input.contestId),
+        });
+
+        if (!contestData) {
+          throw new Error("Contest not found");
+        }
+
+        if (!contestData.active) {
+          throw new Error("Contest is not active");
+        }
+
+        // Check if contest is within entry period
+        const now = new Date();
+        if (contestData.startDate && now < contestData.startDate) {
+          throw new Error("Contest entry period hasn't started yet");
+        }
+
+        if (contestData.endDate && now > contestData.endDate) {
+          throw new Error("Contest entry period has ended");
+        }
+
+        // Only new snaps can be entered (created after contest start)
+        if (contestData.startDate && insertedSnap.createdAt < contestData.startDate) {
+          throw new Error("Only new snaps created after the contest started can be entered");
+        }
+
+        // Create contest entry (active by default since we're ignoring payment for now)
+        const contestEntry = {
+          snapId: insertedSnap.id,
+          contestId: input.contestId,
+          active: true, // Skip payment for now
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+
+        await ctx.db.insert(snapContest).values(contestEntry);
+      }
+
       return {
         id: insertedSnap?.id,
         createdAt: insertedSnap?.createdAt,
+        contestId: input.contestId,
       };
     }),
 

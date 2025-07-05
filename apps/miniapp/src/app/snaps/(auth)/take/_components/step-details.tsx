@@ -6,6 +6,7 @@ import z from "zod";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
+import { api } from "~/trpc/react";
 import type { StepProps } from "./types";
 
 const schema = z.object({
@@ -18,9 +19,12 @@ const schema = z.object({
     .max(100, {
       message: "Description must be less than 100 characters",
     }),
+  contestId: z.string().optional(),
 });
 
 export function StepDetails({ data, updateData, next }: StepProps) {
+  const { data: activeContests, isLoading: contestsLoading } = api.contests.getActive.useQuery();
+
   const {
     register,
     handleSubmit,
@@ -30,11 +34,16 @@ export function StepDetails({ data, updateData, next }: StepProps) {
     defaultValues: {
       title: data.title ?? "",
       description: data.description ?? "",
+      contestId: data.contestId ?? "",
     },
   });
 
-  const onSubmit = (data: z.infer<typeof schema>) => {
-    updateData({ title: data.title, description: data.description });
+  const onSubmit = (formData: z.infer<typeof schema>) => {
+    updateData({ 
+      title: formData.title, 
+      description: formData.description,
+      contestId: formData.contestId ?? undefined,
+    });
     next();
   };
 
@@ -57,6 +66,30 @@ export function StepDetails({ data, updateData, next }: StepProps) {
               <p className="text-sm text-red-500">
                 {errors.description.message}
               </p>
+            )}
+          </div>
+          
+          {/* Contest Selection */}
+          <div>
+            <label className="mb-2 block text-sm font-medium">
+              Enter a Contest (Optional)
+            </label>
+            <select
+              {...register("contestId")}
+              className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              disabled={contestsLoading}
+            >
+              <option value="">No contest - just share publicly</option>
+              {activeContests?.map((contest) => (
+                <option key={contest.id} value={contest.id}>
+                  {contest.title}
+                  {contest.entryPrice && ` - Entry: $${Number(contest.entryPrice).toFixed(2)}`}
+                  {contest.prize && ` - Prize: $${Number(contest.prize).toFixed(2)}`}
+                </option>
+              ))}
+            </select>
+            {contestsLoading && (
+              <p className="mt-1 text-sm text-gray-500">Loading contests...</p>
             )}
           </div>
         </div>
