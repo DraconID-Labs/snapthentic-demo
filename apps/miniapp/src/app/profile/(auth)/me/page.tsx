@@ -9,9 +9,11 @@ import { AspectRatioImage } from "~/components/ui/responsive-image";
 import { Loader } from "~/components/ui/loader";
 import { api } from "~/trpc/react";
 import { CreateProfile } from "../_components/create-profile";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const session = useSession();
+  const router = useRouter();
 
   const {
     data: snapsRaw,
@@ -82,7 +84,11 @@ export default function Page() {
         <Button asChild variant="outline" className="w-full">
           <Link href="/profile/edit">Edit profile</Link>
         </Button>
-        <Button variant="outline" className="w-full">
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => router.push("/snaps/take")}
+        >
           Share profile
         </Button>
         <Button variant="outline">

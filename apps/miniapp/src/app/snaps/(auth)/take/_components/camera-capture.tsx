@@ -7,7 +7,7 @@ import { ResponsiveImage } from "~/components/ui/responsive-image";
 import {
   compressImageToDataURL,
   getSizeReduction,
-} from "../_utils/compress-image";
+} from "../../../_utils/compress-image";
 
 interface CameraCaptureProps {
   onPhotoCapture: (photoDataUrl: string) => void;

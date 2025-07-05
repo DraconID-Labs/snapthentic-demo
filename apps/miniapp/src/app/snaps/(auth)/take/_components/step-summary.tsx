@@ -3,13 +3,9 @@
 import { Loader2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
-import type { SnapDrawerContentProps } from "./snap-drawer-content";
+import type { StepProps } from "../page";
 
-export function StepSummary({
-  data,
-  next,
-  updateData,
-}: SnapDrawerContentProps) {
+export function StepSummary({ data, updateData, next }: StepProps) {
   const createSnapMutation = api.snaps.create.useMutation({
     onSuccess: (result) => {
       updateData({
@@ -48,8 +44,8 @@ export function StepSummary({
       signature: data.signature.signature,
       signerAddress: data.signature.address,
       signatureVersion: data.signature.version.toString(),
-      title: `Snap ${new Date().toLocaleDateString()}`,
-      description: "Authenticated photo snap",
+      title: data.title ?? `Snap ${new Date().toLocaleDateString()}`,
+      description: data.description ?? "Authenticated photo snap",
       isPublic: true,
     });
   };
@@ -71,8 +67,32 @@ export function StepSummary({
         )}
       </div>
 
-      <div className="space-y-2">
-        <h3 className="font-semibold">Hash</h3>
+      <div className="space-y-1">
+        <h3 className="text-sm font-semibold">Title</h3>
+        {data.title ? (
+          <>
+            <p className="break-all rounded bg-gray-100 p-2 font-mono text-xs">
+              {data.title}
+            </p>
+          </>
+        ) : (
+          <p className="text-sm text-gray-600">No title</p>
+        )}
+      </div>
+
+      <div className="space-y-1">
+        <h3 className="text-sm font-semibold">Description</h3>
+        {data.description ? (
+          <p className="break-all rounded bg-gray-100 p-2 font-mono text-xs">
+            {data.description}
+          </p>
+        ) : (
+          <p className="text-sm text-gray-600">No description</p>
+        )}
+      </div>
+
+      <div className="space-y-1">
+        <h3 className="text-sm font-semibold">Hash</h3>
         {data.hash ? (
           <p className="break-all rounded bg-gray-100 p-2 font-mono text-xs">
             {data.hash}
@@ -82,8 +102,8 @@ export function StepSummary({
         )}
       </div>
 
-      <div className="space-y-2">
-        <h3 className="font-semibold">Signature</h3>
+      <div className="space-y-1">
+        <h3 className="text-sm font-semibold">Signature</h3>
         {data.signature?.success ? (
           <>
             <p className="break-all rounded bg-gray-100 p-2 font-mono text-xs">

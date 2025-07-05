@@ -3,9 +3,9 @@
 import { ArrowRight, HeartCrack, PartyPopper } from "lucide-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
-import type { SnapDrawerContentProps } from "./snap-drawer-content";
+import type { StepProps } from "../page";
 
-export function StepCompleted({ data }: SnapDrawerContentProps) {
+export function StepCompleted({ data }: StepProps) {
   return (
     <div className="flex flex-col items-center justify-center space-y-6">
       {data.submitResult?.success && (
@@ -21,27 +21,6 @@ export function StepCompleted({ data }: SnapDrawerContentProps) {
           <p className="text-sm text-gray-600">{data.submitResult?.message}</p>
         </div>
       )}
-      {/* <div className="w-full">
-        {data.submitResult && (
-          <div
-            className={`rounded-lg p-4 ${
-              data.submitResult.success
-                ? "border border-green-200 bg-green-50 text-green-800"
-                : "border border-red-200 bg-red-50 text-red-800"
-            }`}
-          >
-            <p className="font-medium">
-              {data.submitResult.success ? "✓ Success" : "✗ Error"}
-            </p>
-            <p className="text-sm">{data.submitResult.message}</p>
-            {data.submitResult.snapId && (
-              <p className="mt-1 text-xs">
-                Snap ID: {data.submitResult.snapId}
-              </p>
-            )}
-          </div>
-        )}
-      </div> */}
       {data.submitResult?.snapId && (
         <Link href={`/snaps/${data.submitResult.snapId}`}>
           <Button variant={"default"}>

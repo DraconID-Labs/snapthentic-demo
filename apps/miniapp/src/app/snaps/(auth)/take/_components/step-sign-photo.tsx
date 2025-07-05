@@ -5,15 +5,11 @@ import { Signature } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
 import { Code } from "~/components/ui/code";
-import { useSignMessage } from "../_hooks/use-sign-message";
-import { hashMessage } from "../_utils/hash-photo";
-import type { SnapDrawerContentProps } from "./snap-drawer-content";
+import { useSignMessage } from "../../../_hooks/use-sign-message";
+import { hashMessage } from "../../../_utils/hash-photo";
+import type { StepProps } from "../page";
 
-export function SignPhotoStep({
-  data,
-  updateData,
-  next,
-}: SnapDrawerContentProps) {
+export function SignPhotoStep({ data, updateData, next }: StepProps) {
   const { signedMessage, sign } = useSignMessage();
   const [hash, setHash] = useState<string | undefined>();
 
