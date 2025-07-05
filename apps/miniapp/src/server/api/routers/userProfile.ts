@@ -1,8 +1,4 @@
-import {
-  type InsertUserProfile,
-  follows,
-  userProfiles,
-} from "@snapthentic/database/schema";
+import { follows, userProfiles } from "@snapthentic/database/schema";
 import { TRPCError } from "@trpc/server";
 import { count, eq } from "drizzle-orm";
 import { z } from "zod";
@@ -140,45 +136,4 @@ export const userProfileRouter = createTRPCRouter({
 
     return { success: true };
   }),
-
-  // Create or update profile (upsert)
-  upsert: protectedProcedure
-    .input(createUserProfileSchema)
-    .mutation(async ({ ctx, input }) => {
-      // Check if profile exists
-      const existingProfile = await ctx.db
-        .select()
-        .from(userProfiles)
-        .where(eq(userProfiles.userId, ctx.session.user.id))
-        .limit(1);
-
-      if (existingProfile.length > 0) {
-        // Update existing profile
-        const result = await ctx.db
-          .update(userProfiles)
-          .set({
-            ...input,
-            updatedAt: new Date(),
-          })
-          .where(eq(userProfiles.userId, ctx.session.user.id))
-          .returning();
-
-        return result[0];
-      }
-
-      // Create new profile
-      const newProfile: InsertUserProfile = {
-        userId: ctx.session.user.id,
-        ...input,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const result = await ctx.db
-        .insert(userProfiles)
-        .values(newProfile)
-        .returning();
-
-      return result[0];
-    }),
 });

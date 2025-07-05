@@ -11,9 +11,6 @@ import { Textarea } from "~/components/ui/textarea";
 import { api } from "~/trpc/react";
 
 interface ProfileForm {
-  nickname?: string;
-  displayName?: string;
-  avatarUrl?: string;
   bio?: string;
   location?: string;
   twitterHandle?: string;
@@ -28,7 +25,7 @@ export default function EditProfilePage() {
   const { data: profile, isLoading: isProfileLoading } =
     api.userProfile.me.useQuery();
 
-  const upsertProfile = api.userProfile.upsert.useMutation({
+  const upsertProfile = api.userProfile.update.useMutation({
     onSuccess: async () => {
       await Promise.all([
         utils.userProfile.me.invalidate(),
@@ -52,9 +49,6 @@ export default function EditProfilePage() {
   useEffect(() => {
     if (profile) {
       setForm({
-        nickname: profile.nickname ?? "",
-        displayName: profile.displayName ?? "",
-        avatarUrl: profile.avatarUrl ?? "",
         bio: profile.bio ?? "",
         location: profile.location ?? "",
         twitterHandle: profile.twitterHandle ?? "",
