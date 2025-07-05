@@ -4,6 +4,8 @@
 import { relations } from "drizzle-orm";
 import { numeric, pgTableCreator } from "drizzle-orm/pg-core";
 import { boolean, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import { unique, index, check } from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 
 export const createTable = pgTableCreator((name) => `snapthentic_${name}`);
 
@@ -57,6 +59,40 @@ export const snaps = createTable("snaps", {
     .defaultNow()
     .notNull(),
 });
+
+// Likes table for snaps
+export const likes = createTable("likes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: varchar("user_id", { length: 255 }).notNull(),
+  snapId: uuid("snap_id").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+}, (table) => ({
+  // Composite unique constraint to prevent duplicate likes
+  userSnapUnique: unique().on(table.userId, table.snapId),
+  // Indexes for performance
+  userIdIdx: index("likes_user_id_idx").on(table.userId),
+  snapIdIdx: index("likes_snap_id_idx").on(table.snapId),
+}));
+
+// Follows table for user relationships
+export const follows = createTable("follows", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  followerId: varchar("follower_id", { length: 255 }).notNull(), // User who is following
+  followingId: varchar("following_id", { length: 255 }).notNull(), // User being followed
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+}, (table) => ({
+  // Composite unique constraint to prevent duplicate follows
+  followerFollowingUnique: unique().on(table.followerId, table.followingId),
+  // Indexes for performance
+  followerIdIdx: index("follows_follower_id_idx").on(table.followerId),
+  followingIdIdx: index("follows_following_id_idx").on(table.followingId),
+  // Check constraint to prevent self-following
+  noSelfFollow: check("no_self_follow", sql`${table.followerId} != ${table.followingId}`),
+}));
 
 export const snapContest = createTable("snap_contests", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -114,12 +150,44 @@ export const snapContestVoteRelations = relations(
   }),
 );
 
-export const snapRelations = relations(snaps, ({ one }) => ({
+export const snapsRelations = relations(snaps, ({ one, many }) => ({
   author: one(userProfiles, {
     fields: [snaps.userId],
     references: [userProfiles.userId],
   }),
+  likes: many(likes),
   contestEntry: one(snapContest),
+}));
+
+export const userProfilesRelations = relations(userProfiles, ({ many }) => ({
+  snaps: many(snaps),
+  likes: many(likes),
+  followers: many(follows, { relationName: "UserFollowers" }),
+  following: many(follows, { relationName: "UserFollowing" }),
+}));
+
+export const likesRelations = relations(likes, ({ one }) => ({
+  user: one(userProfiles, {
+    fields: [likes.userId],
+    references: [userProfiles.userId],
+  }),
+  snap: one(snaps, {
+    fields: [likes.snapId],
+    references: [snaps.id],
+  }),
+}));
+
+export const followsRelations = relations(follows, ({ one }) => ({
+  follower: one(userProfiles, {
+    fields: [follows.followerId],
+    references: [userProfiles.userId],
+    relationName: "UserFollowers",
+  }),
+  following: one(userProfiles, {
+    fields: [follows.followingId],
+    references: [userProfiles.userId],
+    relationName: "UserFollowing",
+  }),
 }));
 
 export const snapContestRelations = relations(snapContest, ({ one, many }) => ({
@@ -143,6 +211,12 @@ export type InsertSnap = typeof snaps.$inferInsert;
 export type SnapWithAuthor = typeof snaps.$inferSelect & {
   author: UserProfile;
 };
+
+export type Like = typeof likes.$inferSelect;
+export type InsertLike = typeof likes.$inferInsert;
+
+export type Follow = typeof follows.$inferSelect;
+export type InsertFollow = typeof follows.$inferInsert;
 
 export type Contest = typeof contest.$inferSelect;
 export type InsertContest = typeof contest.$inferInsert;

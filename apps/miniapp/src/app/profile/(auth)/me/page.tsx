@@ -23,7 +23,7 @@ export default function Page() {
     data: profile,
     isLoading: profileLoading,
     isError: profileError,
-  } = api.userProfile.getMyProfile.useQuery();
+  } = api.userProfile.me.useQuery();
 
   if (session.status === "loading" || profileLoading || snapsLoading) {
     return <Loader />;
@@ -67,11 +67,11 @@ export default function Page() {
               <span className="text-xs">snaps</span>
             </div>
             <div className="flex flex-col text-left leading-none">
-              <span>{Math.floor(Math.random() * 1000)}</span>
+              <span>{profile?.followersCount ?? 0}</span>
               <span className="text-xs">followers</span>
             </div>
             <div className="flex flex-col text-left leading-none">
-              <span>{Math.floor(Math.random() * 1000)}</span>
+              <span>{profile?.followingCount ?? 0}</span>
               <span className="text-xs">following</span>
             </div>
           </div>
@@ -102,6 +102,15 @@ export default function Page() {
           </Link>
         ))}
       </div>
+      
+      {snaps.length === 0 && (
+        <div className="flex w-full flex-col items-center justify-center gap-4 py-8">
+          <p className="text-gray-500">No snaps yet</p>
+          <Button asChild variant="outline">
+            <Link href="/snaps/take">Take your first snap</Link>
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

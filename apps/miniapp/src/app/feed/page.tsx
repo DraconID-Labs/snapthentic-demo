@@ -82,23 +82,24 @@ export default function FeedPage() {
       </h1>
 
       {allSnaps.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-12">
+        <div className="flex flex-col items-center justify-center space-y-6 py-12">
           <p className="text-gray-500">No snaps yet!</p>
         </div>
       ) : (
         <>
           {allSnaps.map((snap) => (
-            <SnapCard
-              key={snap.id}
-              snap={snap}
-              isOwner={session.data?.user.id === snap.author.userId}
-              onBodyClick={() => {
-                router.push(`/snaps/${snap.id}`);
-              }}
-              onHeaderClick={() => {
-                router.push(`/profile/${snap.author.userId}`);
-              }}
-            />
+            <div key={snap.id}>
+              <SnapCard
+                snap={snap}
+                isOwner={session.data?.user.id === snap.author.userId}
+                onBodyClick={() => {
+                  router.push(`/snaps/${snap.id}`);
+                }}
+                onHeaderClick={() => {
+                  router.push(`/profile/${snap.author.userId}`);
+                }}
+              />
+            </div>
           ))}
 
           {/* Infinite scroll trigger */}

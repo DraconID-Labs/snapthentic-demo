@@ -71,6 +71,13 @@
       "when": 1751583721223,
       "tag": "0009_swift_nightcrawler",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1751721147484,
+      "tag": "0010_fresh_crystal",
+      "breakpoints": true
     }
   ]
 }

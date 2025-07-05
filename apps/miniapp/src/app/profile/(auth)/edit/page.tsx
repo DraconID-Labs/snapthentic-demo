@@ -26,12 +26,12 @@ export default function EditProfilePage() {
   const utils = api.useUtils();
 
   const { data: profile, isLoading: isProfileLoading } =
-    api.userProfile.getMyProfile.useQuery();
+    api.userProfile.me.useQuery();
 
   const upsertProfile = api.userProfile.upsert.useMutation({
     onSuccess: async () => {
       await Promise.all([
-        utils.userProfile.getMyProfile.invalidate(),
+        utils.userProfile.me.invalidate(),
         utils.snaps.getMySnaps.invalidate(),
       ]);
       router.push("/profile/me");

@@ -1,12 +1,14 @@
 import {
-  createCallerFactory,
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
+    createCallerFactory,
+    createTRPCRouter,
+    protectedProcedure,
+    publicProcedure,
 } from "~/server/api/trpc";
 import { proofsRouter } from "./routers/proofs";
 import { snapsRouter } from "./routers/snaps";
 import { userProfileRouter } from "./routers/userProfile";
+import { likesRouter } from "./routers/likes";
+import { followsRouter } from "./routers/follows";
 
 /**
  * This is the primary router for your server.
@@ -19,6 +21,8 @@ export const appRouter = createTRPCRouter({
   userProfile: userProfileRouter,
   proofs: proofsRouter,
   snaps: snapsRouter,
+  likes: likesRouter,
+  follows: followsRouter,
 });
 
 // export type definition of API

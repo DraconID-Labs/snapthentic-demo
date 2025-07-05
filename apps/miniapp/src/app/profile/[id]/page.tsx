@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Loader } from "~/components/ui/loader";
 import { AspectRatioImage } from "~/components/ui/responsive-image";
+import { FollowButton } from "~/components/ui/follow-button";
 import { useSessionWithProfile } from "~/hooks/use-session-with-profile";
 import { api } from "~/trpc/react";
 
@@ -29,7 +30,7 @@ export default function Page() {
     data: profile,
     isLoading,
     isError,
-  } = api.userProfile.getProfile.useQuery({ userId: id as string });
+  } = api.userProfile.getByUserId.useQuery({ userId: id as string });
 
   const {
     data: snapsRaw,
@@ -56,23 +57,38 @@ export default function Page() {
           <AvatarFallback>{profile?.displayName?.slice(0, 2)}</AvatarFallback>
         </Avatar>
         <div className="flex w-full flex-col gap-4">
-          <h2 className="font-bold">@{profile?.displayName}</h2>
+          <div className="flex items-center justify-between">
+            <h2 className="font-bold">@{profile?.displayName}</h2>
+            <FollowButton
+              userId={id as string}
+              size="sm"
+              className="ml-auto"
+            />
+          </div>
           <div className="flex items-center justify-between gap-2">
             <div className="flex flex-col text-left">
               <span>{snaps.length}</span>
               <span className="text-xs">snaps</span>
             </div>
             <div className="flex flex-col text-left">
-              <span>{Math.floor(Math.random() * 1000)}</span>
+              <span>{profile?.followersCount ?? 0}</span>
               <span className="text-xs">followers</span>
             </div>
             <div className="flex flex-col text-left">
-              <span>{Math.floor(Math.random() * 1000)}</span>
+              <span>{profile?.followingCount ?? 0}</span>
               <span className="text-xs">following</span>
             </div>
           </div>
         </div>
       </div>
+      
+      {/* Bio section */}
+      {profile?.bio && (
+        <div className="w-full">
+          <p className="text-sm text-gray-600">{profile.bio}</p>
+        </div>
+      )}
+      
       <div className="grid w-full grid-cols-3 gap-1">
         {snaps.map((snap) => (
           <Link href={`/snaps/${snap.id}`} key={snap.id}>
@@ -86,6 +102,12 @@ export default function Page() {
           </Link>
         ))}
       </div>
+      
+      {snaps.length === 0 && (
+        <div className="flex w-full items-center justify-center py-8">
+          <p className="text-gray-500">No snaps yet</p>
+        </div>
+      )}
     </div>
   );
 }

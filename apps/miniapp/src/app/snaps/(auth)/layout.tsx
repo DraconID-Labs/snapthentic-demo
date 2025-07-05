@@ -8,7 +8,7 @@ export default async function Layout({
 }: { children: React.ReactNode }) {
   let profile: UserProfile | null = null;
   try {
-    profile = await api.userProfile.getMyProfile();
+    profile = await api.userProfile.me();
   } catch (error) {
     console.error(error);
   }

@@ -4,7 +4,6 @@ import type { SnapWithAuthor } from "@snapthentic/database/schema";
 import {
   Check,
   ExternalLink,
-  HeartIcon,
   MessageCircleIcon,
   MoreVertical,
   ShareIcon,
@@ -22,11 +21,18 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { ResponsiveImage } from "~/components/ui/responsive-image";
+import { LikeButton } from "~/components/ui/like-button";
 import { env } from "~/env";
 import { SnapDownload } from "./snap-download";
 import { useShareOnX } from "./use-share-on-x";
 import { SnapDelete } from "./snap-delete";
 import { SnapEdit } from "./snap-edit";
+
+// Extended type for snap with like information
+type SnapWithLikes = SnapWithAuthor & {
+  likeCount?: number;
+  isLikedByUser?: boolean;
+};
 
 export function SnapCard({
   snap,
@@ -34,7 +40,7 @@ export function SnapCard({
   onBodyClick,
   isOwner,
 }: {
-  snap: SnapWithAuthor;
+  snap: SnapWithLikes;
   onHeaderClick?: () => void;
   onBodyClick?: () => void;
   isOwner?: boolean;
@@ -105,13 +111,16 @@ export function SnapCard({
 
       <div className="mb-1 flex w-full items-center justify-between">
         <div className="flex w-full items-center gap-1">
-          <Button variant="ghost" className="max-w-fit px-1">
-            <HeartIcon className="size-4 fill-red-500 stroke-red-400" />
-            <span className="text-sm">{Math.floor(Math.random() * 100)}</span>
-          </Button>
+          <LikeButton
+            snapId={snap.id}
+            initialLikeCount={snap.likeCount ?? 0}
+            initialIsLiked={snap.isLikedByUser ?? false}
+            size="sm"
+            className="max-w-fit px-1"
+          />
           <Button variant="ghost" className="max-w-fit px-1">
             <MessageCircleIcon className="size-4" />
-            <span className="text-sm">{Math.floor(Math.random() * 100)}</span>
+            <span className="text-sm">{Math.floor(Math.random() * 10)}</span>
           </Button>
           <Button
             variant="ghost"
@@ -119,7 +128,7 @@ export function SnapCard({
             onClick={handleShare}
           >
             <ShareIcon className="size-4" />
-            <span className="text-sm">{Math.floor(Math.random() * 100)}</span>
+            <span className="text-sm">Share</span>
           </Button>
         </div>
 

@@ -16,6 +16,12 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     where: eq(snaps.id, id),
     with: {
       author: true,
+      likes: {
+        columns: {
+          id: true,
+          userId: true,
+        },
+      },
     },
   });
 
@@ -68,6 +74,12 @@ export default async function SnapPage(props: Props) {
     where: eq(snaps.id, id),
     with: {
       author: true,
+      likes: {
+        columns: {
+          id: true,
+          userId: true,
+        },
+      },
     },
   });
 
@@ -75,5 +87,12 @@ export default async function SnapPage(props: Props) {
     return <div>Snap not found</div>;
   }
 
-  return <SnapDetailView snap={snap} />;
+  // Add like count to the snap data
+  const snapWithLikes = {
+    ...snap,
+    likeCount: snap.likes.length,
+    isLikedByUser: false, // This will be determined on the client side
+  };
+
+  return <SnapDetailView snap={snapWithLikes} />;
 }

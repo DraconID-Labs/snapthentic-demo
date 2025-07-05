@@ -1,14 +1,15 @@
 import {
-  type InsertUserProfile,
-  userProfiles,
+    type InsertUserProfile,
+    userProfiles,
+    follows,
 } from "@snapthentic/database/schema";
 import { TRPCError } from "@trpc/server";
-import { eq } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
 import { z } from "zod";
 import {
-  createTRPCRouter,
-  protectedProcedure,
-  publicProcedure,
+    createTRPCRouter,
+    protectedProcedure,
+    publicProcedure,
 } from "~/server/api/trpc";
 
 const createUserProfileSchema = z.object({
@@ -32,45 +33,68 @@ const updateUserProfileSchema = createUserProfileSchema.pick({
 });
 
 export const userProfileRouter = createTRPCRouter({
-  // Get current user's profile
-  getMyProfile: protectedProcedure.query(async ({ ctx }) => {
-    const profile = await ctx.db
-      .select()
-      .from(userProfiles)
-      .where(eq(userProfiles.userId, ctx.session.user.id))
-      .limit(1);
+  me: protectedProcedure.query(async ({ ctx }) => {
+    const profile = await ctx.db.query.userProfiles.findFirst({
+      where: eq(userProfiles.userId, ctx.session.user.id),
+    });
 
-    return profile[0] ?? null;
+    if (!profile) {
+      throw new TRPCError({
+        code: "NOT_FOUND",
+        message: "User profile not found",
+      });
+    }
+
+    // Get follower and following counts
+    const [followersResult, followingResult] = await Promise.all([
+      ctx.db
+        .select({ count: count() })
+        .from(follows)
+        .where(eq(follows.followingId, ctx.session.user.id)),
+      ctx.db
+        .select({ count: count() })
+        .from(follows)
+        .where(eq(follows.followerId, ctx.session.user.id)),
+    ]);
+
+    return {
+      ...profile,
+      followersCount: followersResult[0]?.count ?? 0,
+      followingCount: followingResult[0]?.count ?? 0,
+    };
   }),
 
-  // Get any user's profile by user ID (only if public)
-  getProfile: publicProcedure
+  getByUserId: publicProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const profile = await ctx.db
-        .select()
-        .from(userProfiles)
-        .where(eq(userProfiles.userId, input.userId))
-        .limit(1);
+      const profile = await ctx.db.query.userProfiles.findFirst({
+        where: eq(userProfiles.userId, input.userId),
+      });
 
-      const userProfile = profile[0];
-
-      if (!userProfile) {
+      if (!profile) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "User profile not found",
         });
       }
 
-      // Return full profile if it's public, or if it's the current user's profile
-      if (userProfile.isPublic || ctx.session?.user?.id === input.userId) {
-        return userProfile;
-      }
+      // Get follower and following counts
+      const [followersResult, followingResult] = await Promise.all([
+        ctx.db
+          .select({ count: count() })
+          .from(follows)
+          .where(eq(follows.followingId, input.userId)),
+        ctx.db
+          .select({ count: count() })
+          .from(follows)
+          .where(eq(follows.followerId, input.userId)),
+      ]);
 
-      throw new TRPCError({
-        code: "FORBIDDEN",
-        message: "This profile is private",
-      });
+      return {
+        ...profile,
+        followersCount: followersResult[0]?.count ?? 0,
+        followingCount: followingResult[0]?.count ?? 0,
+      };
     }),
 
   // Update user profile

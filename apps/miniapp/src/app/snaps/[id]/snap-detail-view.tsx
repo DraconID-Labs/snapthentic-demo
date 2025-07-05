@@ -6,8 +6,14 @@ import { ImageViewer } from "~/components/ui/image-viewer";
 import { SnapCard } from "../_components/snap-card";
 import { useSession } from "next-auth/react";
 
+// Extended type for snap with like information
+type SnapWithLikes = SnapWithAuthor & {
+  likeCount?: number;
+  isLikedByUser?: boolean;
+};
+
 interface SnapDetailViewProps {
-  snap: SnapWithAuthor;
+  snap: SnapWithLikes;
 }
 
 export function SnapDetailView({ snap }: SnapDetailViewProps) {

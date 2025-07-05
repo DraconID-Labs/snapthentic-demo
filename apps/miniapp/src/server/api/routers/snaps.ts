@@ -278,16 +278,32 @@ export const snapsRouter = createTRPCRouter({
         limit: limit + 1,
         with: {
           author: true,
+          likes: {
+            columns: {
+              id: true,
+              userId: true,
+            },
+          },
         },
       });
 
       const hasMore = feed.length > limit;
       const items = hasMore ? feed.slice(0, limit) : feed;
-      const nextCursor = hasMore ? items[items.length - 1]?.id : undefined;
+
+      // Add like counts and user's like status
+      const enrichedItems = items.map((snap) => ({
+        ...snap,
+        likeCount: snap.likes.length,
+        isLikedByUser: ctx.session?.user
+          ? snap.likes.some(like => like.userId === ctx.session?.user.id)
+          : false,
+        // Remove the likes array to avoid sending unnecessary data
+        likes: undefined,
+      }));
 
       return {
-        items,
-        nextCursor,
+        items: enrichedItems,
+        nextCursor: hasMore ? items[items.length - 1]?.id : undefined,
         hasMore,
       };
     }),
@@ -295,10 +311,24 @@ export const snapsRouter = createTRPCRouter({
   getById: protectedProcedure
     .input(z.object({ snapId: z.string() }))
     .query(async ({ ctx, input }) => {
+      // Assert session exists (guaranteed in protectedProcedure)
+      if (!ctx.session) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Session required",
+        });
+      }
+
       const snap = await ctx.db.query.snaps.findFirst({
         where: eq(snaps.id, input.snapId),
         with: {
           author: true,
+          likes: {
+            columns: {
+              id: true,
+              userId: true,
+            },
+          },
         },
       });
 
@@ -309,7 +339,13 @@ export const snapsRouter = createTRPCRouter({
         });
       }
 
-      return snap;
+      return {
+        ...snap,
+        likeCount: snap.likes.length,
+        isLikedByUser: snap.likes.some(like => like.userId === ctx.session.user.id),
+        // Remove the likes array to avoid sending unnecessary data
+        likes: undefined,
+      };
     }),
 
   update: protectedProcedure

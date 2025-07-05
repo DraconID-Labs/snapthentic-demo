@@ -9,7 +9,7 @@ export function CreateProfile() {
   const utils = api.useUtils();
 
   const { submit } = useSubmitProof(() => {
-    void utils.userProfile.getMyProfile.invalidate();
+    void utils.userProfile.me.invalidate();
     void utils.snaps.getMySnaps.invalidate();
   });
 

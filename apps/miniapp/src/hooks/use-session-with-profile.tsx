@@ -16,7 +16,7 @@ type SessionWithProfile =
 export function useSessionWithProfile(): SessionWithProfile {
   const session = useSession();
 
-  const profile = api.userProfile.getMyProfile.useQuery();
+  const profile = api.userProfile.me.useQuery();
 
   if (session.status === "loading" || profile.isLoading) {
     return { status: "loading" };
