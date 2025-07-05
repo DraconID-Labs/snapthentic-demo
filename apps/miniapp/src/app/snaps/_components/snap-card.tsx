@@ -3,10 +3,10 @@
 import type { SnapWithAuthor } from "@snapthentic/database/schema";
 import {
   Check,
+  Link as LinkIcon,
   ExternalLink,
   MessageCircleIcon,
   MoreVertical,
-  ShareIcon,
   Trophy,
   Vote,
 } from "lucide-react";
@@ -29,7 +29,7 @@ import { env } from "~/env";
 import { SnapDelete } from "./snap-delete";
 import { SnapDownload } from "./snap-download";
 import { SnapEdit } from "./snap-edit";
-import { useShareOnX } from "./use-share-on-x";
+import { useCopyUrl } from "./use-share-on-x";
 
 // Extended type for snap with like and contest information
 type SnapWithLikes = SnapWithAuthor & {
@@ -58,7 +58,7 @@ export function SnapCard({
   onBodyClick?: () => void;
   isOwner?: boolean;
 }) {
-  const { handleShare } = useShareOnX({
+  const { handleCopy, isCopied, isError } = useCopyUrl({
     url: `${env.NEXT_PUBLIC_APP_URL}/snaps/${snap.id}`,
   });
 
@@ -173,11 +173,14 @@ export function SnapCard({
           </Button>
           <Button
             variant="ghost"
-            className="max-w-fit px-1"
-            onClick={handleShare}
+            className={`max-w-fit px-1 ${isCopied ? "text-green-600" : isError ? "text-red-600" : ""}`}
+            onClick={handleCopy}
           >
-            <ShareIcon className="size-4" />
-            <span className="text-sm">Share</span>
+            {isCopied ? (
+              <Check className="size-4" />
+            ) : (
+              <LinkIcon className="size-4" />
+            )}
           </Button>
         </div>
 

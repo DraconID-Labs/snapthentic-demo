@@ -39,10 +39,7 @@ export const userProfileRouter = createTRPCRouter({
     });
 
     if (!profile) {
-      throw new TRPCError({
-        code: "NOT_FOUND",
-        message: "User profile not found",
-      });
+      return null;
     }
 
     // Get follower and following counts

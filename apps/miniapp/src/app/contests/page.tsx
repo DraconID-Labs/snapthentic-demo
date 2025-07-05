@@ -17,7 +17,7 @@ export default async function Page() {
   });
 
   return (
-    <div className="flex min-h-screen flex-col items-center">
+    <div className="mx-auto max-w-2xl space-y-8">
       <div className="mb-6 flex w-full items-center justify-between">
         <h1 className="text-2xl font-bold">Contests</h1>
         <Button asChild variant="outline" size="sm">
@@ -28,14 +28,22 @@ export default async function Page() {
         </Button>
       </div>
       <div className="w-full max-w-4xl space-y-4">
-        {contests.map((contest) => (
-          <Link key={contest.id} href={`/contests/${contest.id}`}>
-            <div className="cursor-pointer transition-transform hover:scale-105">
-              {/* @ts-expect-error - TODO: fix this */}
-              <ContestBanner contest={contest} />
-            </div>
-          </Link>
-        ))}
+        {contests.length === 0 ? (
+          <div className="flex flex-col items-center justify-center space-y-6 py-12">
+            <p className="text-gray-500">No contests yet!</p>
+          </div>
+        ) : (
+          <>
+            {contests.map((contest) => (
+              <Link key={contest.id} href={`/contests/${contest.id}`}>
+                <div className="cursor-pointer transition-transform hover:scale-105">
+                  {/* @ts-expect-error - TODO: fix this */}
+                  <ContestBanner contest={contest} />
+                </div>
+              </Link>
+            ))}
+          </>
+        )}
       </div>
     </div>
   );
