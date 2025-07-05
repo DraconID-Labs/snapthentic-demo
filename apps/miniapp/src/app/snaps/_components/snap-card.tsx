@@ -18,6 +18,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { ResponsiveImage } from "~/components/ui/responsive-image";
@@ -25,6 +26,7 @@ import { env } from "~/env";
 import { SnapDownload } from "./snap-download";
 import { useShareOnX } from "./use-share-on-x";
 import { SnapDelete } from "./snap-delete";
+import { SnapEdit } from "./snap-edit";
 
 export function SnapCard({
   snap,
@@ -73,9 +75,15 @@ export function SnapCard({
               <SnapDownload snap={snap} />
             </DropdownMenuItem>
             {isOwner && (
-              <DropdownMenuItem>
-                <SnapDelete snap={snap} />
-              </DropdownMenuItem>
+              <>
+                <DropdownMenuItem>
+                  <SnapEdit snap={snap} />
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-gray-300" />
+                <DropdownMenuItem>
+                  <SnapDelete snap={snap} />
+                </DropdownMenuItem>
+              </>
             )}
           </DropdownMenuContent>
         </DropdownMenu>

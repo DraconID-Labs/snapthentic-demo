@@ -19,6 +19,7 @@ import {
 } from "~/server/api/trpc";
 import { getPublicUrl } from "~/supabase/get-public-url";
 import { uploadToSupabase } from "~/supabase/upload";
+import { TRPCError } from "@trpc/server";
 
 function base64ToBuffer(base64: string): Buffer {
   const jpegPrefix = "data:image/jpeg;base64,";
@@ -41,6 +42,13 @@ const CreateSnapSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   isPublic: z.boolean().optional().default(true),
+});
+
+const UpdateSnapSchema = z.object({
+  snapId: z.string().min(1, "Snap ID is required"),
+  title: z.string().optional(),
+  description: z.string().optional(),
+  isPublic: z.boolean().optional(),
 });
 
 export const snapsRouter = createTRPCRouter({
@@ -250,6 +258,63 @@ export const snapsRouter = createTRPCRouter({
         nextCursor,
         hasMore,
       };
+    }),
+
+  getById: protectedProcedure
+    .input(z.object({ snapId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const snap = await ctx.db.query.snaps.findFirst({
+        where: eq(snaps.id, input.snapId),
+        with: {
+          author: true,
+        },
+      });
+
+      if (!snap) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Snap not found",
+        });
+      }
+
+      return snap;
+    }),
+
+  update: protectedProcedure
+    .input(UpdateSnapSchema)
+    .mutation(async ({ ctx, input }) => {
+      // First, verify the snap exists and the user owns it
+      const snap = await ctx.db.query.snaps.findFirst({
+        where: eq(snaps.id, input.snapId),
+      });
+
+      if (!snap) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Snap not found",
+        });
+      }
+
+      if (snap.userId !== ctx.session.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can only edit your own snaps",
+        });
+      }
+
+      // Update the snap with new details
+      const [updatedSnap] = await ctx.db
+        .update(snaps)
+        .set({
+          title: input.title,
+          description: input.description,
+          isPublic: input.isPublic,
+          updatedAt: new Date(),
+        })
+        .where(eq(snaps.id, input.snapId))
+        .returning();
+
+      return updatedSnap;
     }),
 });
 
