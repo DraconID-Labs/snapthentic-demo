@@ -39,19 +39,24 @@ export function SnapCard({
   });
 
   return (
-    <div className="flex w-full flex-col gap-2">
+    <div className="flex w-full flex-col">
       <div className="flex w-full items-center justify-between">
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-        <div className="flex w-full items-center gap-2" onClick={onHeaderClick}>
+        <div
+          className="mb-3 flex w-full items-center gap-2"
+          onClick={onHeaderClick}
+        >
           <Avatar className="size-10">
             <AvatarImage src={snap.author.avatarUrl ?? undefined} />
             <AvatarFallback>
               {snap.author?.displayName?.slice(0, 2) ?? "Unknown"}
             </AvatarFallback>
           </Avatar>
-          <div className="flex flex-col gap-1 text-xs">
+          <div className="flex flex-col gap-0.5 text-xs">
             <h1 className="font-bold">@{snap.author.displayName}</h1>
-            <p className="text-gray-500">{snap.author.bio ?? "No bio"}</p>
+            <p className="text-2x text-gray-500">
+              {snap.author.bio ?? "No bio"}
+            </p>
           </div>
         </div>
         <DropdownMenu>
@@ -70,7 +75,7 @@ export function SnapCard({
 
       {/* Responsive image that preserves aspect ratio */}
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-      <div className="cursor-pointer" onClick={onBodyClick}>
+      <div className="mb-2 cursor-pointer" onClick={onBodyClick}>
         <ResponsiveImage
           src={snap.photoUrl}
           alt={snap.title ?? "Snap photo"}
@@ -82,7 +87,7 @@ export function SnapCard({
         />
       </div>
 
-      <div className="flex w-full items-center justify-between">
+      <div className="mb-1 flex w-full items-center justify-between">
         <div className="flex w-full items-center gap-1">
           <Button variant="ghost" className="max-w-fit px-1">
             <HeartIcon className="size-4 fill-red-500 stroke-red-400" />
@@ -137,14 +142,14 @@ export function SnapCard({
           </Drawer>
         </span>
       </div>
-      <div className="flex w-full items-center gap-2 pt-2">
+      <div className="mb-1 flex w-full items-center gap-2">
         <span className="text-xs font-bold">
           {snap.author.nickname ?? snap.author.displayName}:
         </span>
         <span className="text-xs text-gray-500">{snap.description}</span>
       </div>
       <div className="flex w-full items-center">
-        <span className="text-xs text-gray-500">
+        <span className="text-xs font-extralight text-gray-500">
           {snap.createdAt.toLocaleDateString()}
         </span>
       </div>
