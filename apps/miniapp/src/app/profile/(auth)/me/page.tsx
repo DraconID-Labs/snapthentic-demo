@@ -95,10 +95,9 @@ export default function Page() {
             <AspectRatioImage
               src={snap.photoUrl}
               alt={snap.title ?? "Snap"}
-              aspectRatio="1/1"
+              aspectRatio="4/3"
               objectFit="cover"
               className="transition-opacity hover:opacity-80"
-              rounded={false}
             />
           </Link>
         ))}
