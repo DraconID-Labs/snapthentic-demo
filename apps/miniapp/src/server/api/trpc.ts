@@ -125,6 +125,9 @@ export const protectedProcedure = t.procedure
           user: {
             id: "dev-user-id",
             name: "dev-user-name",
+            walletAddress: "0xdev-user-wallet-address",
+            username: "dev-user-username",
+            profilePictureUrl: "https://picsum.photos/200/300?random=0",
           },
           expires: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
         };

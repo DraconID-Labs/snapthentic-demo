@@ -52,7 +52,7 @@ export type Props = {
   params: Promise<{ id: string }>;
 };
 
-export function isUUID(id: string) {
+function isUUID(id: string) {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
     id,
   );
