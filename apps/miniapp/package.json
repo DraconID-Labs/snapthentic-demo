@@ -53,7 +53,9 @@
     "vaul": "^1.1.2",
     "viem": "^2.31.6",
     "zod": "catalog:",
-    "zustand": "catalog:"
+    "zustand": "catalog:",
+    "tailwindcss": "catalog:",
+    "tailwindcss-animate": "catalog:"
   },
   "devDependencies": {
     "@snapthentic/eslint-config": "workspace:*",
@@ -62,8 +64,6 @@
     "@types/react": "catalog:",
     "@types/react-dom": "catalog:",
     "postcss": "catalog:",
-    "rimraf": "catalog:",
-    "tailwindcss": "catalog:",
-    "tailwindcss-animate": "catalog:"
+    "rimraf": "catalog:"
   }
 }
