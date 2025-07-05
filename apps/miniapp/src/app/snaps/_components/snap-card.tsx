@@ -4,12 +4,12 @@ import type { SnapWithAuthor } from "@snapthentic/database/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import {
+  Check,
   ExternalLink,
   HeartIcon,
   MessageCircleIcon,
   MoreVertical,
   ShareIcon,
-  ShieldCheck,
 } from "lucide-react";
 import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
 import Link from "next/link";
@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { SnapDownload } from "./snap-download";
+import { Code } from "~/components/ui/code";
 
 export function SnapCard({
   snap,
@@ -89,34 +90,26 @@ export function SnapCard({
 
         <span className="flex items-center gap-1">
           <Drawer>
-            <DrawerTrigger className="flex items-center gap-1">
+            <DrawerTrigger className="flex items-center justify-center gap-1">
               <span className="text-sm">Verified</span>
-              <ShieldCheck className="size-5 text-green-700" />
+              <Check className="size-5 text-green-700" />
             </DrawerTrigger>
             <DrawerContent className="flex max-h-[100vw] flex-col gap-2 p-4 pb-[150px] text-xs">
               <div className="flex flex-col gap-1">
                 <span className="font-bold">Author</span>
-                <span className="break-all rounded-md bg-gray-300 p-2">
-                  {snap.signerAddress}
-                </span>
+                <Code className="border-none">{snap.signerAddress}</Code>
               </div>
               <div className="flex flex-col gap-1">
                 <span className="font-bold">Signature</span>
-                <span className="break-all rounded-md bg-gray-300 p-2">
-                  {snap.signature}
-                </span>
+                <Code className="border-none">{snap.signature}</Code>
               </div>
               <div className="flex flex-col gap-1">
                 <span className="font-bold">Hash</span>
-                <span className="break-all rounded-md bg-gray-300 p-2">
-                  {snap.hash}
-                </span>
+                <Code className="border-none">{snap.hash}</Code>
               </div>
               <div className="flex flex-col gap-1">
                 <span className="pl-2 font-bold">Transaction</span>
-                <span className="break-all rounded-md bg-gray-300 p-2">
-                  {snap.txHash}
-                </span>
+                <Code className="border-none">{snap.txHash}</Code>
               </div>
               <Link
                 href={`https://sepolia.etherscan.io/tx/${snap.txHash}`}

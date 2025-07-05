@@ -1,43 +1,46 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
-import type { StepComponentProps } from "../page";
+import type { SnapDrawerContentProps } from "./snap-drawer-content";
+import { Loader2 } from "lucide-react";
 
-export function SummaryStep({ data, prev }: StepComponentProps) {
-  const [submitResult, setSubmitResult] = useState<{
-    success: boolean;
-    message: string;
-    snapId?: string;
-  } | null>(null);
-
+export function StepSummary({
+  data,
+  next,
+  updateData,
+}: SnapDrawerContentProps) {
   const createSnapMutation = api.snaps.create.useMutation({
     onSuccess: (result) => {
-      setSubmitResult({
-        success: true,
-        message: "Snap submitted successfully!",
-        snapId: result.id,
+      updateData({
+        submitResult: {
+          success: true,
+          message: "Snap submitted successfully!",
+          snapId: result.id,
+        },
       });
+      next();
     },
     onError: (error) => {
-      setSubmitResult({
-        success: false,
-        message: error.message || "Failed to submit snap",
+      updateData({
+        submitResult: {
+          success: false,
+          message: error.message || "Failed to submit snap",
+        },
       });
     },
   });
 
   const handleSubmit = async () => {
     if (!data.photo || !data.hash || !data.signature?.success) {
-      setSubmitResult({
-        success: false,
-        message: "Missing required data. Please complete all steps.",
+      updateData({
+        submitResult: {
+          success: false,
+          message: "Missing required data. Please complete all steps.",
+        },
       });
       return;
     }
-
-    setSubmitResult(null);
 
     createSnapMutation.mutate({
       photoData: data.photo,
@@ -56,12 +59,13 @@ export function SummaryStep({ data, prev }: StepComponentProps) {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Summary</h2>
-
-      <div className="space-y-2">
-        <h3 className="font-semibold">Photo</h3>
+      <div className="flex flex-col items-center justify-center space-y-2">
         {data.photo ? (
-          <img src={data.photo} alt="summary" className="max-h-64 rounded" />
+          <img
+            src={data.photo}
+            alt="summary"
+            className="mx-auto max-h-64 rounded"
+          />
         ) : (
           <p className="text-sm text-gray-600">No photo</p>
         )}
@@ -70,7 +74,7 @@ export function SummaryStep({ data, prev }: StepComponentProps) {
       <div className="space-y-2">
         <h3 className="font-semibold">Hash</h3>
         {data.hash ? (
-          <p className="break-all rounded bg-gray-100 p-2 text-xs">
+          <p className="break-all rounded bg-gray-100 p-2 font-mono text-xs">
             {data.hash}
           </p>
         ) : (
@@ -82,11 +86,8 @@ export function SummaryStep({ data, prev }: StepComponentProps) {
         <h3 className="font-semibold">Signature</h3>
         {data.signature?.success ? (
           <>
-            <p className="break-all rounded bg-gray-100 p-2 text-xs">
-              Signature: {data.signature.signature}
-            </p>
-            <p className="break-all rounded bg-gray-100 p-2 text-xs">
-              Address: {data.signature.address}
+            <p className="break-all rounded bg-gray-100 p-2 font-mono text-xs">
+              {data.signature.signature}
             </p>
           </>
         ) : (
@@ -94,36 +95,13 @@ export function SummaryStep({ data, prev }: StepComponentProps) {
         )}
       </div>
 
-      {/* Submit Result */}
-      {submitResult && (
-        <div
-          className={`rounded-lg p-4 ${
-            submitResult.success
-              ? "border border-green-200 bg-green-50 text-green-800"
-              : "border border-red-200 bg-red-50 text-red-800"
-          }`}
-        >
-          <p className="font-medium">
-            {submitResult.success ? "✓ Success" : "✗ Error"}
-          </p>
-          <p className="text-sm">{submitResult.message}</p>
-          {submitResult.snapId && (
-            <p className="mt-1 text-xs">Snap ID: {submitResult.snapId}</p>
-          )}
-        </div>
-      )}
-
-      <div className="flex gap-2 pt-4">
-        <Button variant="outline" onClick={prev} disabled={isSubmitting}>
-          Back
-        </Button>
-
+      <div className="flex justify-center gap-2 pt-4">
         <Button
           onClick={handleSubmit}
           disabled={!canSubmit || isSubmitting}
-          className="flex-1"
+          className="min-w-[150px]"
         >
-          {isSubmitting ? "Submitting..." : "Submit Snap"}
+          {isSubmitting ? <Loader2 className="animate-spin" /> : "Submit Snap"}
         </Button>
       </div>
 

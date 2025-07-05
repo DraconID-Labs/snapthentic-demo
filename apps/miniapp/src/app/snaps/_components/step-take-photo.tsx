@@ -2,40 +2,42 @@
 
 import { useState } from "react";
 import { useRequestCameraPermissions } from "~/app/snaps/_hooks/use-request-camera-permissions";
-import { Button } from "~/components/ui/button";
-import type { StepComponentProps } from "../page";
 import { CameraCapture } from "./camera-capture";
+import type { SnapDrawerContentProps } from "./snap-drawer-content";
+import { Camera } from "lucide-react";
 
-export function TakePhotoStep({ data, updateData, next }: StepComponentProps) {
+export function TakePhotoStep({
+  data,
+  updateData,
+  next,
+}: SnapDrawerContentProps) {
   const permissionGranted = useRequestCameraPermissions();
   const [showCamera, setShowCamera] = useState(permissionGranted);
   const [capturedPhoto, setCapturedPhoto] = useState<string | null>(
     data.photo ?? null,
   );
+  const [previewCaptured, setPreviewCaptured] = useState<boolean>(false);
 
   const handlePhotoCapture = (photoDataUrl: string) => {
     updateData({ photo: photoDataUrl });
     setCapturedPhoto(photoDataUrl);
     setShowCamera(false);
+    setPreviewCaptured(false);
     next();
-  };
-
-  const handleCameraCancel = () => {
-    setShowCamera(false);
   };
 
   return (
     <div className="w-full space-y-4">
-      {!showCamera && !capturedPhoto && (
-        <Button className="bg-blue-400" onClick={() => setShowCamera(true)}>
-          Take a Photo
-        </Button>
+      {!capturedPhoto && !previewCaptured && (
+        <div className="mx-auto flex max-w-fit flex-col items-center gap-2">
+          <Camera className="size-[100px] text-gray-600/40" />
+          <p className="text-lg font-semibold">Use native camera & smile!</p>
+        </div>
       )}
-
       {showCamera && (
         <CameraCapture
           onPhotoCapture={handlePhotoCapture}
-          onCancel={handleCameraCancel}
+          onPreviewCapture={setPreviewCaptured}
         />
       )}
     </div>

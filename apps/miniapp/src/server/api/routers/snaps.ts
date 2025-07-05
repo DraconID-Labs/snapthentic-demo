@@ -4,7 +4,11 @@ import { randomUUID } from "node:crypto";
 import { desc, eq, and, lt } from "drizzle-orm";
 import { z } from "zod";
 import { registerSnapOnChain } from "~/blockchain/register-snap-onchain";
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { uploadToSupabase } from "~/supabase/upload";
 import { getPublicUrl } from "~/supabase/get-public-url";
 import { constructV1Signature } from "@snapthentic/signatures";
@@ -135,7 +139,7 @@ export const snapsRouter = createTRPCRouter({
       return snap[0] ?? null;
     }),
 
-  getFeed: protectedProcedure
+  getFeed: publicProcedure
     .input(
       z.object({
         limit: z.number().optional().default(10),
