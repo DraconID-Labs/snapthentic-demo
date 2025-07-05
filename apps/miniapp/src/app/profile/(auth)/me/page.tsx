@@ -1,17 +1,17 @@
 "use client";
 
 import { Power, UserPlus } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
 import LazyImage from "~/components/ui/lazy-image";
 import { Loader } from "~/components/ui/loader";
-import { useSessionWithProfile } from "~/hooks/use-session-with-profile";
 import { api } from "~/trpc/react";
+import { CreateProfile } from "../_components/create-profile";
 
 export default function Page() {
-  const session = useSessionWithProfile();
+  const session = useSession();
 
   const {
     data: snapsRaw,
@@ -19,17 +19,23 @@ export default function Page() {
     isError: snapsError,
   } = api.snaps.getMySnaps.useQuery();
 
-  if (
-    session.status === "loading" ||
-    session.status === "unauthenticated" ||
-    snapsLoading
-  ) {
+  const {
+    data: profile,
+    isLoading: profileLoading,
+    isError: profileError,
+  } = api.userProfile.getMyProfile.useQuery();
+
+  if (session.status === "loading" || profileLoading || snapsLoading) {
     return <Loader />;
   }
 
-  if (snapsError) return <div>Error...</div>;
+  if (snapsError || profileError) {
+    return <div>Error loading snaps...</div>;
+  }
 
-  const profile = session.status === "authenticated" ? session.profile : null;
+  if (!profile) {
+    return <CreateProfile />;
+  }
 
   const snaps = snapsRaw ?? [];
 
