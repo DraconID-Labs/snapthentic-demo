@@ -7,7 +7,7 @@ import {
   Home,
   Lock,
   RedoDot,
-  Search,
+  Trophy,
   User,
 } from "lucide-react";
 import Link from "next/link";
@@ -48,7 +48,7 @@ export default function MobileBottomNav() {
 
   const navItems: NavItem[] = [
     { href: "/", label: "Home", icon: Home },
-    { href: "/search", label: "Search", icon: Search },
+    { href: "/contests", label: "Contests", icon: Trophy },
     {
       href: null,
       label: "Snap",

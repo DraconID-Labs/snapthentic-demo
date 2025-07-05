@@ -59,18 +59,80 @@ export const snaps = createTable("snaps", {
     .notNull(),
 });
 
+export const snapContest = createTable("snap_contests", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  snapId: uuid("snap_id").notNull(),
+  contestId: uuid("contest_id").notNull(),
+  // Has entry fee been paid?
+  active: boolean("active").default(false),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+});
+
+export const snapContestVote = createTable("snap_contest_votes", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: varchar("user_id", { length: 255 }).notNull(),
+  snapContestId: uuid("snap_contest_id").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }),
+});
+
 export const contest = createTable("contest", {
   id: uuid("id").defaultRandom().primaryKey(),
   title: varchar("user_id", { length: 255 }).notNull(),
   description: varchar("user_id", { length: 255 }).notNull(),
+  active: boolean("active").default(false),
+  startDate: timestamp("start_date", { withTimezone: true }),
+  endDate: timestamp("end_date", { withTimezone: true }),
   entryPrice: numeric("entry_price"),
+  prize: numeric("prize"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .defaultNow()
+    .notNull(),
 });
+
+export const contestRelations = relations(contest, ({ many }) => ({
+  snapContests: many(snapContest),
+}));
+
+export const snapContestVoteRelations = relations(
+  snapContestVote,
+  ({ one }) => ({
+    snapContest: one(snapContest, {
+      fields: [snapContestVote.snapContestId],
+      references: [snapContest.id],
+    }),
+    voter: one(userProfiles, {
+      fields: [snapContestVote.userId],
+      references: [userProfiles.userId],
+    }),
+  }),
+);
 
 export const snapRelations = relations(snaps, ({ one }) => ({
   author: one(userProfiles, {
     fields: [snaps.userId],
     references: [userProfiles.userId],
   }),
+  contestEntry: one(snapContest),
+}));
+
+export const snapContestRelations = relations(snapContest, ({ one, many }) => ({
+  snap: one(snaps, {
+    fields: [snapContest.snapId],
+    references: [snaps.id],
+  }),
+  contest: one(contest, {
+    fields: [snapContest.contestId],
+    references: [contest.id],
+  }),
+  votes: many(snapContestVote),
 }));
 
 // Export type for TypeScript usage
