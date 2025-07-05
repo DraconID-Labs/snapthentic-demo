@@ -21,6 +21,7 @@ export default function EditSnapPage() {
   const params = useParams();
   const router = useRouter();
   const session = useSession();
+  const utils = api.useUtils();
   const snapId = params.id as string;
 
   const [form, setForm] = useState<SnapEditForm>({
@@ -36,11 +37,12 @@ export default function EditSnapPage() {
   } = api.snaps.getById.useQuery({ snapId });
 
   const updateSnapMutation = api.snaps.update.useMutation({
-    onSuccess: () => {
-      // Invalidate queries to refresh the data
-      void api.useUtils().snaps.getById.invalidate({ snapId });
-      void api.useUtils().snaps.getMySnaps.invalidate();
-      void api.useUtils().snaps.getFeed.invalidate();
+    onSuccess: async () => {
+      await Promise.all([
+        utils.snaps.getById.invalidate({ snapId }),
+        utils.snaps.getMySnaps.invalidate(),
+        utils.snaps.getFeed.invalidate(),
+      ]);
       router.push(`/snaps/${snapId}`);
     },
     onError: (error) => {

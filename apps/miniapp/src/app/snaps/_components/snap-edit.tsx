@@ -1,19 +1,18 @@
 import type { SnapWithAuthor } from "@snapthentic/database/schema";
 import { Edit } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { Button } from "~/components/ui/button";
+import Link from "next/link";
 
 export function SnapEdit({ snap }: { snap: SnapWithAuthor }) {
-  const router = useRouter();
-
   return (
-    <Button
-      variant="ghost"
-      className="w-full"
-      onClick={() => router.push(`/snaps/${snap.id}/edit`)}
-    >
-      <Edit className="size-4" />
-      <span>Edit</span>
+    <Button variant="ghost" className="h-auto w-full " asChild>
+      <Link
+        href={`/snaps/${snap.id}/edit`}
+        className="flex w-full items-center px-2 py-1.5"
+      >
+        <Edit className="mr-2 size-4" />
+        <span>Edit</span>
+      </Link>
     </Button>
   );
 }

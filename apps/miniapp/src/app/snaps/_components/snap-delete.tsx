@@ -19,7 +19,7 @@ export function SnapDelete({ snap }: { snap: SnapWithAuthor }) {
   return (
     <Button
       variant="ghost"
-      className="w-full text-red-500"
+      className="h-auto w-full text-red-500"
       onClick={() => deleteSnap({ snapId: snap.id })}
     >
       <Trash className="size-4" />

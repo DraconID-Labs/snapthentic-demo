@@ -23,7 +23,13 @@ const createUserProfileSchema = z.object({
   isPublic: z.boolean().optional(),
 });
 
-const updateUserProfileSchema = createUserProfileSchema.partial();
+const updateUserProfileSchema = createUserProfileSchema.pick({
+  bio: true,
+  location: true,
+  twitterHandle: true,
+  instagramHandle: true,
+  isPublic: true,
+});
 
 export const userProfileRouter = createTRPCRouter({
   // Get current user's profile
