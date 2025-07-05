@@ -8,16 +8,32 @@ import type { StepProps } from "./types";
 export function StepSummary({ data, updateData, next }: StepProps) {
   // Get contest information if contestId is provided
   const { data: contest } = api.contests.getById.useQuery(
-    { id: data.contestId! },
-    { enabled: !!data.contestId }
+    { id: data.contestId ?? "" },
+    { enabled: !!data.contestId },
   );
+
+  const utils = api.useUtils();
 
   const createSnapMutation = api.snaps.create.useMutation({
     onSuccess: (result) => {
+      // Invalidate relevant caches
+      void Promise.all([
+        utils.snaps.getFeed.invalidate(),
+        utils.snaps.getMySnaps.invalidate(),
+        // If user entered a contest, invalidate contest entries cache
+        data.contestId
+          ? utils.contests.getMyEntries.invalidate()
+          : Promise.resolve(),
+        // Also invalidate active contests to update available contests in selection
+        data.contestId
+          ? utils.contests.getActive.invalidate()
+          : Promise.resolve(),
+      ]);
+
       updateData({
         submitResult: {
           success: true,
-          message: data.contestId 
+          message: data.contestId
             ? "Snap submitted and entered into contest successfully!"
             : "Snap submitted successfully!",
           snapId: result.id,
@@ -106,7 +122,9 @@ export function StepSummary({ data, updateData, next }: StepProps) {
           <h3 className="text-sm font-semibold">Contest Entry</h3>
           {contest ? (
             <div className="rounded border border-blue-200 bg-blue-50 p-2">
-              <p className="text-sm font-medium text-blue-900">{contest.title}</p>
+              <p className="text-sm font-medium text-blue-900">
+                {contest.title}
+              </p>
               <p className="text-xs text-blue-700">{contest.description}</p>
               <div className="mt-2 flex gap-4 text-xs">
                 {contest.entryPrice && (
@@ -122,7 +140,9 @@ export function StepSummary({ data, updateData, next }: StepProps) {
               </div>
             </div>
           ) : (
-            <p className="text-sm text-gray-600">Loading contest information...</p>
+            <p className="text-sm text-gray-600">
+              Loading contest information...
+            </p>
           )}
         </div>
       )}
@@ -157,8 +177,12 @@ export function StepSummary({ data, updateData, next }: StepProps) {
           disabled={!canSubmit || isSubmitting}
           className="min-w-[150px]"
         >
-          {isSubmitting ? <Loader2 className="animate-spin" /> : (
-            data.contestId ? "Submit & Enter Contest" : "Submit Snap"
+          {isSubmitting ? (
+            <Loader2 className="animate-spin" />
+          ) : data.contestId ? (
+            "Submit & Enter Contest"
+          ) : (
+            "Submit Snap"
           )}
         </Button>
       </div>
