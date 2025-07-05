@@ -25,7 +25,7 @@ function base64ToBuffer(base64: string): Buffer {
   const matches = base64.startsWith(jpegPrefix);
 
   if (!matches) {
-    throw new Error("Invalid base64 string");
+    throw new Error("Not a JPEG stream.");
   }
 
   const imageBuffer = Buffer.from(base64.slice(jpegPrefix.length), "base64");

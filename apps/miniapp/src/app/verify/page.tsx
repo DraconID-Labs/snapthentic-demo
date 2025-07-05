@@ -41,7 +41,7 @@ export default function VerifyPage() {
       const file = event.target.files?.[0];
       if (!file) return;
 
-      if (!file.type.startsWith("image/")) {
+      if (!file.type.startsWith("image/jpeg")) {
         alert("Please select an image file");
         return;
       }
@@ -141,7 +141,7 @@ export default function VerifyPage() {
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg"
                     onChange={handleFileSelect}
                     className="hidden"
                   />
