@@ -157,27 +157,36 @@ export const snapsRouter = createTRPCRouter({
       const buffer = base64ToBuffer(input.photoData);
       const decoded = await decodeMessage(buffer);
       const payload = parseV1Signature(decoded.message);
+
+      const isSignatureValid = await verifyV1Signature({
+        signerAddress: payload.signerAddress,
+        hash: payload.hash,
+        signature: payload.signature,
+      });
+
+      if (!isSignatureValid) {
+        throw new Error("Invalid signature");
+      }
+
       const snap = await ctx.db.query.snaps.findFirst({
         where: eq(snaps.hash, payload.hash),
       });
 
-      if (!snap) {
-        throw new Error("Snap not found");
-      }
-
       // TODO IN THE FUTURE
       // Strip data, re-hash image, verify signature against new hash based on the address
-      // Send two separate results - one from backend, one based on actually verified data ;p
       return {
-        snapId: snap.id,
-        author: snap.userId,
-        createdAt: snap.createdAt,
-        txHash: snap.txHash,
-        hash: snap.hash,
-        signature: snap.signature,
-        signerAddress: snap.signerAddress,
-        signatureVersion: snap.signatureVersion,
-        title: snap.title,
+        onchain: payload,
+        system: {
+          snapId: snap?.id,
+          author: snap?.userId,
+          createdAt: snap?.createdAt,
+          txHash: snap?.txHash,
+          hash: snap?.hash,
+          signature: snap?.signature,
+          signerAddress: snap?.signerAddress,
+          signatureVersion: snap?.signatureVersion,
+          title: snap?.title,
+        },
       };
     }),
 

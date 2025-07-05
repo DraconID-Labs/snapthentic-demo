@@ -14,13 +14,22 @@ import { Code } from "~/components/ui/code";
 import { api } from "~/trpc/react";
 
 interface VerificationData {
-  author: string;
-  createdAt: string;
-  txHash: string;
-  hash: string;
-  signature: string;
-  signerAddress: string;
-  signatureVersion: string;
+  onchain: {
+    hash: string;
+    signature: string;
+    signerAddress: string;
+    txHash: string;
+  };
+  system: Partial<{
+    snapId: string;
+    author: string;
+    createdAt: string;
+    txHash: string;
+    hash: string;
+    signature: string;
+    signerAddress: string;
+    signatureVersion: string;
+  }>;
 }
 
 interface VerificationResult {
@@ -77,13 +86,11 @@ export default function VerifyPage() {
           message:
             "Image verified successfully! This appears to be an authentic snap.",
           data: {
-            author: data.author,
-            createdAt: data.createdAt.toISOString(),
-            txHash: data.txHash,
-            hash: data.hash,
-            signature: data.signature,
-            signerAddress: data.signerAddress,
-            signatureVersion: data.signatureVersion,
+            onchain: data.onchain,
+            system: {
+              ...data.system,
+              createdAt: data.system.createdAt?.toISOString(),
+            },
           },
         });
       },
@@ -222,45 +229,41 @@ export default function VerifyPage() {
                   <div className="text-sm">
                     <span className="font-medium">Author:</span>{" "}
                     <Code className="border-none bg-transparent">
-                      {verificationResult.data.author}
+                      {verificationResult.data.onchain.signerAddress}
                     </Code>
                   </div>
                   <div className="text-sm">
                     <span className="font-medium">Created At:</span>{" "}
                     <Code className="border-none bg-transparent">
-                      {new Date(
-                        verificationResult.data.createdAt,
-                      ).toLocaleString()}
+                      {verificationResult.data.system.createdAt
+                        ? new Date(
+                            verificationResult.data.system.createdAt,
+                          ).toLocaleString()
+                        : "N/A"}
                     </Code>
                   </div>
                   <div className="text-sm">
                     <span className="font-medium">Hash:</span>{" "}
                     <Code className="border-none bg-transparent">
-                      {verificationResult.data.hash}
+                      {verificationResult.data.onchain.hash}
                     </Code>
                   </div>
                   <div className="text-sm">
                     <span className="font-medium">Signature:</span>{" "}
                     <Code className="border-none bg-transparent">
-                      {verificationResult.data.signature}
+                      {verificationResult.data.onchain.signature}
                     </Code>
                   </div>
                   <div className="text-sm">
                     <span className="font-medium">Signer Address:</span>{" "}
                     <Code className="border-none bg-transparent">
-                      {verificationResult.data.signerAddress}
-                    </Code>
-                  </div>
-                  <div className="text-sm">
-                    <span className="font-medium">Signature Version:</span>{" "}
-                    <Code className="border-none bg-transparent">
-                      {verificationResult.data.signatureVersion}
+                      {verificationResult.data.onchain.signerAddress}
                     </Code>
                   </div>
                   <div className="text-sm">
                     <span className="font-medium">Tx Hash:</span>{" "}
                     <Code className="border-none bg-transparent">
-                      {verificationResult.data.txHash}
+                      {verificationResult.data.onchain.txHash}
                     </Code>
                   </div>
                 </div>
