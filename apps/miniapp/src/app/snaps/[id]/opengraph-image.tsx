@@ -1,10 +1,22 @@
-import { snaps } from "@snapthentic/database/schema";
-import { eq } from "drizzle-orm";
-import { db } from "~/server/database";
-import { SnapCard } from "../_components/snap-card";
+import { ImageResponse } from "next/og";
 import { notFound } from "next/navigation";
-import { env } from "~/env";
+import { db } from "~/server/database";
+import { eq } from "drizzle-orm";
+import { snaps } from "@snapthentic/database/schema";
 import type { Metadata } from "next";
+import { env } from "~/env";
+
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export const contentType = "image/jpeg";
+
+function isUUID(id: string) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+    id,
+  );
+}
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { id } = await props.params;
@@ -48,17 +60,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   };
 }
 
-export type Props = {
-  params: Promise<{ id: string }>;
-};
-
-export function isUUID(id: string) {
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
-    id,
-  );
-}
-
-export default async function SnapPage(props: Props) {
+// Image generation
+export default async function OpenGraphImage(props: Props) {
   const { id } = await props.params;
   if (!isUUID(id)) {
     return notFound();
@@ -72,8 +75,10 @@ export default async function SnapPage(props: Props) {
   });
 
   if (!snap) {
-    return <div>Snap not found</div>;
+    return notFound();
   }
 
-  return <SnapCard snap={snap} />;
+  return new ImageResponse(
+    <img src={snap.photoUrl} alt={snap.title ?? "Snap"} />,
+  );
 }

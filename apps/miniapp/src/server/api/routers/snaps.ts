@@ -127,16 +127,15 @@ export const snapsRouter = createTRPCRouter({
     return userSnaps;
   }),
 
-  getById: protectedProcedure
-    .input(z.object({ id: z.string() }))
+  getByAuthorId: publicProcedure
+    .input(z.object({ authorId: z.string() }))
     .query(async ({ ctx, input }) => {
-      const snap = await ctx.db
-        .select()
-        .from(snaps)
-        .where(eq(snaps.id, input.id))
-        .limit(1);
+      const snapsFound = await ctx.db.query.snaps.findMany({
+        where: eq(snaps.userId, input.authorId),
+        orderBy: desc(snaps.createdAt),
+      });
 
-      return snap[0] ?? null;
+      return snapsFound;
     }),
 
   getFeed: publicProcedure

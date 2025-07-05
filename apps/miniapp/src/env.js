@@ -21,6 +21,7 @@ export const env = createEnv({
   },
   client: {},
   shared: {
+    NEXT_PUBLIC_APP_URL: z.string().url(),
     NEXT_PUBLIC_NODE_ENV: z
       .enum(["development", "production"])
       .default("development"),
@@ -49,6 +50,7 @@ export const env = createEnv({
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_KEY: process.env.SUPABASE_KEY,
     SUPABASE_BUCKET: process.env.SUPABASE_BUCKET,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

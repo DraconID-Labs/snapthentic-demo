@@ -17,9 +17,15 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "Miniapp Template",
-  description: "Miniapp Template",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  title: "Snapthentic - fight misinformation with real humans",
+  description:
+    "Snapthentic is a platform that allows you to fight misinformation by verifying photos using World ID.",
+  icons: [
+    {
+      rel: "icon",
+      url: "/favicon.png",
+    },
+  ],
 };
 
 export default async function RootLayout({

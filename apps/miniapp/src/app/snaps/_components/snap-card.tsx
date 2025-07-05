@@ -25,15 +25,18 @@ import { Code } from "~/components/ui/code";
 
 export function SnapCard({
   snap,
-  onClick,
+  onHeaderClick,
+  onBodyClick,
 }: {
   snap: SnapWithAuthor;
-  onClick?: () => void;
+  onHeaderClick?: () => void;
+  onBodyClick?: () => void;
 }) {
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex w-full items-center justify-between">
-        <div className="flex w-full items-center gap-2">
+        {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
+        <div className="flex w-full items-center gap-2" onClick={onHeaderClick}>
           <Avatar className="size-10">
             <AvatarImage src={snap.author.avatarUrl ?? undefined} />
             <AvatarFallback>
@@ -61,7 +64,7 @@ export function SnapCard({
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div
         className="relative -mx-4 h-[500px] w-screen cursor-pointer"
-        onClick={onClick}
+        onClick={onBodyClick}
       >
         <LazyImage
           fill

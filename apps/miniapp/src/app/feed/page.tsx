@@ -86,8 +86,11 @@ export default function FeedPage() {
             <SnapCard
               key={snap.id}
               snap={snap}
-              onClick={() => {
+              onBodyClick={() => {
                 router.push(`/snaps/${snap.id}`);
+              }}
+              onHeaderClick={() => {
+                router.push(`/profile/${snap.author.userId}`);
               }}
             />
           ))}
