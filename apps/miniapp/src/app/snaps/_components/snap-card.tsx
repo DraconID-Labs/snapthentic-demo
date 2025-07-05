@@ -1,3 +1,5 @@
+"use client";
+
 import type { SnapWithAuthor } from "@snapthentic/database/schema";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
@@ -5,12 +7,20 @@ import {
   ExternalLink,
   HeartIcon,
   MessageCircleIcon,
+  MoreVertical,
   ShareIcon,
   ShieldCheck,
 } from "lucide-react";
 import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
 import Link from "next/link";
 import LazyImage from "~/components/ui/lazy-image";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { SnapDownload } from "./snap-download";
 
 export function SnapCard({
   snap,
@@ -21,17 +31,31 @@ export function SnapCard({
 }) {
   return (
     <div className="flex w-full flex-col gap-2">
-      <div className="flex w-full items-center gap-2">
-        <Avatar className="size-10">
-          <AvatarImage src={snap.author.avatarUrl ?? undefined} />
-          <AvatarFallback>
-            {snap.author?.displayName?.slice(0, 2) ?? "Unknown"}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col gap-1 text-xs">
-          <h1 className="font-bold">@{snap.author.displayName}</h1>
-          <p className="text-gray-500">{snap.author.bio ?? "No bio"}</p>
+      <div className="flex w-full items-center justify-between">
+        <div className="flex w-full items-center gap-2">
+          <Avatar className="size-10">
+            <AvatarImage src={snap.author.avatarUrl ?? undefined} />
+            <AvatarFallback>
+              {snap.author?.displayName?.slice(0, 2) ?? "Unknown"}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col gap-1 text-xs">
+            <h1 className="font-bold">@{snap.author.displayName}</h1>
+            <p className="text-gray-500">{snap.author.bio ?? "No bio"}</p>
+          </div>
         </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="max-w-fit px-2">
+              <MoreVertical className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-gray-100">
+            <DropdownMenuItem>
+              <SnapDownload snap={snap} />
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
       <div
