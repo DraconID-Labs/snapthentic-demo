@@ -16,7 +16,6 @@ export type SignedMessage =
     };
 
 export async function signMessage(message: string): Promise<SignedMessage> {
-  console.log("signMessage", message, typeof message);
   const signMessagePayload: SignMessageInput = {
     message,
   };

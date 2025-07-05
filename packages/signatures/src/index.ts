@@ -1,4 +1,5 @@
 import z from "zod";
+import Safe, { hashSafeMessage } from "@safe-global/protocol-kit";
 
 const HexString = (length: number) =>
   z.string().regex(new RegExp(`^0x[0-9a-fA-F]{${length}}$`));
@@ -51,4 +52,47 @@ export function parseV1Signature(sig: string): SignaturePayloadV1 {
     signature,
     txHash,
   });
+}
+
+/**
+ * Verifies a signature against an address and hash
+ * @param signature - The signature to verify (hex string)
+ * @param hash - The hash that was signed (hex string)
+ * @param address - The expected signer address (hex string)
+ * @returns boolean indicating if the signature is valid
+ */
+async function verifySignature(
+  signature: string,
+  hash: string,
+  address: string,
+): Promise<boolean> {
+  try {
+    const safe = await Safe.init({
+      provider: "https://worldchain-mainnet.g.alchemy.com/public",
+      safeAddress: address,
+    });
+    const message = prefixSignature(hash);
+    const safeHash = hashSafeMessage(message);
+    const isValid = await safe.isValidSignature(safeHash, signature);
+
+    return isValid;
+  } catch (error) {
+    console.error("Signature verification failed:", error);
+    return false;
+  }
+}
+
+/**
+ * Verifies a V1 signature payload
+ * @param payload - The parsed signature payload
+ * @returns boolean indicating if the signature is valid
+ */
+export async function verifyV1Signature(
+  payload: Omit<SignaturePayloadV1, "txHash">,
+): Promise<boolean> {
+  return verifySignature(
+    payload.signature,
+    payload.hash,
+    payload.signerAddress,
+  );
 }

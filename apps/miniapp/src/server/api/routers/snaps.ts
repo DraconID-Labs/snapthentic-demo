@@ -1,8 +1,13 @@
 import { randomUUID } from "node:crypto";
-import { type InsertSnap, snaps } from "@snapthentic/database/schema";
+import {
+  type InsertSnap,
+  snaps,
+  userProfiles,
+} from "@snapthentic/database/schema";
 import {
   constructV1Signature,
   parseV1Signature,
+  verifyV1Signature,
 } from "@snapthentic/signatures";
 import {
   decodeMessage,
@@ -55,10 +60,27 @@ export const snapsRouter = createTRPCRouter({
   create: protectedProcedure
     .input(CreateSnapSchema)
     .mutation(async ({ ctx, input }) => {
-      // Check if user has profile (IA/db check)
+      const user = await ctx.db.query.userProfiles.findFirst({
+        where: eq(userProfiles.userId, ctx.session.user.id),
+      });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
       const hexHash = ensureHexPrefix(input.hash);
       const hexSignature = ensureHexPrefix(input.signature);
       const hexSignerAddress = ensureHexPrefix(input.signerAddress);
+
+      const isSignatureValid = await verifyV1Signature({
+        signerAddress: hexSignerAddress,
+        hash: hexHash,
+        signature: hexSignature,
+      });
+
+      if (!isSignatureValid) {
+        throw new Error("Invalid signature");
+      }
 
       const uuid = randomUUID();
       const filename = `${hexSignerAddress}-${hexHash}-${uuid}.jpeg`;

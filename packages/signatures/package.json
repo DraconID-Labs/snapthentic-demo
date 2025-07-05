@@ -22,6 +22,7 @@
     "@types/node": "^20.0.0"
   },
   "dependencies": {
+    "@safe-global/protocol-kit": "^6.1.0",
     "@worldcoin/minikit-js": "^1.9.6",
     "tsx": "^4.20.3",
     "viem": "^2.31.6",
