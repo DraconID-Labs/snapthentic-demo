@@ -24,15 +24,18 @@ import { ResponsiveImage } from "~/components/ui/responsive-image";
 import { env } from "~/env";
 import { SnapDownload } from "./snap-download";
 import { useShareOnX } from "./use-share-on-x";
+import { SnapDelete } from "./snap-delete";
 
 export function SnapCard({
   snap,
   onHeaderClick,
   onBodyClick,
+  isOwner,
 }: {
   snap: SnapWithAuthor;
   onHeaderClick?: () => void;
   onBodyClick?: () => void;
+  isOwner?: boolean;
 }) {
   const { handleShare } = useShareOnX({
     url: `${env.NEXT_PUBLIC_APP_URL}/snaps/${snap.id}`,
@@ -69,6 +72,11 @@ export function SnapCard({
             <DropdownMenuItem>
               <SnapDownload snap={snap} />
             </DropdownMenuItem>
+            {isOwner && (
+              <DropdownMenuItem>
+                <SnapDelete snap={snap} />
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

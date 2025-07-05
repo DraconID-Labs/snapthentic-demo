@@ -4,6 +4,7 @@ import type { SnapWithAuthor } from "@snapthentic/database/schema";
 import { useState } from "react";
 import { ImageViewer } from "~/components/ui/image-viewer";
 import { SnapCard } from "../_components/snap-card";
+import { useSession } from "next-auth/react";
 
 interface SnapDetailViewProps {
   snap: SnapWithAuthor;
@@ -11,10 +12,15 @@ interface SnapDetailViewProps {
 
 export function SnapDetailView({ snap }: SnapDetailViewProps) {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
+  const session = useSession();
 
   return (
-    <>
-      <SnapCard snap={snap} onBodyClick={() => setIsViewerOpen(true)} />
+    <div className="mx-auto max-w-2xl">
+      <SnapCard
+        snap={snap}
+        onBodyClick={() => setIsViewerOpen(true)}
+        isOwner={session.data?.user.id === snap.author.userId}
+      />
 
       <ImageViewer
         src={snap.photoUrl}
@@ -22,6 +28,6 @@ export function SnapDetailView({ snap }: SnapDetailViewProps) {
         isOpen={isViewerOpen}
         onClose={() => setIsViewerOpen(false)}
       />
-    </>
+    </div>
   );
 }

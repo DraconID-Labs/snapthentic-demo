@@ -1,6 +1,6 @@
 "use client";
 
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 import { Loader } from "~/components/ui/loader";
@@ -8,6 +8,7 @@ import { api } from "~/trpc/react";
 import { SnapCard } from "../snaps/_components/snap-card";
 
 export default function FeedPage() {
+  const session = useSession();
   const router = useRouter();
   const {
     data,
@@ -75,6 +76,7 @@ export default function FeedPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-8">
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: it's fine */}
       <h1 className="text-2xl font-bold" onClick={() => signOut()}>
         Feed
       </h1>
@@ -89,6 +91,7 @@ export default function FeedPage() {
             <SnapCard
               key={snap.id}
               snap={snap}
+              isOwner={session.data?.user.id === snap.author.userId}
               onBodyClick={() => {
                 router.push(`/snaps/${snap.id}`);
               }}

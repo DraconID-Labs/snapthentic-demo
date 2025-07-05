@@ -169,6 +169,31 @@ export const snapsRouter = createTRPCRouter({
     return userSnaps;
   }),
 
+  delete: protectedProcedure
+    .input(z.object({ snapId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const snap = await ctx.db.query.snaps.findFirst({
+        where: eq(snaps.id, input.snapId),
+      });
+      // TODO: add removal from bucket ;p
+
+      if (!snap) {
+        throw new Error("Snap not found");
+      }
+
+      const isOwner = snap.userId === ctx.session.user.id;
+
+      if (!isOwner) {
+        throw new Error("You are not the owner of this snap");
+      }
+
+      await ctx.db.delete(snaps).where(eq(snaps.id, input.snapId));
+
+      return {
+        success: true,
+      };
+    }),
+
   getByAuthorId: publicProcedure
     .input(z.object({ authorId: z.string() }))
     .query(async ({ ctx, input }) => {
