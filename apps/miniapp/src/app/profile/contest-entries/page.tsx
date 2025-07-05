@@ -33,10 +33,7 @@ export default function ContestEntriesPage() {
   return (
     <div className="flex min-h-screen flex-col items-center">
       <div className="mb-4 flex w-full items-center justify-between">
-        <Link href="/contests" className="text-blue-600 hover:underline">
-          ← Back to Contests
-        </Link>
-        <h1 className="text-2xl font-bold">My Contest Entries</h1>
+        <h1 className="text-2xl font-bold">Your entries</h1>
         <div /> {/* Spacer for centering */}
       </div>
 
@@ -83,11 +80,13 @@ export default function ContestEntriesPage() {
                     <p className="text-sm opacity-90">
                       {entry.snap.description}
                     </p>
-                    <div className="mt-2 flex items-center justify-between text-xs opacity-75">
-                      <span>Contest: {entry.contest.title}</span>
+                    <div className="mt-2 flex flex-col items-start justify-between text-xs opacity-75">
+                      <span className="font-semibold">
+                        {entry.contest.title}
+                      </span>
                       {entry.contest.prize && (
                         <span>
-                          Prize: {Number(entry.contest.prize).toFixed(2)} WLD
+                          {Number(entry.contest.prize).toFixed(2)} WLD
                         </span>
                       )}
                     </div>
