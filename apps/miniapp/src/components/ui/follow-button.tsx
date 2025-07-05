@@ -1,10 +1,10 @@
 "use client";
 
-import { UserPlus, UserMinus } from "lucide-react";
-import { cn } from "~/utils/cn";
-import { api } from "~/trpc/react";
-import { Button } from "./button";
+import { UserMinus, UserPlus } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { api } from "~/trpc/react";
+import { cn } from "~/utils/cn";
+import { Button } from "./button";
 
 interface FollowButtonProps {
   userId: string;
@@ -35,7 +35,7 @@ export function FollowButton({
     {
       enabled: !!session,
       initialData: { following: initialIsFollowing, followedAt: undefined },
-    }
+    },
   );
 
   // Toggle follow mutation
@@ -46,7 +46,9 @@ export function FollowButton({
       await utils.follows.getCounts.cancel({ userId });
 
       // Snapshot the previous value
-      const previousFollowStatus = utils.follows.isFollowing.getData({ userId });
+      const previousFollowStatus = utils.follows.isFollowing.getData({
+        userId,
+      });
       const previousCounts = utils.follows.getCounts.getData({ userId });
 
       // Optimistically update follow status
@@ -57,7 +59,8 @@ export function FollowButton({
 
       // Optimistically update follower count
       utils.follows.getCounts.setData({ userId }, (old) => ({
-        followers: (old?.followers ?? 0) + (previousFollowStatus?.following ? -1 : 1),
+        followers:
+          (old?.followers ?? 0) + (previousFollowStatus?.following ? -1 : 1),
         following: old?.following ?? 0,
       }));
 
@@ -66,7 +69,10 @@ export function FollowButton({
     onError: (err, variables, context) => {
       // Revert optimistic updates on error
       if (context?.previousFollowStatus) {
-        utils.follows.isFollowing.setData({ userId }, context.previousFollowStatus);
+        utils.follows.isFollowing.setData(
+          { userId },
+          context.previousFollowStatus,
+        );
       }
       if (context?.previousCounts) {
         utils.follows.getCounts.setData({ userId }, context.previousCounts);
@@ -103,7 +109,7 @@ export function FollowButton({
         isFollowing
           ? "border-gray-300 text-gray-700 hover:border-red-300 hover:text-red-600"
           : "bg-blue-600 text-white hover:bg-blue-700",
-        className
+        className,
       )}
     >
       {isFollowing ? (
@@ -119,4 +125,4 @@ export function FollowButton({
       )}
     </Button>
   );
-} 
+}

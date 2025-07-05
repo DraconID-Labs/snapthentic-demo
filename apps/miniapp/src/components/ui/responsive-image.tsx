@@ -18,9 +18,9 @@
 
 "use client";
 
+import { useState } from "react";
 import { cn } from "~/utils/cn";
 import LazyImage from "./lazy-image";
-import { useState } from "react";
 
 interface ResponsiveImageProps {
   src: string;

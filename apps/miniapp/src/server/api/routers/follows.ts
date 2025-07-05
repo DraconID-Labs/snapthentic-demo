@@ -37,7 +37,7 @@ export const followsRouter = createTRPCRouter({
       const existingFollow = await ctx.db.query.follows.findFirst({
         where: and(
           eq(follows.followerId, ctx.session.user.id),
-          eq(follows.followingId, input.userId)
+          eq(follows.followingId, input.userId),
         ),
       });
 
@@ -48,8 +48,8 @@ export const followsRouter = createTRPCRouter({
           .where(
             and(
               eq(follows.followerId, ctx.session.user.id),
-              eq(follows.followingId, input.userId)
-            )
+              eq(follows.followingId, input.userId),
+            ),
           );
 
         return {
@@ -77,7 +77,7 @@ export const followsRouter = createTRPCRouter({
       const follow = await ctx.db.query.follows.findFirst({
         where: and(
           eq(follows.followerId, ctx.session.user.id),
-          eq(follows.followingId, input.userId)
+          eq(follows.followingId, input.userId),
         ),
       });
 
@@ -94,7 +94,7 @@ export const followsRouter = createTRPCRouter({
         userId: z.string(),
         limit: z.number().min(1).max(100).default(20),
         cursor: z.string().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       // Check if user exists
@@ -119,7 +119,9 @@ export const followsRouter = createTRPCRouter({
       });
 
       const hasMore = userFollowers.length > input.limit;
-      const items = hasMore ? userFollowers.slice(0, input.limit) : userFollowers;
+      const items = hasMore
+        ? userFollowers.slice(0, input.limit)
+        : userFollowers;
 
       return {
         items: items.map((follow) => ({
@@ -139,7 +141,7 @@ export const followsRouter = createTRPCRouter({
         userId: z.string(),
         limit: z.number().min(1).max(100).default(20),
         cursor: z.string().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       // Check if user exists
@@ -164,7 +166,9 @@ export const followsRouter = createTRPCRouter({
       });
 
       const hasMore = userFollowing.length > input.limit;
-      const items = hasMore ? userFollowing.slice(0, input.limit) : userFollowing;
+      const items = hasMore
+        ? userFollowing.slice(0, input.limit)
+        : userFollowing;
 
       return {
         items: items.map((follow) => ({
@@ -197,4 +201,4 @@ export const followsRouter = createTRPCRouter({
         following: followingResult[0]?.count ?? 0,
       };
     }),
-}); 
+});

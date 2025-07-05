@@ -1,7 +1,7 @@
 import type { SnapWithAuthor } from "@snapthentic/database/schema";
 import { Edit } from "lucide-react";
-import { Button } from "~/components/ui/button";
 import Link from "next/link";
+import { Button } from "~/components/ui/button";
 
 export function SnapEdit({ snap }: { snap: SnapWithAuthor }) {
   return (

@@ -1,10 +1,10 @@
 "use client";
 
 import { Heart } from "lucide-react";
-import { cn } from "~/utils/cn";
-import { api } from "~/trpc/react";
-import { Button } from "./button";
 import { useSession } from "next-auth/react";
+import { api } from "~/trpc/react";
+import { cn } from "~/utils/cn";
+import { Button } from "./button";
 
 interface LikeButtonProps {
   snapId: string;
@@ -30,7 +30,7 @@ export function LikeButton({
     {
       enabled: !!session,
       initialData: { liked: initialIsLiked, likedAt: undefined },
-    }
+    },
   );
 
   // Get like count
@@ -38,7 +38,7 @@ export function LikeButton({
     { snapId },
     {
       initialData: initialLikeCount,
-    }
+    },
   );
 
   // Toggle like mutation
@@ -58,8 +58,9 @@ export function LikeButton({
         likedAt: !old?.liked ? new Date() : undefined,
       }));
 
-      utils.likes.getCount.setData({ snapId }, (old) => 
-        (old ?? 0) + (previousUserLike?.liked ? -1 : 1)
+      utils.likes.getCount.setData(
+        { snapId },
+        (old) => (old ?? 0) + (previousUserLike?.liked ? -1 : 1),
       );
 
       return { previousUserLike, previousCount };
@@ -113,14 +114,14 @@ export function LikeButton({
             ? "text-red-500 hover:text-red-600"
             : "text-gray-500 hover:text-red-500",
           sizeClasses[size],
-          className
+          className,
         )}
       >
         <Heart
           size={iconSizes[size]}
           className={cn(
             "transition-colors",
-            userLike?.liked ? "fill-current" : "fill-none"
+            userLike?.liked ? "fill-current" : "fill-none",
           )}
         />
         {likeCount !== undefined && likeCount > 0 && (
@@ -129,4 +130,4 @@ export function LikeButton({
       </Button>
     </div>
   );
-} 
+}

@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Textarea } from "~/components/ui/textarea";
-import { Loader } from "~/components/ui/loader";
-import { api } from "~/trpc/react";
 import { ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Loader } from "~/components/ui/loader";
+import { Textarea } from "~/components/ui/textarea";
+import { api } from "~/trpc/react";
 
 interface ProfileForm {
   nickname?: string;

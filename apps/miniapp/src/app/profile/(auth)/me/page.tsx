@@ -5,8 +5,8 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
-import { AspectRatioImage } from "~/components/ui/responsive-image";
 import { Loader } from "~/components/ui/loader";
+import { AspectRatioImage } from "~/components/ui/responsive-image";
 import { api } from "~/trpc/react";
 import { CreateProfile } from "../_components/create-profile";
 
@@ -102,7 +102,7 @@ export default function Page() {
           </Link>
         ))}
       </div>
-      
+
       {snaps.length === 0 && (
         <div className="flex w-full flex-col items-center justify-center gap-4 py-8">
           <p className="text-gray-500">No snaps yet</p>

@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "~/utils/cn";
 import { api } from "~/trpc/react";
+import { cn } from "~/utils/cn";
 
 interface UserStatsProps {
   userId: string;
@@ -24,7 +24,7 @@ export function UserStats({
         followers: initialFollowersCount,
         following: initialFollowingCount,
       },
-    }
+    },
   );
 
   const formatCount = (count: number) => {
@@ -72,7 +72,7 @@ export function UserStatsInline({
         followers: initialFollowersCount,
         following: initialFollowingCount,
       },
-    }
+    },
   );
 
   const formatCount = (count: number) => {
@@ -97,4 +97,4 @@ export function UserStatsInline({
       </span>
     </div>
   );
-} 
+}

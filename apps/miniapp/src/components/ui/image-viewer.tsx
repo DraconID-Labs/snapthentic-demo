@@ -1,6 +1,6 @@
 "use client";
 
-import { X, ZoomIn, ZoomOut, RotateCw } from "lucide-react";
+import { RotateCw, X, ZoomIn, ZoomOut } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "./button";
 

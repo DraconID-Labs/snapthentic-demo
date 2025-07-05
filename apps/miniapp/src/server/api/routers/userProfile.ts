@@ -1,15 +1,15 @@
 import {
-    type InsertUserProfile,
-    userProfiles,
-    follows,
+  type InsertUserProfile,
+  follows,
+  userProfiles,
 } from "@snapthentic/database/schema";
 import { TRPCError } from "@trpc/server";
-import { eq, count } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { z } from "zod";
 import {
-    createTRPCRouter,
-    protectedProcedure,
-    publicProcedure,
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
 } from "~/server/api/trpc";
 
 const createUserProfileSchema = z.object({

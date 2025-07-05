@@ -1,14 +1,14 @@
 import {
-    createCallerFactory,
-    createTRPCRouter,
-    protectedProcedure,
-    publicProcedure,
+  createCallerFactory,
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
 } from "~/server/api/trpc";
+import { followsRouter } from "./routers/follows";
+import { likesRouter } from "./routers/likes";
 import { proofsRouter } from "./routers/proofs";
 import { snapsRouter } from "./routers/snaps";
 import { userProfileRouter } from "./routers/userProfile";
-import { likesRouter } from "./routers/likes";
-import { followsRouter } from "./routers/follows";
 
 /**
  * This is the primary router for your server.

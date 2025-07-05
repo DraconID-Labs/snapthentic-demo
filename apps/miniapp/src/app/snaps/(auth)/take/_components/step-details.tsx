@@ -1,12 +1,12 @@
 "use client";
 
-import type { StepProps } from "./types";
-import z from "zod";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "~/components/ui/input";
+import { useForm } from "react-hook-form";
+import z from "zod";
 import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import { Textarea } from "~/components/ui/textarea";
+import type { StepProps } from "./types";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }).max(40, {

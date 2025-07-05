@@ -1,10 +1,10 @@
 "use client";
 
 import type { SnapWithAuthor } from "@snapthentic/database/schema";
+import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { ImageViewer } from "~/components/ui/image-viewer";
 import { SnapCard } from "../_components/snap-card";
-import { useSession } from "next-auth/react";
 
 // Extended type for snap with like information
 type SnapWithLikes = SnapWithAuthor & {

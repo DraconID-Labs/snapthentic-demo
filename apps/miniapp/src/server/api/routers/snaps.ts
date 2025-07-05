@@ -14,6 +14,7 @@ import {
   encodeMessage,
   imageToBuffer,
 } from "@snapthentic/stenography";
+import { TRPCError } from "@trpc/server";
 import { and, desc, eq, lt } from "drizzle-orm";
 import { z } from "zod";
 import { registerSnapOnChain } from "~/blockchain/register-snap-onchain";
@@ -24,7 +25,6 @@ import {
 } from "~/server/api/trpc";
 import { getPublicUrl } from "~/supabase/get-public-url";
 import { uploadToSupabase } from "~/supabase/upload";
-import { TRPCError } from "@trpc/server";
 
 function base64ToBuffer(base64: string): Buffer {
   const jpegPrefix = "data:image/jpeg;base64,";
@@ -295,7 +295,7 @@ export const snapsRouter = createTRPCRouter({
         ...snap,
         likeCount: snap.likes.length,
         isLikedByUser: ctx.session?.user
-          ? snap.likes.some(like => like.userId === ctx.session?.user.id)
+          ? snap.likes.some((like) => like.userId === ctx.session?.user.id)
           : false,
         // Remove the likes array to avoid sending unnecessary data
         likes: undefined,
@@ -342,7 +342,9 @@ export const snapsRouter = createTRPCRouter({
       return {
         ...snap,
         likeCount: snap.likes.length,
-        isLikedByUser: snap.likes.some(like => like.userId === ctx.session.user.id),
+        isLikedByUser: snap.likes.some(
+          (like) => like.userId === ctx.session.user.id,
+        ),
         // Remove the likes array to avoid sending unnecessary data
         likes: undefined,
       };

@@ -3,9 +3,9 @@ import { TRPCError } from "@trpc/server";
 import { and, count, eq } from "drizzle-orm";
 import { z } from "zod";
 import {
-    createTRPCRouter,
-    protectedProcedure,
-    publicProcedure,
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
 } from "~/server/api/trpc";
 
 export const likesRouter = createTRPCRouter({
@@ -29,7 +29,7 @@ export const likesRouter = createTRPCRouter({
       const existingLike = await ctx.db.query.likes.findFirst({
         where: and(
           eq(likes.userId, ctx.session.user.id),
-          eq(likes.snapId, input.snapId)
+          eq(likes.snapId, input.snapId),
         ),
       });
 
@@ -40,8 +40,8 @@ export const likesRouter = createTRPCRouter({
           .where(
             and(
               eq(likes.userId, ctx.session.user.id),
-              eq(likes.snapId, input.snapId)
-            )
+              eq(likes.snapId, input.snapId),
+            ),
           );
 
         return {
@@ -81,7 +81,7 @@ export const likesRouter = createTRPCRouter({
       const like = await ctx.db.query.likes.findFirst({
         where: and(
           eq(likes.userId, ctx.session.user.id),
-          eq(likes.snapId, input.snapId)
+          eq(likes.snapId, input.snapId),
         ),
       });
 
@@ -98,7 +98,7 @@ export const likesRouter = createTRPCRouter({
         snapId: z.string().uuid(),
         limit: z.number().min(1).max(100).default(20),
         cursor: z.string().optional(),
-      })
+      }),
     )
     .query(async ({ ctx, input }) => {
       const snap = await ctx.db.query.snaps.findFirst({
@@ -154,7 +154,7 @@ export const likesRouter = createTRPCRouter({
           input.snapIds.length === 1
             ? eq(likes.snapId, input.snapIds[0]!)
             : // @ts-expect-error - drizzle types issue with inArray
-              likes.snapId.in(input.snapIds)
+              likes.snapId.in(input.snapIds),
         )
         .groupBy(likes.snapId);
 
@@ -164,7 +164,7 @@ export const likesRouter = createTRPCRouter({
           acc[snapId] = count;
           return acc;
         },
-        {} as Record<string, number>
+        {} as Record<string, number>,
       );
     }),
 
@@ -182,7 +182,7 @@ export const likesRouter = createTRPCRouter({
           input.snapIds.length === 1
             ? eq(likes.snapId, input.snapIds[0]!)
             : // @ts-expect-error - drizzle types issue with inArray
-              likes.snapId.in(input.snapIds)
+              likes.snapId.in(input.snapIds),
         ),
       });
 
@@ -195,7 +195,7 @@ export const likesRouter = createTRPCRouter({
           };
           return acc;
         },
-        {} as Record<string, { liked: boolean; likedAt: Date }>
+        {} as Record<string, { liked: boolean; likedAt: Date }>,
       );
     }),
-}); 
+});

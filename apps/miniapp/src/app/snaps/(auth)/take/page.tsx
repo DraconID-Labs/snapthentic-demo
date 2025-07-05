@@ -1,12 +1,12 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { TakePhotoStep } from "./_components/step-take-photo";
+import { StepCompleted } from "./_components/step-completed";
+import { StepContainer } from "./_components/step-container";
+import { StepDetails } from "./_components/step-details";
 import { SignPhotoStep } from "./_components/step-sign-photo";
 import { StepSummary } from "./_components/step-summary";
-import { StepCompleted } from "./_components/step-completed";
-import { StepDetails } from "./_components/step-details";
-import { StepContainer } from "./_components/step-container";
+import { TakePhotoStep } from "./_components/step-take-photo";
 import type { SnapData } from "./_components/types";
 
 const steps = [

@@ -20,13 +20,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { ResponsiveImage } from "~/components/ui/responsive-image";
 import { LikeButton } from "~/components/ui/like-button";
+import { ResponsiveImage } from "~/components/ui/responsive-image";
 import { env } from "~/env";
-import { SnapDownload } from "./snap-download";
-import { useShareOnX } from "./use-share-on-x";
 import { SnapDelete } from "./snap-delete";
+import { SnapDownload } from "./snap-download";
 import { SnapEdit } from "./snap-edit";
+import { useShareOnX } from "./use-share-on-x";
 
 // Extended type for snap with like information
 type SnapWithLikes = SnapWithAuthor & {
