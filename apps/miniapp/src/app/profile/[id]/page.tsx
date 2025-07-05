@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import LazyImage from "~/components/ui/lazy-image";
 import { Loader } from "~/components/ui/loader";
+import { AspectRatioImage } from "~/components/ui/responsive-image";
 import { useSessionWithProfile } from "~/hooks/use-session-with-profile";
 import { api } from "~/trpc/react";
 
@@ -76,14 +76,13 @@ export default function Page() {
       <div className="grid w-full grid-cols-3 gap-1">
         {snaps.map((snap) => (
           <Link href={`/snaps/${snap.id}`} key={snap.id}>
-            <div className="relative flex h-[200px] flex-col gap-2">
-              <LazyImage
-                fill
-                src={snap.photoUrl}
-                alt={snap.title ?? ""}
-                className="object-cover"
-              />
-            </div>
+            <AspectRatioImage
+              src={snap.photoUrl}
+              alt={snap.title ?? "Snap"}
+              aspectRatio="3/4"
+              objectFit="cover"
+              className="transition-opacity hover:opacity-80"
+            />
           </Link>
         ))}
       </div>
