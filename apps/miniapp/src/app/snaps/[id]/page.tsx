@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { env } from "~/env";
 import { db } from "~/server/database";
-import { SnapCard } from "../_components/snap-card";
+import { SnapDetailView } from "./snap-detail-view";
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { id } = await props.params;
@@ -75,5 +75,5 @@ export default async function SnapPage(props: Props) {
     return <div>Snap not found</div>;
   }
 
-  return <SnapCard snap={snap} />;
+  return <SnapDetailView snap={snap} />;
 }
