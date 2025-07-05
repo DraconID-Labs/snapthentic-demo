@@ -7,6 +7,7 @@ import { registerSnapOnChain } from "~/blockchain/register-snap-onchain";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { uploadToSupabase } from "~/supabase/upload";
 import { getPublicUrl } from "~/supabase/get-public-url";
+import { constructV1Signature } from "@snapthentic/signatures";
 
 const CreateSnapSchema = z.object({
   photoData: z.string().min(1, "Photo data is required"),
@@ -50,12 +51,19 @@ export const snapsRouter = createTRPCRouter({
       );
       console.timeEnd("registerSnapOnChain");
 
+      const signaturePayload = constructV1Signature({
+        signerAddress: hexSignerAddress,
+        hash: hexHash,
+        signature: hexSignature,
+        txHash,
+      });
+
       console.time("base64ToBuffer");
       const imageBuffer = base64ToBuffer(input.photoData);
       console.timeEnd("base64ToBuffer");
 
       console.time("encodeMessage");
-      const encoded = await encodeMessage(imageBuffer, txHash);
+      const encoded = await encodeMessage(imageBuffer, signaturePayload);
       console.timeEnd("encodeMessage");
 
       console.time("imageToBuffer");

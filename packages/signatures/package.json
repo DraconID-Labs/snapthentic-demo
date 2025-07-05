@@ -19,5 +19,8 @@
   },
   "devDependencies": {
     "@snapthentic/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "zod": "^3.25.71"
   }
 }

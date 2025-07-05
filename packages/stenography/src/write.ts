@@ -1,12 +1,7 @@
 #!/usr/bin/env node
 
 import Jimp from "jimp";
-import {
-  encodeMessage,
-  calculateCapacity,
-  imageToBuffer,
-  prefixSignature,
-} from "./index.js";
+import { encodeMessage, calculateCapacity, imageToBuffer } from "./index.js";
 import * as fs from "node:fs";
 
 async function write() {
@@ -34,10 +29,7 @@ async function write() {
 
     // Step 4: Encode the message
     console.log("Step 3: Encoding message into image...");
-    const encodingResult = await encodeMessage(
-      imageBuffer,
-      prefixSignature(message),
-    );
+    const encodingResult = await encodeMessage(imageBuffer, message);
 
     console.log("✓ Encoding successful!");
     console.log(`  - Capacity: ${encodingResult.capacity} bytes`);
