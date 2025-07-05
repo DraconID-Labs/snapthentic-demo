@@ -18,9 +18,13 @@
     "lint": "biome check --formatter-enabled=false ."
   },
   "devDependencies": {
-    "@snapthentic/typescript-config": "workspace:*"
+    "@snapthentic/typescript-config": "workspace:*",
+    "@types/node": "^20.0.0"
   },
   "dependencies": {
+    "@worldcoin/minikit-js": "^1.9.6",
+    "tsx": "^4.20.3",
+    "viem": "^2.31.6",
     "zod": "^3.25.71"
   }
 }
