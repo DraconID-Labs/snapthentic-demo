@@ -7,7 +7,18 @@
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env", ".env.*"],
       "outputs": [".next/**", "!.next/cache/**"],
-      "env": ["DATABASE_URL", "WORLDCOIN_APP_ID"]
+      "env": [
+        "DATABASE_URL",
+        "WORLDCOIN_APP_ID",
+        "NEXTAUTH_SECRET",
+        "CALLER_PRIVATE_KEY",
+        "REGISTRY_ADDRESS",
+        "SUPABASE_URL",
+        "SUPABASE_KEY",
+        "SUPABASE_BUCKET",
+        "NEXTAUTH_URL",
+        "NODE_ENV"
+      ]
     },
     "typecheck": {
       "dependsOn": ["^typecheck"]
