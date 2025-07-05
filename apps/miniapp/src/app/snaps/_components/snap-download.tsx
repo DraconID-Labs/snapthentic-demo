@@ -83,7 +83,7 @@ export function SnapDownload({ snap }: { snap: SnapWithAuthor }) {
         }, 100);
       } catch {
         // Fallback: open in new tab (works in most environments)
-        window.open(snap.photoUrl, "_blank", "noopener,noreferrer");
+        // window.open(snap.photoUrl, "_blank", "noopener,noreferrer");
       }
     } finally {
       setIsDownloading(false);
