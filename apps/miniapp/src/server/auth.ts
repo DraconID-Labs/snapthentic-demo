@@ -137,7 +137,6 @@ export const walletAuthOptions: NextAuthOptions = {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const finalPayload: MiniAppWalletAuthSuccessPayload =
           JSON.parse(finalPayloadJson);
-        console.log("verifyin siwe message", finalPayload, nonce);
         const result = await verifySiweMessage(finalPayload, nonce);
 
         if (!result.isValid || !result.siweMessageData.address) {

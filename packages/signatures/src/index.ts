@@ -35,11 +35,7 @@ export function constructV1Signature({
 
 export function parseV1Signature(sig: string): SignaturePayloadV1 {
   const [brand, version, ...payload] = sig.split(":");
-  console.log("brand", brand);
-  console.log("version", version);
-  console.log("payload", payload);
   const brandAndVersion = `${brand}:${version}`;
-  console.log("brandAndVersion", brandAndVersion);
   if (brandAndVersion !== PREFIX.SNAP_HASH) {
     throw new Error("Invalid signature brand and version");
   }

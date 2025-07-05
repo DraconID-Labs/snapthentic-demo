@@ -2,10 +2,10 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { relations } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import { numeric, pgTableCreator } from "drizzle-orm/pg-core";
 import { boolean, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
-import { unique, index, check } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
+import { check, index, unique } from "drizzle-orm/pg-core";
 
 export const createTable = pgTableCreator((name) => `snapthentic_${name}`);
 
@@ -61,38 +61,49 @@ export const snaps = createTable("snaps", {
 });
 
 // Likes table for snaps
-export const likes = createTable("likes", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  userId: varchar("user_id", { length: 255 }).notNull(),
-  snapId: uuid("snap_id").notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-}, (table) => ({
-  // Composite unique constraint to prevent duplicate likes
-  userSnapUnique: unique().on(table.userId, table.snapId),
-  // Indexes for performance
-  userIdIdx: index("likes_user_id_idx").on(table.userId),
-  snapIdIdx: index("likes_snap_id_idx").on(table.snapId),
-}));
+export const likes = createTable(
+  "likes",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: varchar("user_id", { length: 255 }).notNull(),
+    snapId: uuid("snap_id").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    // Composite unique constraint to prevent duplicate likes
+    userSnapUnique: unique().on(table.userId, table.snapId),
+    // Indexes for performance
+    userIdIdx: index("likes_user_id_idx").on(table.userId),
+    snapIdIdx: index("likes_snap_id_idx").on(table.snapId),
+  }),
+);
 
 // Follows table for user relationships
-export const follows = createTable("follows", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  followerId: varchar("follower_id", { length: 255 }).notNull(), // User who is following
-  followingId: varchar("following_id", { length: 255 }).notNull(), // User being followed
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .defaultNow()
-    .notNull(),
-}, (table) => ({
-  // Composite unique constraint to prevent duplicate follows
-  followerFollowingUnique: unique().on(table.followerId, table.followingId),
-  // Indexes for performance
-  followerIdIdx: index("follows_follower_id_idx").on(table.followerId),
-  followingIdIdx: index("follows_following_id_idx").on(table.followingId),
-  // Check constraint to prevent self-following
-  noSelfFollow: check("no_self_follow", sql`${table.followerId} != ${table.followingId}`),
-}));
+export const follows = createTable(
+  "follows",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    followerId: varchar("follower_id", { length: 255 }).notNull(), // User who is following
+    followingId: varchar("following_id", { length: 255 }).notNull(), // User being followed
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => ({
+    // Composite unique constraint to prevent duplicate follows
+    followerFollowingUnique: unique().on(table.followerId, table.followingId),
+    // Indexes for performance
+    followerIdIdx: index("follows_follower_id_idx").on(table.followerId),
+    followingIdIdx: index("follows_following_id_idx").on(table.followingId),
+    // Check constraint to prevent self-following
+    noSelfFollow: check(
+      "no_self_follow",
+      sql`${table.followerId} != ${table.followingId}`,
+    ),
+  }),
+);
 
 export const snapContest = createTable("snap_contests", {
   id: uuid("id").defaultRandom().primaryKey(),

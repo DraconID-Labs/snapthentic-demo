@@ -150,10 +150,7 @@
         "snapthentic_follows_follower_id_following_id_unique": {
           "name": "snapthentic_follows_follower_id_following_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "follower_id",
-            "following_id"
-          ]
+          "columns": ["follower_id", "following_id"]
         }
       },
       "policies": {},
@@ -234,10 +231,7 @@
         "snapthentic_likes_user_id_snap_id_unique": {
           "name": "snapthentic_likes_user_id_snap_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "user_id",
-            "snap_id"
-          ]
+          "columns": ["user_id", "snap_id"]
         }
       },
       "policies": {},
@@ -294,9 +288,7 @@
         "snapthentic_proofs_user_id_unique": {
           "name": "snapthentic_proofs_user_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "user_id"
-          ]
+          "columns": ["user_id"]
         }
       },
       "policies": {},
@@ -585,9 +577,7 @@
         "snapthentic_user_profile_user_id_unique": {
           "name": "snapthentic_user_profile_user_id_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "user_id"
-          ]
+          "columns": ["user_id"]
         }
       },
       "policies": {},

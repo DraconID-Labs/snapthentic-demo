@@ -18,7 +18,6 @@ export function AuthWallProvider({ children }: { children: ReactNode }) {
   }
 
   if (status === "loading") {
-    console.log("Loading");
     return <Loader />;
   }
 

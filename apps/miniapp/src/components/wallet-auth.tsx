@@ -12,7 +12,6 @@ export async function loginWithWallet() {
     notBefore: new Date(Date.now() - 24 * 60 * 60 * 1000),
     statement: `Authenticate (${crypto.randomUUID().replace(/-/g, "")}).`,
   });
-  console.log("Result", result);
   if (!result) {
     throw new Error("No response from wallet auth");
   }
@@ -23,9 +22,6 @@ export async function loginWithWallet() {
       result.finalPayload.error_code,
     );
     return;
-    // biome-ignore lint/style/noUselessElse: <explanation>
-  } else {
-    console.log(result.finalPayload);
   }
 
   await signIn("credentials", {
