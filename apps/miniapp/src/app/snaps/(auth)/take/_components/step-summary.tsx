@@ -3,7 +3,7 @@
 import { Loader2 } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { api } from "~/trpc/react";
-import type { StepProps } from "../page";
+import type { StepProps } from "./types";
 
 export function StepSummary({ data, updateData, next }: StepProps) {
   const createSnapMutation = api.snaps.create.useMutation({

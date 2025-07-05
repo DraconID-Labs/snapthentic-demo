@@ -7,7 +7,7 @@ import { Button } from "~/components/ui/button";
 import { Code } from "~/components/ui/code";
 import { useSignMessage } from "../../../_hooks/use-sign-message";
 import { hashMessage } from "../../../_utils/hash-photo";
-import type { StepProps } from "../page";
+import type { StepProps } from "./types";
 
 export function SignPhotoStep({ data, updateData, next }: StepProps) {
   const { signedMessage, sign } = useSignMessage();

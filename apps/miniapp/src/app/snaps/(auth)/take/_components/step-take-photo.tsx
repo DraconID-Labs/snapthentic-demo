@@ -4,7 +4,7 @@ import { Camera } from "lucide-react";
 import { useState } from "react";
 import { useRequestCameraPermissions } from "~/app/snaps/_hooks/use-request-camera-permissions";
 import { CameraCapture } from "./camera-capture";
-import type { StepProps } from "../page";
+import type { StepProps } from "./types";
 
 export function TakePhotoStep({ data, updateData, next }: StepProps) {
   const permissionGranted = useRequestCameraPermissions();

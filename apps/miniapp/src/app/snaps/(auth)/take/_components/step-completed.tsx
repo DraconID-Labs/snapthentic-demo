@@ -3,7 +3,7 @@
 import { ArrowRight, HeartCrack, PartyPopper } from "lucide-react";
 import Link from "next/link";
 import { Button } from "~/components/ui/button";
-import type { StepProps } from "../page";
+import type { StepProps } from "./types";
 
 export function StepCompleted({ data }: StepProps) {
   return (
