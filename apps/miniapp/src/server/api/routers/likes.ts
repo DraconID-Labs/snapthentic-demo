@@ -1,6 +1,6 @@
 import { likes, snaps } from "@snapthentic/database/schema";
 import { TRPCError } from "@trpc/server";
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, inArray } from "drizzle-orm";
 import { z } from "zod";
 import {
   createTRPCRouter,
@@ -153,8 +153,7 @@ export const likesRouter = createTRPCRouter({
         .where(
           input.snapIds.length === 1
             ? eq(likes.snapId, input.snapIds[0]!)
-            : // @ts-expect-error - drizzle types issue with inArray
-              likes.snapId.in(input.snapIds),
+            : inArray(likes.snapId, input.snapIds),
         )
         .groupBy(likes.snapId);
 
@@ -181,8 +180,7 @@ export const likesRouter = createTRPCRouter({
           eq(likes.userId, ctx.session.user.id),
           input.snapIds.length === 1
             ? eq(likes.snapId, input.snapIds[0]!)
-            : // @ts-expect-error - drizzle types issue with inArray
-              likes.snapId.in(input.snapIds),
+            : inArray(likes.snapId, input.snapIds),
         ),
       });
 
