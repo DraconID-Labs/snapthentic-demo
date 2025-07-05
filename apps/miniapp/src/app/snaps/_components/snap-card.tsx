@@ -7,9 +7,12 @@ import {
   MessageCircleIcon,
   MoreVertical,
   ShareIcon,
+  Trophy,
+  Vote,
 } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Code } from "~/components/ui/code";
 import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
@@ -28,10 +31,20 @@ import { SnapDownload } from "./snap-download";
 import { SnapEdit } from "./snap-edit";
 import { useShareOnX } from "./use-share-on-x";
 
-// Extended type for snap with like information
+// Extended type for snap with like and contest information
 type SnapWithLikes = SnapWithAuthor & {
   likeCount?: number;
   isLikedByUser?: boolean;
+  contestEntry?: {
+    id: string;
+    contest: {
+      id: string;
+      title: string;
+      active: boolean | null;
+      prize: string | null;
+    };
+    voteCount: number;
+  } | null;
 };
 
 export function SnapCard({
@@ -49,8 +62,32 @@ export function SnapCard({
     url: `${env.NEXT_PUBLIC_APP_URL}/snaps/${snap.id}`,
   });
 
+  const isContestEntry = !!snap.contestEntry;
+  const isActiveContest = snap.contestEntry?.contest.active;
+
   return (
     <div className="flex w-full flex-col">
+      {/* Contest Badge */}
+      {isContestEntry && snap.contestEntry && (
+        <div className="mb-2 flex items-center justify-between">
+          <Link href={`/contests/${snap.contestEntry.contest.id}`}>
+            <Badge
+              variant={isActiveContest ? "default" : "secondary"}
+              className="flex cursor-pointer items-center gap-1 hover:bg-opacity-80"
+            >
+              <Trophy size={12} />
+              {snap.contestEntry.contest.title}
+              {isActiveContest && <span className="text-xs">• Live →</span>}
+            </Badge>
+          </Link>
+
+          <div className="flex items-center gap-1 text-xs text-gray-600">
+            <Vote size={12} />
+            <span>{snap.contestEntry.voteCount} votes</span>
+          </div>
+        </div>
+      )}
+
       <div className="flex w-full items-center justify-between">
         {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
         <div
@@ -97,16 +134,28 @@ export function SnapCard({
 
       {/* Responsive image that preserves aspect ratio */}
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-      <div className="mb-2 cursor-pointer" onClick={onBodyClick}>
+      <div
+        className={`relative mb-2 cursor-pointer ${isContestEntry ? "rounded-lg border-2 border-dashed border-blue-400 p-1" : ""}`}
+        onClick={onBodyClick}
+      >
         <ResponsiveImage
           src={snap.photoUrl}
           alt={snap.title ?? "Snap photo"}
           maxHeight={600}
           minHeight={300}
           objectFit="contain"
-          className="w-full"
+          className={`w-full ${isContestEntry ? "rounded-md" : ""}`}
           priority={false}
         />
+
+        {/* Contest indicator overlay */}
+        {isContestEntry && (
+          <div className="absolute right-2 top-2">
+            <div className="rounded-full bg-blue-500 p-1 text-white shadow-lg">
+              <Trophy size={16} />
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="mb-1 flex w-full items-center justify-between">
@@ -173,7 +222,7 @@ export function SnapCard({
         </span>
         <span className="text-xs text-gray-500">{snap.description}</span>
       </div>
-      <div className="flex w-full items-center">
+      <div className="flex w-full items-center justify-between">
         <span className="text-xs font-extralight text-gray-500">
           {snap.createdAt.toLocaleDateString()}
         </span>

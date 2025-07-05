@@ -15,7 +15,7 @@ export default async function Page() {
   });
 
   return (
-    <div className="flex min-h-screen flex-col items-center p-4">
+    <div className="flex min-h-screen flex-col items-center">
       <h1 className="mb-6 w-full text-left text-2xl font-bold">Contests</h1>
       <div className="w-full max-w-4xl space-y-4">
         {contests.map((contest) => (

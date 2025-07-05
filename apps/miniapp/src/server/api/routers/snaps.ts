@@ -1,9 +1,10 @@
 import { randomUUID } from "node:crypto";
 import {
-  type InsertSnap, snaps,
+  type InsertSnap,
+  snaps,
   userProfiles,
   contest,
-  snapContest
+  snapContest,
 } from "@snapthentic/database/schema";
 import {
   constructV1Signature,
@@ -169,8 +170,32 @@ export const snapsRouter = createTRPCRouter({
         }
 
         // Only new snaps can be entered (created after contest start)
-        if (contestData.startDate && insertedSnap.createdAt < contestData.startDate) {
-          throw new Error("Only new snaps created after the contest started can be entered");
+        if (
+          contestData.startDate &&
+          insertedSnap.createdAt < contestData.startDate
+        ) {
+          throw new Error(
+            "Only new snaps created after the contest started can be entered",
+          );
+        }
+
+        // Check if user has already entered this contest
+        const existingEntry = await ctx.db.query.snapContest.findFirst({
+          where: eq(snapContest.contestId, input.contestId),
+          with: {
+            snap: {
+              columns: {
+                userId: true,
+              },
+            },
+          },
+        });
+
+        if (
+          existingEntry &&
+          existingEntry.snap.userId === ctx.session.user.id
+        ) {
+          throw new Error("You have already entered this contest");
         }
 
         // Create contest entry (active by default since we're ignoring payment for now)
@@ -329,19 +354,40 @@ export const snapsRouter = createTRPCRouter({
               userId: true,
             },
           },
+          contestEntry: {
+            with: {
+              contest: {
+                columns: {
+                  id: true,
+                  title: true,
+                  active: true,
+                  prize: true,
+                },
+              },
+              votes: true,
+            },
+          },
         },
       });
 
       const hasMore = feed.length > limit;
       const items = hasMore ? feed.slice(0, limit) : feed;
 
-      // Add like counts and user's like status
+      // Add like counts, user's like status, and contest information
       const enrichedItems = items.map((snap) => ({
         ...snap,
         likeCount: snap.likes.length,
         isLikedByUser: ctx.session?.user
           ? snap.likes.some((like) => like.userId === ctx.session?.user.id)
           : false,
+        // Contest information
+        contestEntry: snap.contestEntry
+          ? {
+              ...snap.contestEntry,
+              voteCount: snap.contestEntry.votes.length,
+              votes: undefined, // Remove votes array to save bandwidth
+            }
+          : null,
         // Remove the likes array to avoid sending unnecessary data
         likes: undefined,
       }));
@@ -374,6 +420,19 @@ export const snapsRouter = createTRPCRouter({
               userId: true,
             },
           },
+          contestEntry: {
+            with: {
+              contest: {
+                columns: {
+                  id: true,
+                  title: true,
+                  active: true,
+                  prize: true,
+                },
+              },
+              votes: true,
+            },
+          },
         },
       });
 
@@ -390,6 +449,14 @@ export const snapsRouter = createTRPCRouter({
         isLikedByUser: snap.likes.some(
           (like) => like.userId === ctx.session.user.id,
         ),
+        // Contest information
+        contestEntry: snap.contestEntry
+          ? {
+              ...snap.contestEntry,
+              voteCount: snap.contestEntry.votes.length,
+              votes: undefined, // Remove votes array to save bandwidth
+            }
+          : null,
         // Remove the likes array to avoid sending unnecessary data
         likes: undefined,
       };

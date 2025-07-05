@@ -1,11 +1,11 @@
 import type { ContestWithSnapContests } from "@snapthentic/database/schema";
 import { Badge } from "~/components/ui/badge";
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "~/components/ui/card";
 import { Countdown } from "./countdown";
 
@@ -21,7 +21,7 @@ export function ContestBanner({
 
   const formatCurrency = (amount: string | null) => {
     if (!amount) return "Free";
-    return `$${Number(amount).toFixed(2)}`;
+    return `${Number(amount).toFixed(2)} WLD`;
   };
 
   return (
@@ -32,7 +32,7 @@ export function ContestBanner({
           {contest.active && <Badge className="bg-green-500">Active</Badge>}
         </div>
         <CardDescription>{contest.description}</CardDescription>
-        
+
         {/* Entry Price and Prize Display */}
         <div className="flex flex-wrap gap-4 text-sm">
           <div className="flex items-center gap-2">
