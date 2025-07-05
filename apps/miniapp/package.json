@@ -36,7 +36,6 @@
     "@trpc/server": "catalog:",
     "@worldcoin/minikit-js": "catalog:",
     "class-variance-authority": "catalog:",
-    "cloudinary": "^2.7.0",
     "clsx": "catalog:",
     "drizzle-orm": "^0.44.2",
     "eruda": "catalog:",

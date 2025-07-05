@@ -2,7 +2,7 @@
 // https://orm.drizzle.team/docs/sql-schema-declaration
 
 import { relations } from "drizzle-orm";
-import { pgTableCreator } from "drizzle-orm/pg-core";
+import { numeric, pgTableCreator } from "drizzle-orm/pg-core";
 import { boolean, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
 
 export const createTable = pgTableCreator((name) => `snapthentic_${name}`);
@@ -57,6 +57,13 @@ export const snaps = createTable("snaps", {
   updatedAt: timestamp("updated_at", { withTimezone: true })
     .defaultNow()
     .notNull(),
+});
+
+export const contest = createTable("contest", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: varchar("user_id", { length: 255 }).notNull(),
+  description: varchar("user_id", { length: 255 }).notNull(),
+  entryPrice: numeric("entry_price"),
 });
 
 export const snapRelations = relations(snaps, ({ one }) => ({
