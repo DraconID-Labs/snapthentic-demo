@@ -22,6 +22,8 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { SnapDownload } from "./snap-download";
 import { Code } from "~/components/ui/code";
+import { env } from "~/env";
+import { useShareOnX } from "./use-share-on-x";
 
 export function SnapCard({
   snap,
@@ -32,6 +34,10 @@ export function SnapCard({
   onHeaderClick?: () => void;
   onBodyClick?: () => void;
 }) {
+  const { handleShare } = useShareOnX({
+    url: `${env.NEXT_PUBLIC_APP_URL}/snaps/${snap.id}`,
+  });
+
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="flex w-full items-center justify-between">
@@ -76,16 +82,20 @@ export function SnapCard({
       </div>
 
       <div className="flex w-full items-center justify-between">
-        <div className="flex w-full items-center gap-2">
-          <Button variant="outline" className="max-w-fit px-2">
+        <div className="flex w-full items-center gap-1">
+          <Button variant="ghost" className="max-w-fit px-1">
             <HeartIcon className="size-4 fill-red-500 stroke-red-400" />
             <span className="text-sm">{Math.floor(Math.random() * 100)}</span>
           </Button>
-          <Button variant="outline" className="max-w-fit px-2">
+          <Button variant="ghost" className="max-w-fit px-1">
             <MessageCircleIcon className="size-4" />
             <span className="text-sm">{Math.floor(Math.random() * 100)}</span>
           </Button>
-          <Button variant="outline" className="max-w-fit px-2">
+          <Button
+            variant="ghost"
+            className="max-w-fit px-1"
+            onClick={handleShare}
+          >
             <ShareIcon className="size-4" />
             <span className="text-sm">{Math.floor(Math.random() * 100)}</span>
           </Button>
@@ -93,8 +103,8 @@ export function SnapCard({
 
         <span className="flex items-center gap-1">
           <Drawer>
-            <DrawerTrigger className="flex items-center justify-center gap-1">
-              <span className="text-sm">Verified</span>
+            <DrawerTrigger className="flex items-center justify-center gap-1 text-xs opacity-50">
+              Verified
               <Check className="size-5 text-green-700" />
             </DrawerTrigger>
             <DrawerContent className="flex max-h-[100vw] flex-col gap-2 p-4 pb-[150px] text-xs">

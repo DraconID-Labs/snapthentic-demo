@@ -13,7 +13,6 @@ interface ProfileForm {
   avatarUrl?: string;
   bio?: string;
   location?: string;
-  website?: string;
   twitterHandle?: string;
   instagramHandle?: string;
   isPublic?: boolean;
@@ -34,12 +33,8 @@ export default function EditProfilePage() {
   });
 
   const [form, setForm] = useState<ProfileForm>({
-    nickname: "",
-    displayName: "",
-    avatarUrl: "",
     bio: "",
     location: "",
-    website: "",
     twitterHandle: "",
     instagramHandle: "",
     isPublic: true,
@@ -63,7 +58,7 @@ export default function EditProfilePage() {
     setForm((prev) => ({
       ...prev,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : value === "" ? undefined : value,
     }));
   };
 
@@ -78,53 +73,6 @@ export default function EditProfilePage() {
     <div className="flex min-h-screen flex-col gap-4">
       <h1 className="text-xl font-semibold">Edit Profile</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {/* Nickname */}
-        <div>
-          <label htmlFor="nickname" className="mb-1 block text-sm">
-            Nickname
-          </label>
-          <input
-            id="nickname"
-            name="nickname"
-            type="text"
-            value={form.nickname ?? ""}
-            onChange={handleChange}
-            placeholder="Your handle"
-            className="w-full rounded border border-gray-300 p-2 focus:border-gray-500 focus:outline-none"
-          />
-        </div>
-        {/* Display Name */}
-        <div>
-          <label htmlFor="displayName" className="mb-1 block text-sm">
-            Display Name
-          </label>
-          <input
-            id="displayName"
-            name="displayName"
-            type="text"
-            value={form.displayName ?? ""}
-            onChange={handleChange}
-            placeholder="Your display name"
-            className="w-full rounded border border-gray-300 p-2 focus:border-gray-500 focus:outline-none"
-          />
-        </div>
-
-        {/* Avatar URL */}
-        <div>
-          <label htmlFor="avatarUrl" className="mb-1 block text-sm">
-            Avatar URL
-          </label>
-          <input
-            id="avatarUrl"
-            name="avatarUrl"
-            type="url"
-            value={form.avatarUrl ?? ""}
-            onChange={handleChange}
-            placeholder="https://example.com/avatar.jpg"
-            className="w-full rounded border border-gray-300 p-2 focus:border-gray-500 focus:outline-none"
-          />
-        </div>
-
         {/* Bio */}
         <div>
           <label htmlFor="bio" className="mb-1 block text-sm">
@@ -152,22 +100,6 @@ export default function EditProfilePage() {
             value={form.location ?? ""}
             onChange={handleChange}
             placeholder="Where do you live?"
-            className="w-full rounded border border-gray-300 p-2 focus:border-gray-500 focus:outline-none"
-          />
-        </div>
-
-        {/* Website */}
-        <div>
-          <label htmlFor="website" className="mb-1 block text-sm">
-            Website
-          </label>
-          <input
-            id="website"
-            name="website"
-            type="url"
-            value={form.website ?? ""}
-            onChange={handleChange}
-            placeholder="https://yourwebsite.com"
             className="w-full rounded border border-gray-300 p-2 focus:border-gray-500 focus:outline-none"
           />
         </div>

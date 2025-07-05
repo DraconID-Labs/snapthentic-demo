@@ -1,0 +1,1 @@
+ALTER TABLE "snapthentic_user_profile" DROP COLUMN "website";

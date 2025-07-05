@@ -15,7 +15,6 @@ export const userProfiles = createTable("user_profile", {
   avatarUrl: text("avatar_url"),
   bio: text("bio"),
   location: varchar("location", { length: 100 }),
-  website: text("website"),
   twitterHandle: varchar("twitter_handle", { length: 50 }),
   instagramHandle: varchar("instagram_handle", { length: 50 }),
   isPublic: boolean("is_public").default(true),

@@ -1,54 +1,47 @@
 "use client";
 
+import { Power, UserPlus } from "lucide-react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
 import LazyImage from "~/components/ui/lazy-image";
 import { Loader } from "~/components/ui/loader";
 import { useSessionWithProfile } from "~/hooks/use-session-with-profile";
 import { api } from "~/trpc/react";
 
 export default function Page() {
-  const { id } = useParams();
-  const router = useRouter();
   const session = useSessionWithProfile();
-
-  const isOwner =
-    id ===
-    (session.status === "authenticated" ? session.profile?.id : undefined);
-
-  if (isOwner) {
-    return router.push("/profile/me");
-  }
-
-  if (!id) {
-    throw new Error("No ID");
-  }
-
-  const {
-    data: profile,
-    isLoading,
-    isError,
-  } = api.userProfile.getProfile.useQuery({ userId: id as string });
 
   const {
     data: snapsRaw,
     isLoading: snapsLoading,
     isError: snapsError,
-  } = api.snaps.getByAuthorId.useQuery({ authorId: id as string });
+  } = api.snaps.getMySnaps.useQuery();
 
-  if (isLoading || snapsLoading) return <Loader />;
-  if (isError || snapsError) return <div>Error...</div>;
-
-  if (!profile) {
-    router.push("/profile/verify");
+  if (
+    session.status === "loading" ||
+    session.status === "unauthenticated" ||
+    snapsLoading
+  ) {
+    return <Loader />;
   }
+
+  if (snapsError) return <div>Error...</div>;
+
+  const profile = session.status === "authenticated" ? session.profile : null;
 
   const snaps = snapsRaw ?? [];
 
   return (
     <div className="flex min-h-screen flex-col items-center gap-4">
-      <h1 className="w-full text-left text-2xl font-bold">Profile</h1>
+      <div className="flex w-full items-center justify-between">
+        <h1 className="w-full text-left text-2xl font-bold">Profile</h1>
+        <Button variant="ghost" className="p-2" onClick={() => signOut()}>
+          <Power className="size-6" />
+        </Button>
+      </div>
+
       {/* Avatar header */}
       <div className="flex w-full items-center justify-between gap-4">
         <Avatar>
@@ -56,22 +49,39 @@ export default function Page() {
           <AvatarFallback>{profile?.displayName?.slice(0, 2)}</AvatarFallback>
         </Avatar>
         <div className="flex w-full flex-col gap-4">
-          <h2 className="font-bold">@{profile?.displayName}</h2>
+          <div className="flex flex-col gap-1">
+            <h2 className="font-bold">@{profile?.displayName}</h2>
+            {profile?.bio && (
+              <p className="text-xs text-gray-600">{profile?.bio}</p>
+            )}
+          </div>
           <div className="flex items-center justify-between gap-2">
-            <div className="flex flex-col text-left">
+            <div className="flex flex-col text-left leading-none">
               <span>{snaps.length}</span>
               <span className="text-xs">snaps</span>
             </div>
-            <div className="flex flex-col text-left">
+            <div className="flex flex-col text-left leading-none">
               <span>{Math.floor(Math.random() * 1000)}</span>
               <span className="text-xs">followers</span>
             </div>
-            <div className="flex flex-col text-left">
+            <div className="flex flex-col text-left leading-none">
               <span>{Math.floor(Math.random() * 1000)}</span>
               <span className="text-xs">following</span>
             </div>
           </div>
         </div>
+      </div>
+      {/* Action buttons */}
+      <div className="flex w-full items-center justify-evenly gap-1">
+        <Button asChild variant="outline" className="w-full">
+          <Link href="/profile/edit">Edit profile</Link>
+        </Button>
+        <Button variant="outline" className="w-full">
+          Share profile
+        </Button>
+        <Button variant="outline">
+          <UserPlus />
+        </Button>
       </div>
       <div className="grid w-full grid-cols-3 gap-1">
         {snaps.map((snap) => (

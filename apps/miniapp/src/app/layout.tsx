@@ -3,7 +3,6 @@ import "~/styles/globals.css";
 import type { Metadata } from "next";
 import { Sora } from "next/font/google";
 
-import { AuthWallProvider } from "~/components/auth-wall-provider";
 import { ErudaProvider } from "~/components/eruda/eruda-provider";
 import MiniKitProvider from "~/components/minikit-provider";
 import MobileBottomNav from "~/components/mobile-bottom-nav";
@@ -40,12 +39,8 @@ export default async function RootLayout({
           <ErudaProvider>
             <NextAuthProvider>
               <MiniKitProvider>
-                <AuthWallProvider>
-                  <div className="min-h-screen w-full p-4 pb-24">
-                    {children}
-                  </div>
-                  <MobileBottomNav />
-                </AuthWallProvider>
+                <div className="min-h-screen w-full p-4 pb-24">{children}</div>
+                <MobileBottomNav />
               </MiniKitProvider>
             </NextAuthProvider>
           </ErudaProvider>

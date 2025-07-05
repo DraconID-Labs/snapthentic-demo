@@ -109,7 +109,6 @@ export const proofsRouter = createTRPCRouter({
         avatarUrl: ctx.session.user.profilePictureUrl ?? "",
         bio: "",
         location: "",
-        website: "",
         twitterHandle: "",
         instagramHandle: "",
         userId: ctx.session.user.id,
