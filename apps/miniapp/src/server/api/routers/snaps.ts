@@ -1,5 +1,9 @@
 import { type InsertSnap, snaps } from "@snapthentic/database/schema";
-import { encodeMessage, imageToBuffer } from "@snapthentic/stenography";
+import {
+  decodeMessage,
+  encodeMessage,
+  imageToBuffer,
+} from "@snapthentic/stenography";
 import { randomUUID } from "node:crypto";
 import { desc, eq, and, lt } from "drizzle-orm";
 import { z } from "zod";
@@ -11,7 +15,22 @@ import {
 } from "~/server/api/trpc";
 import { uploadToSupabase } from "~/supabase/upload";
 import { getPublicUrl } from "~/supabase/get-public-url";
-import { constructV1Signature } from "@snapthentic/signatures";
+import {
+  constructV1Signature,
+  parseV1Signature,
+} from "@snapthentic/signatures";
+
+function base64ToBuffer(base64: string): Buffer {
+  const jpegPrefix = "data:image/jpeg;base64,";
+  const matches = base64.startsWith(jpegPrefix);
+
+  if (!matches) {
+    throw new Error("Invalid base64 string");
+  }
+
+  const imageBuffer = Buffer.from(base64.slice(jpegPrefix.length), "base64");
+  return imageBuffer;
+}
 
 const CreateSnapSchema = z.object({
   photoData: z.string().min(1, "Photo data is required"),
@@ -34,18 +53,6 @@ export const snapsRouter = createTRPCRouter({
 
       const uuid = randomUUID();
       const filename = `${hexSignerAddress}-${hexHash}-${uuid}.jpeg`;
-
-      function base64ToBuffer(base64: string): Buffer {
-        const matches = /^data:([A-Za-z-+/]+);base64,(.+)$/.exec(base64);
-
-        if (!matches || matches.length !== 3) {
-          throw new Error("Invalid base64 string");
-        }
-
-        // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        const imageBuffer = Buffer.from(matches[2]!, "base64");
-        return imageBuffer;
-      }
 
       console.time("registerSnapOnChain");
       const { txHash } = await registerSnapOnChain(
@@ -106,6 +113,40 @@ export const snapsRouter = createTRPCRouter({
       return {
         id: insertedSnap?.id,
         createdAt: insertedSnap?.createdAt,
+      };
+    }),
+
+  verify: publicProcedure
+    .input(
+      z.object({
+        photoData: z.string().min(1, "Photo data is required"),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const buffer = base64ToBuffer(input.photoData);
+      const decoded = await decodeMessage(buffer);
+      const payload = parseV1Signature(decoded.message);
+      const snap = await ctx.db.query.snaps.findFirst({
+        where: eq(snaps.hash, payload.hash),
+      });
+
+      if (!snap) {
+        throw new Error("Snap not found");
+      }
+
+      // TODO IN THE FUTURE
+      // Strip data, re-hash image, verify signature against new hash based on the address
+      // Send two separate results - one from backend, one based on actually verified data ;p
+      return {
+        snapId: snap.id,
+        author: snap.userId,
+        createdAt: snap.createdAt,
+        txHash: snap.txHash,
+        hash: snap.hash,
+        signature: snap.signature,
+        signerAddress: snap.signerAddress,
+        signatureVersion: snap.signatureVersion,
+        title: snap.title,
       };
     }),
 

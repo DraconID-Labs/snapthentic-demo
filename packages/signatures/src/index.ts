@@ -12,7 +12,7 @@ export const SignaturePayloadV1 = z.object({
 export type SignaturePayloadV1 = z.infer<typeof SignaturePayloadV1>;
 
 export const PREFIX = {
-  SNAP_HASH: "snapthentic:v1:",
+  SNAP_HASH: "snapthentic:v1",
 };
 
 /**
@@ -20,7 +20,7 @@ export const PREFIX = {
  * Used while signing image hash to add version prefix.
  */
 export function prefixSignature(message: string): string {
-  return `${PREFIX.SNAP_HASH}${message}`;
+  return `${PREFIX.SNAP_HASH}:${message}`;
 }
 
 export function constructV1Signature({
@@ -34,7 +34,11 @@ export function constructV1Signature({
 
 export function parseV1Signature(sig: string): SignaturePayloadV1 {
   const [brand, version, ...payload] = sig.split(":");
+  console.log("brand", brand);
+  console.log("version", version);
+  console.log("payload", payload);
   const brandAndVersion = `${brand}:${version}`;
+  console.log("brandAndVersion", brandAndVersion);
   if (brandAndVersion !== PREFIX.SNAP_HASH) {
     throw new Error("Invalid signature brand and version");
   }
