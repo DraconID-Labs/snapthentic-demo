@@ -55,6 +55,7 @@ export const snapsRouter = createTRPCRouter({
   create: protectedProcedure
     .input(CreateSnapSchema)
     .mutation(async ({ ctx, input }) => {
+      // Check if user has profile (IA/db check)
       const hexHash = ensureHexPrefix(input.hash);
       const hexSignature = ensureHexPrefix(input.signature);
       const hexSignerAddress = ensureHexPrefix(input.signerAddress);
