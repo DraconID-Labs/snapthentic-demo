@@ -13,14 +13,14 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { Drawer, DrawerContent, DrawerHeader } from "~/components/ui/drawer";
-import { cn } from "~/utils/cn";
 import {
   type SnapData,
   SnapDrawerContent,
 } from "~/app/snaps/_components/snap-drawer-content";
-import { Button } from "./ui/button";
+import { Drawer, DrawerContent, DrawerHeader } from "~/components/ui/drawer";
 import { useSessionWithProfile } from "~/hooks/use-session-with-profile";
+import { cn } from "~/utils/cn";
+import { Button } from "./ui/button";
 
 interface NavItem {
   href: string | null;

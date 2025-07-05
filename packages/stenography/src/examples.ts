@@ -1,12 +1,12 @@
 import * as fs from "node:fs";
 import {
-  encodeMessage,
-  decodeMessage,
-  calculateCapacity,
-  createSampleImage,
-  compareImages,
-  imageToBuffer,
   type SteganographyOptions,
+  calculateCapacity,
+  compareImages,
+  createSampleImage,
+  decodeMessage,
+  encodeMessage,
+  imageToBuffer,
 } from "./index.js";
 
 /**

@@ -1,11 +1,15 @@
+import { randomUUID } from "node:crypto";
 import { type InsertSnap, snaps } from "@snapthentic/database/schema";
+import {
+  constructV1Signature,
+  parseV1Signature,
+} from "@snapthentic/signatures";
 import {
   decodeMessage,
   encodeMessage,
   imageToBuffer,
 } from "@snapthentic/stenography";
-import { randomUUID } from "node:crypto";
-import { desc, eq, and, lt } from "drizzle-orm";
+import { and, desc, eq, lt } from "drizzle-orm";
 import { z } from "zod";
 import { registerSnapOnChain } from "~/blockchain/register-snap-onchain";
 import {
@@ -13,12 +17,8 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
-import { uploadToSupabase } from "~/supabase/upload";
 import { getPublicUrl } from "~/supabase/get-public-url";
-import {
-  constructV1Signature,
-  parseV1Signature,
-} from "@snapthentic/signatures";
+import { uploadToSupabase } from "~/supabase/upload";
 
 function base64ToBuffer(base64: string): Buffer {
   const jpegPrefix = "data:image/jpeg;base64,";

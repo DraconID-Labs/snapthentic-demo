@@ -1,9 +1,9 @@
 "use client";
 
+import { ArrowRight, HeartCrack, PartyPopper } from "lucide-react";
+import Link from "next/link";
 import { Button } from "~/components/ui/button";
 import type { SnapDrawerContentProps } from "./snap-drawer-content";
-import Link from "next/link";
-import { ArrowRight, HeartCrack, PartyPopper } from "lucide-react";
 
 export function StepCompleted({ data }: SnapDrawerContentProps) {
   return (

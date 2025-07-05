@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 
+import * as fs from "node:fs";
 import {
-  createSampleImage,
-  encodeMessage,
-  decodeMessage,
   calculateCapacity,
   compareImages,
+  createSampleImage,
+  decodeMessage,
+  encodeMessage,
   imageToBuffer,
 } from "./index.js";
-import * as fs from "node:fs";
 
 async function demo() {
   console.log("🔐 LSB Steganography Demo\n");

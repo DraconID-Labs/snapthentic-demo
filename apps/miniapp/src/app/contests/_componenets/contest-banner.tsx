@@ -1,4 +1,5 @@
 import type { ContestWithSnapContests } from "@snapthentic/database/schema";
+import { Badge } from "~/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -7,7 +8,6 @@ import {
   CardTitle,
 } from "~/components/ui/card";
 import { Countdown } from "./countdown";
-import { Badge } from "~/components/ui/badge";
 
 export function ContestBanner({
   contest,

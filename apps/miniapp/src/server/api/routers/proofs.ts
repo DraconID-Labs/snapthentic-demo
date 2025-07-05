@@ -11,11 +11,11 @@ import { env } from "~/env";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 
 import {
-  uniqueNamesGenerator,
-  adjectives,
-  colors,
-  animals,
   type Config as UniqueNamesConfig,
+  adjectives,
+  animals,
+  colors,
+  uniqueNamesGenerator,
 } from "unique-names-generator";
 
 const config = {

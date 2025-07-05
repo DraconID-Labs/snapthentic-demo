@@ -1,13 +1,13 @@
 "use client";
 
 import { prefixSignature } from "@snapthentic/signatures";
+import { Signature } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "~/components/ui/button";
-import { useSignMessage } from "../_hooks/use-sign-message";
-import type { SnapDrawerContentProps } from "./snap-drawer-content";
-import { hashMessage } from "../_utils/hash-photo";
-import { Signature } from "lucide-react";
 import { Code } from "~/components/ui/code";
+import { useSignMessage } from "../_hooks/use-sign-message";
+import { hashMessage } from "../_utils/hash-photo";
+import type { SnapDrawerContentProps } from "./snap-drawer-content";
 
 export function SignPhotoStep({
   data,

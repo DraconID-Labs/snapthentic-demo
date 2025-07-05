@@ -1,10 +1,10 @@
 import { snaps } from "@snapthentic/database/schema";
 import { eq } from "drizzle-orm";
-import { db } from "~/server/database";
-import { SnapCard } from "../_components/snap-card";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { env } from "~/env";
-import type { Metadata } from "next";
+import { db } from "~/server/database";
+import { SnapCard } from "../_components/snap-card";
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const { id } = await props.params;

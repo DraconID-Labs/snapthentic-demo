@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-import Jimp from "jimp";
-import { encodeMessage, calculateCapacity, imageToBuffer } from "./index.js";
 import * as fs from "node:fs";
+import Jimp from "jimp";
+import { calculateCapacity, encodeMessage, imageToBuffer } from "./index.js";
 
 async function write() {
   // biome-ignore lint/style/noNonNullAssertion: <explanation>

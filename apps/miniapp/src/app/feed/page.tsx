@@ -1,11 +1,11 @@
 "use client";
 
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { Loader } from "~/components/ui/loader";
 import { api } from "~/trpc/react";
 import { SnapCard } from "../snaps/_components/snap-card";
-import { Loader } from "~/components/ui/loader";
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
 
 export default function FeedPage() {
   const router = useRouter();

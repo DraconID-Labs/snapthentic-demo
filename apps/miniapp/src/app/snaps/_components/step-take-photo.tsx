@@ -1,10 +1,10 @@
 "use client";
 
+import { Camera } from "lucide-react";
 import { useState } from "react";
 import { useRequestCameraPermissions } from "~/app/snaps/_hooks/use-request-camera-permissions";
 import { CameraCapture } from "./camera-capture";
 import type { SnapDrawerContentProps } from "./snap-drawer-content";
-import { Camera } from "lucide-react";
 
 export function TakePhotoStep({
   data,

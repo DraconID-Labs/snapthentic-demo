@@ -1,8 +1,6 @@
 "use client";
 
 import type { SnapWithAuthor } from "@snapthentic/database/schema";
-import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
-import { Button } from "~/components/ui/button";
 import {
   Check,
   ExternalLink,
@@ -11,18 +9,20 @@ import {
   MoreVertical,
   ShareIcon,
 } from "lucide-react";
-import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
 import Link from "next/link";
-import LazyImage from "~/components/ui/lazy-image";
+import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
+import { Button } from "~/components/ui/button";
+import { Code } from "~/components/ui/code";
+import { Drawer, DrawerContent, DrawerTrigger } from "~/components/ui/drawer";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { SnapDownload } from "./snap-download";
-import { Code } from "~/components/ui/code";
+import LazyImage from "~/components/ui/lazy-image";
 import { env } from "~/env";
+import { SnapDownload } from "./snap-download";
 import { useShareOnX } from "./use-share-on-x";
 
 export function SnapCard({

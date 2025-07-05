@@ -1,11 +1,11 @@
 "use client";
 
+import { Lock } from "lucide-react";
 import { useSession } from "next-auth/react";
 import type { ReactNode } from "react";
+import { Button } from "./ui/button";
 import { Loader } from "./ui/loader";
 import { loginWithWallet } from "./wallet-auth";
-import { Button } from "./ui/button";
-import { Lock } from "lucide-react";
 
 export function AuthWallProvider({ children }: { children: ReactNode }) {
   const { status } = useSession();

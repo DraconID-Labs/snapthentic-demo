@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { AlertCircle, Check, Send, Upload } from "lucide-react";
+import { useCallback, useRef, useState } from "react";
 import { Button } from "~/components/ui/button";
 import {
   Card,
@@ -9,9 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "~/components/ui/card";
-import { Upload, Send, Check, AlertCircle } from "lucide-react";
-import { api } from "~/trpc/react";
 import { Code } from "~/components/ui/code";
+import { api } from "~/trpc/react";
 
 interface VerificationData {
   author: string;

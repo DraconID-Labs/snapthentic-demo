@@ -1,7 +1,7 @@
 import {
+  type MiniAppWalletAuthSuccessPayload,
   MiniKit,
   verifySiweMessage,
-  type MiniAppWalletAuthSuccessPayload,
 } from "@worldcoin/minikit-js";
 import {
   type DefaultSession,

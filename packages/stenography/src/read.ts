@@ -1,5 +1,5 @@
-import { decodeMessage, imageToBuffer } from "./index.js";
 import Jimp from "jimp";
+import { decodeMessage, imageToBuffer } from "./index.js";
 
 /**
  * Basic example: Hide and extract a simple message

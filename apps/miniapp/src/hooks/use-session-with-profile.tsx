@@ -1,7 +1,7 @@
 import type { UserProfile } from "@snapthentic/database/schema";
+import type { Session } from "next-auth";
 import { useSession } from "next-auth/react";
 import { api } from "~/trpc/react";
-import type { Session } from "next-auth";
 
 type SessionWithProfile =
   | {

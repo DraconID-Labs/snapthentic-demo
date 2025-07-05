@@ -1,8 +1,8 @@
-import { ImageResponse } from "next/og";
-import { notFound } from "next/navigation";
-import { db } from "~/server/database";
-import { eq } from "drizzle-orm";
 import { snaps } from "@snapthentic/database/schema";
+import { eq } from "drizzle-orm";
+import { notFound } from "next/navigation";
+import { ImageResponse } from "next/og";
+import { db } from "~/server/database";
 
 type Props = {
   params: Promise<{ id: string }>;

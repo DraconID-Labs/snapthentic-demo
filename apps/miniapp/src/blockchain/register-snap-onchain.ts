@@ -1,4 +1,4 @@
-import { createPublicClient, createWalletClient, http } from "viem";
+import { http, createPublicClient, createWalletClient } from "viem";
 import { sepolia } from "viem/chains";
 import { env } from "~/env";
 
