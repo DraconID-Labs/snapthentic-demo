@@ -20,7 +20,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import LazyImage from "~/components/ui/lazy-image";
+import { ResponsiveImage } from "~/components/ui/responsive-image";
 import { env } from "~/env";
 import { SnapDownload } from "./snap-download";
 import { useShareOnX } from "./use-share-on-x";
@@ -67,17 +67,18 @@ export function SnapCard({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+
+      {/* Responsive image that preserves aspect ratio */}
       {/* biome-ignore lint/a11y/useKeyWithClickEvents: <explanation> */}
-      <div
-        className="relative -mx-4 h-[500px] w-screen cursor-pointer"
-        onClick={onBodyClick}
-      >
-        <LazyImage
-          fill
+      <div className="cursor-pointer" onClick={onBodyClick}>
+        <ResponsiveImage
           src={snap.photoUrl}
-          alt={snap.title ?? ""}
-          sizes="100vw"
-          className="object-cover"
+          alt={snap.title ?? "Snap photo"}
+          maxHeight={600}
+          minHeight={300}
+          objectFit="contain"
+          className="w-full"
+          priority={false}
         />
       </div>
 

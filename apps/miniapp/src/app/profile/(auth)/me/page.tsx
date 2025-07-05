@@ -5,7 +5,7 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
 import { Button } from "~/components/ui/button";
-import LazyImage from "~/components/ui/lazy-image";
+import { AspectRatioImage } from "~/components/ui/responsive-image";
 import { Loader } from "~/components/ui/loader";
 import { api } from "~/trpc/react";
 import { CreateProfile } from "../_components/create-profile";
@@ -92,14 +92,14 @@ export default function Page() {
       <div className="grid w-full grid-cols-3 gap-1">
         {snaps.map((snap) => (
           <Link href={`/snaps/${snap.id}`} key={snap.id}>
-            <div className="relative flex h-[200px] flex-col gap-2">
-              <LazyImage
-                fill
-                src={snap.photoUrl}
-                alt={snap.title ?? ""}
-                className="object-cover"
-              />
-            </div>
+            <AspectRatioImage
+              src={snap.photoUrl}
+              alt={snap.title ?? "Snap"}
+              aspectRatio="1/1"
+              objectFit="cover"
+              className="transition-opacity hover:opacity-80"
+              rounded={false}
+            />
           </Link>
         ))}
       </div>
