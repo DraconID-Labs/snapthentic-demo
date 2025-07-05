@@ -4,9 +4,10 @@ import { useParams } from "next/navigation";
 import { api } from "~/trpc/react";
 import { ContestBanner } from "../_componenets/contest-banner";
 import { Button } from "~/components/ui/button";
-import { Heart, HeartOff } from "lucide-react";
+import { Heart, HeartOff, Trophy } from "lucide-react";
 import { ResponsiveImage } from "~/components/ui/responsive-image";
 import { Loader } from "~/components/ui/loader";
+import Link from "next/link";
 
 export default function ContestPage() {
   const params = useParams();
@@ -71,6 +72,18 @@ export default function ContestPage() {
 
   return (
     <div className="flex min-h-screen flex-col items-center">
+      <div className="mb-4 flex w-full items-center justify-between">
+        <Link href="/contests" className="text-blue-600 hover:underline">
+          ← Back to Contests
+        </Link>
+        <Button asChild variant="outline" size="sm">
+          <Link href="/profile/contest-entries">
+            <Trophy className="mr-2 size-4" />
+            My Entries
+          </Link>
+        </Button>
+      </div>
+
       {/* @ts-expect-error - TODO: fix ContestWithSnapContests type */}
       <ContestBanner contest={contest} />
 

@@ -2,16 +2,17 @@
 
 import { api } from "~/trpc/react";
 import { Badge } from "~/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Trophy, Vote } from "lucide-react";
 import { ResponsiveImage } from "~/components/ui/responsive-image";
+import { Button } from "~/components/ui/button";
 import Link from "next/link";
+import { Loader } from "~/components/ui/loader";
 
 export default function ContestEntriesPage() {
   const { data: entries, isLoading } = api.contests.getMyEntries.useQuery({});
 
   if (isLoading) {
-    return <div className="flex min-h-screen items-center justify-center">Loading...</div>;
+    return <Loader />;
   }
 
   if (!entries?.length) {
@@ -19,7 +20,9 @@ export default function ContestEntriesPage() {
       <div className="flex min-h-screen flex-col items-center justify-center p-4">
         <Trophy className="mb-4 size-16 text-gray-400" />
         <h2 className="mb-2 text-xl font-semibold">No Contest Entries</h2>
-        <p className="mb-4 text-gray-600">You haven&apos;t entered any contests yet.</p>
+        <p className="mb-4 text-gray-600">
+          You haven&apos;t entered any contests yet.
+        </p>
         <Link href="/contests" className="text-blue-600 hover:underline">
           Browse active contests
         </Link>
@@ -28,73 +31,86 @@ export default function ContestEntriesPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col p-4">
-      <div className="mx-auto w-full max-w-4xl">
-        <h1 className="mb-6 text-2xl font-bold">My Contest Entries</h1>
-        
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {entries.map((entry) => (
-            <Card key={entry.id} className="overflow-hidden">
-              <CardHeader className="pb-2">
-                <div className="flex items-start justify-between">
-                  <CardTitle className="text-lg">{entry.contest.title}</CardTitle>
-                  <Badge variant={entry.contest.active ? "default" : "secondary"}>
+    <div className="flex min-h-screen flex-col items-center">
+      <div className="mb-4 flex w-full items-center justify-between">
+        <Link href="/contests" className="text-blue-600 hover:underline">
+          ← Back to Contests
+        </Link>
+        <h1 className="text-2xl font-bold">My Contest Entries</h1>
+        <div /> {/* Spacer for centering */}
+      </div>
+
+      <div className="w-full max-w-4xl">
+        {entries.length === 0 ? (
+          <p className="py-8 text-center text-gray-500">No entries yet</p>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {entries.map((entry) => (
+              <div
+                key={entry.id}
+                className="relative overflow-hidden rounded-lg bg-white shadow-md"
+              >
+                <ResponsiveImage
+                  src={entry.snap.photoUrl}
+                  alt={entry.snap.title ?? "Contest entry"}
+                  maxHeight={400}
+                  minHeight={250}
+                  objectFit="cover"
+                  className="w-full"
+                />
+
+                {/* Contest status badge */}
+                <div className="absolute left-2 top-2">
+                  <Badge
+                    variant={entry.contest.active ? "default" : "secondary"}
+                  >
                     {entry.contest.active ? "Active" : "Ended"}
                   </Badge>
                 </div>
-              </CardHeader>
-              
-              <CardContent className="p-0">
-                <div className="relative">
-                  {/* Simple image display instead of full SnapCard */}
-                  <ResponsiveImage
-                    src={entry.snap.photoUrl}
-                    alt={entry.snap.title ?? "Contest entry"}
-                    maxHeight={300}
-                    minHeight={200}
-                    objectFit="cover"
-                    className="w-full"
-                  />
-                  
-                  {/* Vote count overlay */}
-                  <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded bg-black/70 px-2 py-1 text-white">
+
+                {/* Vote count */}
+                <div className="absolute right-2 top-2 flex items-center gap-2">
+                  <span className="flex items-center gap-1 rounded bg-black/50 px-2 py-1 text-sm text-white">
                     <Vote size={14} />
-                    <span className="text-sm">{entry.voteCount}</span>
+                    {entry.voteCount}
+                  </span>
+                </div>
+
+                {/* Entry info overlay */}
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                  <div className="text-white">
+                    <h3 className="font-semibold">{entry.snap.title}</h3>
+                    <p className="text-sm opacity-90">
+                      {entry.snap.description}
+                    </p>
+                    <div className="mt-2 flex items-center justify-between text-xs opacity-75">
+                      <span>Contest: {entry.contest.title}</span>
+                      {entry.contest.prize && (
+                        <span>
+                          Prize: {Number(entry.contest.prize).toFixed(2)} WLD
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
-                
-                <div className="space-y-2 p-4">
-                  <div className="text-sm">
-                    <p className="font-medium">{entry.snap.title}</p>
-                    <p className="text-gray-600">{entry.snap.description}</p>
-                  </div>
-                  
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Contest Prize:</span>
-                    <span className="font-semibold text-green-600">
-                      {entry.contest.prize ? `$${Number(entry.contest.prize).toFixed(2)}` : "TBD"}
-                    </span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">Your Votes:</span>
-                    <span className="font-semibold text-blue-600">
-                      {entry.voteCount}
-                    </span>
-                  </div>
-                  
-                  <Link
-                    href={`/contests/${entry.contest.id}`}
-                    className="block w-full rounded bg-blue-600 py-2 text-center text-white transition-colors hover:bg-blue-700"
+
+                {/* View contest button */}
+                <div className="absolute bottom-2 right-2">
+                  <Button
+                    asChild
+                    size="sm"
+                    className="bg-white/90 text-black hover:bg-white"
                   >
-                    View Contest
-                  </Link>
+                    <Link href={`/contests/${entry.contest.id}`}>
+                      View Contest
+                    </Link>
+                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
-} 
+}

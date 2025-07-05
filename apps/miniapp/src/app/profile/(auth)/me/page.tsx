@@ -1,6 +1,6 @@
 "use client";
 
-import { Power, UserPlus } from "lucide-react";
+import { Power, UserPlus, Trophy } from "lucide-react";
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
@@ -79,11 +79,14 @@ export default function Page() {
       </div>
       {/* Action buttons */}
       <div className="flex w-full items-center justify-evenly gap-1">
-        <Button asChild variant="outline" className="w-full">
+        <Button asChild variant="outline" className="flex-1">
           <Link href="/profile/edit">Edit profile</Link>
         </Button>
-        <Button variant="outline" className="w-full">
-          Share profile
+        <Button asChild variant="outline" className="flex-1">
+          <Link href="/profile/contest-entries">
+            <Trophy className="size-4" />
+            My Contests
+          </Link>
         </Button>
         <Button variant="outline">
           <UserPlus />
