@@ -5,13 +5,14 @@ import {
   Camera,
   Check,
   Home,
+  Lock,
   RedoDot,
   Search,
   User,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Drawer, DrawerContent, DrawerHeader } from "~/components/ui/drawer";
 import { cn } from "~/utils/cn";
 import {
@@ -19,6 +20,7 @@ import {
   SnapDrawerContent,
 } from "~/app/snaps/_components/snap-drawer-content";
 import { Button } from "./ui/button";
+import { useSessionWithProfile } from "~/hooks/use-session-with-profile";
 
 interface NavItem {
   href: string | null;
@@ -29,6 +31,7 @@ interface NavItem {
 }
 
 export default function MobileBottomNav() {
+  const session = useSessionWithProfile();
   const pathname = usePathname();
   const [isSnapDrawerOpen, setIsSnapDrawerOpen] = useState(false);
   const [currentStepIdx, setCurrentStepIdx] = useState(0);
@@ -57,6 +60,11 @@ export default function MobileBottomNav() {
     { href: "/profile", label: "Profile", icon: User },
   ];
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: bro please
+  useEffect(() => {
+    setIsSnapDrawerOpen(false);
+  }, [pathname]);
+
   const updateSnapData = useCallback((partial: Partial<SnapData>) => {
     setSnapData((prev) => ({ ...prev, ...partial }));
   }, []);
@@ -73,24 +81,36 @@ export default function MobileBottomNav() {
     <>
       <Drawer open={isSnapDrawerOpen} onOpenChange={setIsSnapDrawerOpen}>
         <DrawerContent>
-          <DrawerHeader className="flex w-full justify-between">
-            <div className="flex items-center justify-between">
-              <Button variant="ghost" onClick={prevStep}>
-                <ArrowLeft />
-              </Button>
-              <Button variant="ghost" onClick={handleRedo}>
-                <RedoDot className="-scale-x-100" />
-              </Button>
-            </div>
-          </DrawerHeader>
+          {session.status !== "authenticated" && (
+            <DrawerHeader className="flex w-full justify-between">
+              <div className="flex items-center justify-between">
+                <Button variant="ghost" onClick={prevStep}>
+                  <ArrowLeft />
+                </Button>
+                <Button variant="ghost" onClick={handleRedo}>
+                  <RedoDot className="-scale-x-100" />
+                </Button>
+              </div>
+            </DrawerHeader>
+          )}
           <div className="mb-10 size-full px-4">
-            <SnapDrawerContent
-              data={snapData}
-              updateData={updateSnapData}
-              currentStepIdx={currentStepIdx}
-              next={nextStep}
-              prev={prevStep}
-            />
+            {session.status !== "authenticated" ? (
+              <SnapDrawerContent
+                data={snapData}
+                updateData={updateSnapData}
+                currentStepIdx={currentStepIdx}
+                next={nextStep}
+                prev={prevStep}
+              />
+            ) : (
+              <div className="flex size-full flex-col items-center justify-center ">
+                <Lock className="size-[100px] text-gray-400" />
+                <p className="mb-4 text-xl font-bold">No profile!</p>
+                <Link href="/profile">
+                  <Button>Create Profile</Button>
+                </Link>
+              </div>
+            )}
           </div>
         </DrawerContent>
       </Drawer>
