@@ -101,9 +101,12 @@ export const proofsRouter = createTRPCRouter({
         });
       }
 
+      const randomName = uniqueNamesGenerator(config);
+
       const newProfile: InsertUserProfile = {
-        displayName: uniqueNamesGenerator(config),
-        avatarUrl: "",
+        nickname: ctx.session.user.username ?? randomName,
+        displayName: ctx.session.user.username ?? randomName,
+        avatarUrl: ctx.session.user.profilePictureUrl ?? "",
         bio: "",
         location: "",
         website: "",

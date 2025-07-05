@@ -53,7 +53,6 @@ export default function MobileBottomNav() {
       href: null,
       label: "Snap",
       icon: Camera,
-      isHighlighted: true,
       onClick: handleSnapClick,
     },
     { href: "/verify", label: "Verify", icon: Check },
@@ -81,7 +80,7 @@ export default function MobileBottomNav() {
     <>
       <Drawer open={isSnapDrawerOpen} onOpenChange={setIsSnapDrawerOpen}>
         <DrawerContent>
-          {session.status !== "authenticated" && (
+          {session.status === "authenticated" && (
             <DrawerHeader className="flex w-full justify-between">
               <div className="flex items-center justify-between">
                 <Button variant="ghost" onClick={prevStep}>
@@ -94,7 +93,7 @@ export default function MobileBottomNav() {
             </DrawerHeader>
           )}
           <div className="mb-10 size-full px-4">
-            {session.status !== "authenticated" ? (
+            {session.status === "authenticated" ? (
               <SnapDrawerContent
                 data={snapData}
                 updateData={updateSnapData}

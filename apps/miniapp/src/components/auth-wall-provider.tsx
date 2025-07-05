@@ -1,8 +1,9 @@
 "use client";
 
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import type { ReactNode } from "react";
 import { Loader } from "./ui/loader";
+import { loginWithWallet } from "./wallet-auth";
 
 export function AuthWallProvider({ children }: { children: ReactNode }) {
   const { status } = useSession();
@@ -18,6 +19,7 @@ export function AuthWallProvider({ children }: { children: ReactNode }) {
     return <Loader />;
   }
 
-  void signIn("worldcoin");
+  // void signIn("world-wallet");
+  void loginWithWallet();
   return null;
 }

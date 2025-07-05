@@ -39,14 +39,14 @@ export default async function RootLayout({
         <TRPCReactProvider>
           <ErudaProvider>
             <NextAuthProvider>
-              <AuthWallProvider>
-                <MiniKitProvider>
+              <MiniKitProvider>
+                <AuthWallProvider>
                   <div className="min-h-screen w-full p-4 pb-24">
                     {children}
                   </div>
                   <MobileBottomNav />
-                </MiniKitProvider>
-              </AuthWallProvider>
+                </AuthWallProvider>
+              </MiniKitProvider>
             </NextAuthProvider>
           </ErudaProvider>
         </TRPCReactProvider>

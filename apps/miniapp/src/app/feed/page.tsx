@@ -5,6 +5,7 @@ import { api } from "~/trpc/react";
 import { SnapCard } from "../snaps/_components/snap-card";
 import { Loader } from "~/components/ui/loader";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 export default function FeedPage() {
   const router = useRouter();
@@ -74,7 +75,9 @@ export default function FeedPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-8">
-      <h1 className="text-2xl font-bold">Feed</h1>
+      <h1 className="text-2xl font-bold" onClick={() => signOut()}>
+        Feed
+      </h1>
 
       {allSnaps.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-12">

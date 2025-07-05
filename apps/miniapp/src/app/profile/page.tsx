@@ -1,6 +1,7 @@
 "use client";
 
 import { UserPlus } from "lucide-react";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "~/components/ui/avatar";
@@ -70,6 +71,9 @@ export default function Page() {
       <div className="flex w-full items-center justify-evenly gap-1">
         <Button asChild variant="outline" className="w-full">
           <Link href="/profile/edit">Edit profile</Link>
+        </Button>
+        <Button variant="outline" className="w-full" onClick={() => signOut()}>
+          Sign Out
         </Button>
         <Button variant="outline" className="w-full">
           Share profile

@@ -110,6 +110,7 @@ export const snapsRouter = createTRPCRouter({
     }),
 
   getMySnaps: protectedProcedure.query(async ({ ctx }) => {
+    console.dir({ session: ctx.session });
     const userSnaps = await ctx.db
       .select({
         id: snaps.id,
