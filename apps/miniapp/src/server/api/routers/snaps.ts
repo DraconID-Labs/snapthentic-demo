@@ -5,6 +5,7 @@ import {
   userProfiles,
   contest,
   snapContest,
+  snapContestVote,
 } from "@snapthentic/database/schema";
 import {
   constructV1Signature,
@@ -297,6 +298,26 @@ export const snapsRouter = createTRPCRouter({
         throw new Error("You are not the owner of this snap");
       }
 
+      // First, find any contest entries associated with this snap
+      const contestEntries = await ctx.db.query.snapContest.findMany({
+        where: eq(snapContest.snapId, input.snapId),
+      });
+
+      // Delete all votes for these contest entries
+      if (contestEntries.length > 0) {
+        for (const entry of contestEntries) {
+          await ctx.db
+            .delete(snapContestVote)
+            .where(eq(snapContestVote.snapContestId, entry.id));
+        }
+      }
+
+      // Then delete the contest entries
+      await ctx.db
+        .delete(snapContest)
+        .where(eq(snapContest.snapId, input.snapId));
+
+      // Finally delete the snap itself
       await ctx.db.delete(snaps).where(eq(snaps.id, input.snapId));
 
       return {
