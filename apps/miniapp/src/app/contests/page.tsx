@@ -27,22 +27,20 @@ export default async function Page() {
           </Link>
         </Button>
       </div>
-      <div className="w-full max-w-4xl space-y-4">
+      <div className="flex w-full max-w-4xl flex-col gap-4">
         {contests.length === 0 ? (
           <div className="flex flex-col items-center justify-center space-y-6 py-12">
             <p className="text-gray-500">No contests yet!</p>
           </div>
         ) : (
-          <>
-            {contests.map((contest) => (
-              <Link key={contest.id} href={`/contests/${contest.id}`}>
-                <div className="cursor-pointer transition-transform hover:scale-105">
-                  {/* @ts-expect-error - TODO: fix this */}
-                  <ContestBanner contest={contest} />
-                </div>
-              </Link>
-            ))}
-          </>
+          contests.map((contest) => (
+            <Link key={contest.id} href={`/contests/${contest.id}`}>
+              <div className="cursor-pointer transition-transform hover:scale-105">
+                {/* @ts-expect-error - TODO: fix this */}
+                <ContestBanner contest={contest} />
+              </div>
+            </Link>
+          ))
         )}
       </div>
     </div>

@@ -128,12 +128,11 @@ export default function ContestPage() {
                   </span>
                   <Button
                     size="sm"
-                    variant={voteStatus?.[entry.id] ? "default" : "outline"}
+                    variant="outline"
                     onClick={() => handleVote(entry.id)}
                     disabled={
                       voteMutation.isPending || removeVoteMutation.isPending
                     }
-                    className="bg-white/90 hover:bg-white"
                   >
                     {voteStatus?.[entry.id] ? (
                       <HeartOff size={16} />
