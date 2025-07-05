@@ -38,14 +38,21 @@ export function SnapDownload({ snap }: { snap: SnapWithAuthor }) {
               title: snap.title ?? "Snap",
               text: "Check out this snap!",
             });
-            return;
+            return; // Successfully shared, exit early
           }
-        } catch {
-          console.log("Web Share API failed, trying download");
+        } catch (error) {
+          console.error(error);
+          // Check if this is a user cancellation (AbortError)
+          if (error instanceof Error && error.name === "AbortError") {
+            console.log("User cancelled share");
+            return; // User cancelled, don't execute fallback
+          }
+          console.log("Web Share API failed, trying download", error);
+          // For other errors, continue to fallback
         }
       }
 
-      // Try traditional download
+      // Traditional download fallback (only if Web Share wasn't cancelled)
       try {
         const response = await fetch(snap.photoUrl);
 
@@ -82,8 +89,8 @@ export function SnapDownload({ snap }: { snap: SnapWithAuthor }) {
           window.URL.revokeObjectURL(blobUrl);
         }, 100);
       } catch {
-        // Fallback: open in new tab (works in most environments)
-        // window.open(snap.photoUrl, "_blank", "noopener,noreferrer");
+        // Final fallback: open in new tab (works in most environments)
+        window.open(snap.photoUrl, "_blank", "noopener,noreferrer");
       }
     } finally {
       setIsDownloading(false);
